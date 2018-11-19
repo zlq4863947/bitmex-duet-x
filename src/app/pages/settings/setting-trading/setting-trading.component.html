@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+        <nb-card-header>交易配置</nb-card-header>
+        <nb-card-body>
+          <form>
+            <div class="form-group row">
+              <label for="inputSymbol" class="col-sm-3 col-form-label">交易商品</label>
+              <div class="col-sm-9">
+                  <div class="dropdown" ngbDropdown>
+                    <button class="btn btn-primary" type="button" ngbDropdownToggle>
+                      交易商品
+                    </button>
+                    <ul class="dropdown-menu" ngbDropdownMenu>
+                      <li class="dropdown-item">XBTUSD</li>
+                      <li class="dropdown-item">ADAZ18</li>
+                      <li class="dropdown-item">BCHZ18</li>
+                      <li class="dropdown-item">EOSZ18</li>
+                      <li class="dropdown-item">ETHUSD</li>
+                      <li class="dropdown-item">LTCZ18</li>
+                      <li class="dropdown-item">TRXZ18</li>
+                      <li class="dropdown-item">XRPZ18</li>
+                    </ul>
+                  </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputAmount" class="col-sm-3 col-form-label">交易数量</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="inputAmount" placeholder="交易数量">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputLeverage" class="col-sm-3 col-form-label">杠杆倍数</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="inputLeverage" placeholder="杠杆倍数">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputSide" class="col-sm-3 col-form-label">交易方向</label>
+              <div class="col-sm-9">
+                  <div [(ngModel)]="radioModel" ngbRadioGroup name="radioSide2"
+                       class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group">
+                    <label ngbButtonLabel class="btn btn-outline-primary">
+                      <input ngbButton type="radio" value="buy"> 买入
+                    </label>
+                    <label ngbButtonLabel class="btn btn-outline-primary">
+                      <input ngbButton type="radio" value="sell"> 卖出
+                    </label>
+                  </div>
+              </div>
+            </div>
+          </form>
+        </nb-card-body>
+      </nb-card>
+  </div>
+</div>

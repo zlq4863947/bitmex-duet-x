@@ -1,0 +1,28 @@
+<nb-card>
+  <nb-card-body>
+    <div class="size-container">
+        <div class="dropdown" ngbDropdown>
+          <button class="btn btn-primary" type="button" ngbDropdownToggle>
+            交易商品
+          </button>
+          <ul class="dropdown-menu" ngbDropdownMenu>
+            <li class="dropdown-item">XBTUSD</li>
+            <li class="dropdown-item">ADAZ18</li>
+            <li class="dropdown-item">BCHZ18</li>
+            <li class="dropdown-item">EOSZ18</li>
+            <li class="dropdown-item">ETHUSD</li>
+            <li class="dropdown-item">LTCZ18</li>
+            <li class="dropdown-item">TRXZ18</li>
+            <li class="dropdown-item">XRPZ18</li>
+          </ul>
+        </div>
+    </div>
+    <div class="size-container">
+        <!--button class="btn {{ hb.class }} btn-demo">启动</button-->
+        <button type="submit" class="btn btn-success btn-block">启动</button>
+    </div>
+    <div class="size-container">
+        <button type="submit" class="btn btn-danger btn-block">停止</button>
+    </div>
+  </nb-card-body>
+</nb-card>
