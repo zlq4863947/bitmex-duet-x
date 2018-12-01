@@ -29,7 +29,7 @@
   "scripts": {
     "ng": "ng",
     "conventional-changelog": "conventional-changelog",
-    "start": "ng serve",
+    "start": "ng serve --port 4201",
     "electron": "ng build --base-href ./ && electron .",
     "test1": "electron-packager . todoapp-angular-electron --platform=win32 --arch=ia32",
     "make:win": "electron-packager . bitmex-duet --platform=win32 --arch=x64 --app-version=1.0.0",

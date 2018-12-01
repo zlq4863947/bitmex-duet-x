@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class SmartTableService {
+export class OrderTableService {
 
   data = [{
     id: 1,
