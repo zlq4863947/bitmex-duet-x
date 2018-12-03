@@ -4,30 +4,30 @@
   .btn-group:not(.btn-divided-group) > .btn:not(.dropdown-toggle) {
     &:first-child {
       @include nb-ltr() {
-        border-top-left-radius: nb-theme(btn-border-radius);
         border-bottom-left-radius: nb-theme(btn-border-radius);
-        border-top-right-radius: 0;
         border-bottom-right-radius: 0;
+        border-top-left-radius: nb-theme(btn-border-radius);
+        border-top-right-radius: 0;
       };
       @include nb-rtl() {
-        border-top-left-radius: 0;
         border-bottom-left-radius: 0;
-        border-top-right-radius: nb-theme(btn-border-radius);
         border-bottom-right-radius: nb-theme(btn-border-radius);
+        border-top-left-radius: 0;
+        border-top-right-radius: nb-theme(btn-border-radius);
       };
     }
     &:last-child {
       @include nb-ltr() {
-        border-top-left-radius: 0;
         border-bottom-left-radius: 0;
-        border-top-right-radius: nb-theme(btn-border-radius);
         border-bottom-right-radius: nb-theme(btn-border-radius);
+        border-top-left-radius: 0;
+        border-top-right-radius: nb-theme(btn-border-radius);
       };
       @include nb-rtl() {
-        border-top-left-radius: nb-theme(btn-border-radius);
         border-bottom-left-radius: nb-theme(btn-border-radius);
-        border-top-right-radius: 0;
         border-bottom-right-radius: 0;
+        border-top-left-radius: nb-theme(btn-border-radius);
+        border-top-right-radius: 0;
       };
     }
   }
@@ -128,6 +128,7 @@
     .btn:not(:first-child) {
       @include nb-ltr(margin-left, 0.5rem);
       @include nb-rtl(margin-right, 0.5rem);
+
       border-radius: nb-theme(btn-border-radius);
     }
   }
@@ -150,16 +151,16 @@
     .input-group-prepend .btn:first-child,
     .input-group-btn .btn:first-child {
       @include nb-ltr() {
-        border-top-left-radius: nb-theme(form-control-border-radius);
         border-bottom-left-radius: nb-theme(form-control-border-radius);
-        border-top-right-radius: 0;
         border-bottom-right-radius: 0;
+        border-top-left-radius: nb-theme(form-control-border-radius);
+        border-top-right-radius: 0;
       };
       @include nb-rtl() {
-        border-top-left-radius: 0;
         border-bottom-left-radius: 0;
-        border-top-right-radius: nb-theme(form-control-border-radius);
         border-bottom-right-radius: nb-theme(form-control-border-radius);
+        border-top-left-radius: 0;
+        border-top-right-radius: nb-theme(form-control-border-radius);
       };
     }
     .form-control:last-child:not(:only-child),
@@ -167,16 +168,16 @@
     .input-group-append .btn:last-child,
     .input-group-btn .btn:last-child {
       @include nb-ltr() {
-        border-top-left-radius: 0;
         border-bottom-left-radius: 0;
-        border-top-right-radius: nb-theme(form-control-border-radius);
         border-bottom-right-radius: nb-theme(form-control-border-radius);
+        border-top-left-radius: 0;
+        border-top-right-radius: nb-theme(form-control-border-radius);
       };
       @include nb-rtl() {
-        border-top-left-radius: nb-theme(form-control-border-radius);
         border-bottom-left-radius: nb-theme(form-control-border-radius);
-        border-top-right-radius: 0;
         border-bottom-right-radius: 0;
+        border-top-left-radius: nb-theme(form-control-border-radius);
+        border-top-right-radius: 0;
       };
     }
 

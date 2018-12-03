@@ -6,29 +6,27 @@
   }
 
   .settings-row {
+    align-items: center;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     flex-wrap: wrap;
-
-    width: 90%;
+    justify-content: space-between;
     margin: 0 0 1rem;
+    width: 90%;
 
     a {
-      text-decoration: none;
-      font-size: 2.25rem;
-
-      color: nb-theme(color-fg);
-
-      &.selected {
-        color: nb-theme(color-success);
-      }
-
       @include nb-for-theme(cosmic) {
         &.selected {
           color: nb-theme(link-color);
         }
+      }
+
+      color: nb-theme(color-fg);
+      font-size: 2.25rem;
+      text-decoration: none;
+
+      &.selected {
+        color: nb-theme(color-success);
       }
     }
   }
@@ -40,7 +38,12 @@
   .switcher {
     margin-bottom: 1rem;
 
-    /deep/ ngx-switcher {
+     /deep/ ngx-switcher {
+      @include nb-for-theme(cosmic) {
+        .switch .slider {
+          background-color: nb-theme(color-bg);
+        }
+      }
       .switch-label span {
         font-size: 1em;
         font-weight: normal;
@@ -58,12 +61,6 @@
         input:checked + .slider::before {
           @include nb-ltr(transform, translateX(1.5rem)!important);
           @include nb-rtl(transform, translateX(-1.5rem)!important);
-        }
-      }
-
-      @include nb-for-theme(cosmic) {
-        .switch .slider {
-          background-color: nb-theme(color-bg);
         }
       }
     }

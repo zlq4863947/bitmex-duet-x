@@ -1,13 +1,10 @@
-
-import { of as observableOf,  Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-
+import { Observable, of as observableOf } from 'rxjs';
 
 let counter = 0;
 
 @Injectable()
 export class UserService {
-
   private users = {
     nick: { name: 'Nick Jones', picture: 'assets/images/nick.png' },
     eva: { name: 'Eva Moor', picture: 'assets/images/eva.png' },

@@ -6,7 +6,5 @@ import { Component, OnDestroy } from '@angular/core';
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnDestroy {
-  
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 }

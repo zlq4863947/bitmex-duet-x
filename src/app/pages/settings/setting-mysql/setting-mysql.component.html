@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-md-12">
+    <nb-card>
+        <nb-card-header>mysql数据库配置</nb-card-header>
+        <nb-card-body>
+          <form>
+            <div class="form-group row">
+              <label for="inputHost" class="col-sm-3 col-form-label">数据库IP</label>
+              <div class="col-sm-9">
+                  <input type="text" #box class="form-control" id="inputHost" placeholder="127.0.0.1">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputPort" class="col-sm-3 col-form-label">端口</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="inputPort" placeholder="3306">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputUserName" class="col-sm-3 col-form-label">用户名</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="inputUserName" placeholder="root">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputPassword" class="col-sm-3 col-form-label">密码</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="inputPassword" placeholder="密码">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputDB" class="col-sm-3 col-form-label">数据库</label>
+              <div class="col-sm-9">
+                  <input type="text" class="form-control" id="inputDB" placeholder="数据库">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-4">
+                <button type="button" class="btn btn-success btn-block" (click)="connectMysql()">测试连接</button>
+              </div>
+            </div>
+          </form>
+        </nb-card-body>
+      </nb-card>
+  </div>
+</div>

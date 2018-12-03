@@ -1,5 +1,6 @@
-import { of as observableOf,  Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
+import { Observable, of as observableOf } from 'rxjs';
+
 import { OrdersChart, OrdersChartService } from './orders-chart.service';
 import { ProfitChart, ProfitChartService } from './profit-chart.service';
 
@@ -10,7 +11,6 @@ export class OrderProfitChartSummary {
 
 @Injectable()
 export class OrdersProfitChartService {
-
   private summary = [
     {
       title: 'Marketplace',
@@ -30,9 +30,7 @@ export class OrdersProfitChartService {
     },
   ];
 
-  constructor(private ordersChartService: OrdersChartService,
-              private profitChartService: ProfitChartService) {
-  }
+  constructor(private ordersChartService: OrdersChartService, private profitChartService: ProfitChartService) {}
 
   getOrderProfitChartSummary(): Observable<OrderProfitChartSummary[]> {
     return observableOf(this.summary);

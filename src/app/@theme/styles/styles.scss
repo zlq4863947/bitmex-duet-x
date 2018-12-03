@@ -15,17 +15,15 @@
 
 // install the framework and custom global styles
 @include nb-install() {
-
   // framework global styles
   @include nb-theme-global();
   @include nb-auth-global();
-
   // loading progress bar
   @include ngx-pace-theme();
+  @include bootstrap-rtl();
 
   // fixed in rc.9 and can be removed after upgrade
   .custom-control .custom-control-indicator {
     border-radius: 50%; // TODO: quickfix for https://github.com/akveo/nebular/issues/275
   }
-  @include bootstrap-rtl();
 };

@@ -1,54 +1,41 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { NbSecurityModule } from '@nebular/security';
 import {
   NbActionsModule,
   NbCardModule,
+  NbCheckboxModule,
+  NbContextMenuModule,
   NbLayoutModule,
   NbMenuModule,
+  NbPopoverModule,
+  NbProgressBarModule,
   NbRouteTabsetModule,
   NbSearchModule,
   NbSidebarModule,
   NbTabsetModule,
   NbThemeModule,
   NbUserModule,
-  NbCheckboxModule,
-  NbPopoverModule,
-  NbContextMenuModule,
-  NbProgressBarModule,
 } from '@nebular/theme';
-
-import { NbSecurityModule } from '@nebular/security';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import {
   FooterComponent,
   HeaderComponent,
-  SearchInputComponent,
-  ThemeSettingsComponent,
-  SwitcherComponent,
   LayoutDirectionSwitcherComponent,
+  SearchInputComponent,
+  SwitcherComponent,
+  ThemeSettingsComponent,
   ThemeSwitcherComponent,
-  TinyMCEComponent,
   ThemeSwitcherListComponent,
+  TinyMCEComponent,
 } from './components';
-import {
-  CapitalizePipe,
-  PluralPipe,
-  RoundPipe,
-  TimingPipe,
-  NumberWithCommasPipe,
-} from './pipes';
-import {
-  OneColumnLayoutComponent,
-  SampleLayoutComponent,
-  ThreeColumnsLayoutComponent,
-  TwoColumnsLayoutComponent,
-} from './layouts';
-import { DEFAULT_THEME } from './styles/theme.default';
-import { COSMIC_THEME } from './styles/theme.cosmic';
+import { OneColumnLayoutComponent, SampleLayoutComponent, ThreeColumnsLayoutComponent, TwoColumnsLayoutComponent } from './layouts';
+import { CapitalizePipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
 import { CORPORATE_THEME } from './styles/theme.corporate';
+import { COSMIC_THEME } from './styles/theme.cosmic';
+import { DEFAULT_THEME } from './styles/theme.default';
 
 const BASE_MODULES = [CommonModule, FormsModule, ReactiveFormsModule];
 
@@ -86,24 +73,16 @@ const COMPONENTS = [
   TwoColumnsLayoutComponent,
 ];
 
-const ENTRY_COMPONENTS = [
-  ThemeSwitcherListComponent,
-];
+const ENTRY_COMPONENTS = [ThemeSwitcherListComponent];
 
-const PIPES = [
-  CapitalizePipe,
-  PluralPipe,
-  RoundPipe,
-  TimingPipe,
-  NumberWithCommasPipe,
-];
+const PIPES = [CapitalizePipe, PluralPipe, RoundPipe, TimingPipe, NumberWithCommasPipe];
 
 const NB_THEME_PROVIDERS = [
   ...NbThemeModule.forRoot(
     {
       name: 'cosmic',
     },
-    [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME ],
+    [DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME],
   ).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,

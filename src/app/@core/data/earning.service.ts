@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf, Observable } from 'rxjs';
+import { Observable, of as observableOf } from 'rxjs';
 
 export class LiveUpdateChart {
   liveChart: { value: [string, number] }[];
@@ -17,7 +17,6 @@ export class PieChart {
 
 @Injectable()
 export class EarningService {
-
   private currentDate: Date = new Date();
   private currentValue = Math.random() * 1000;
   private ONE_DAY = 24 * 3600 * 1000;
@@ -68,8 +67,7 @@ export class EarningService {
     this.currentDate = new Date();
     this.currentValue = Math.random() * 1000;
 
-    return Array.from(Array(elementsNumber))
-      .map(item => this.generateRandomLiveChartData());
+    return Array.from(Array(elementsNumber)).map((item) => this.generateRandomLiveChartData());
   }
 
   generateRandomLiveChartData() {
@@ -82,11 +80,7 @@ export class EarningService {
 
     return {
       value: [
-        [
-          this.currentDate.getFullYear(),
-          this.currentDate.getMonth(),
-          this.currentDate.getDate(),
-        ].join('/'),
+        [this.currentDate.getFullYear(), this.currentDate.getMonth(), this.currentDate.getDate()].join('/'),
         Math.round(this.currentValue),
       ],
     };

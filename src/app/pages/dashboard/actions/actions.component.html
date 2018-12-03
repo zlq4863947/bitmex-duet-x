@@ -18,6 +18,19 @@
         </div>
     </div>
     <div class="size-container">
+        <div class="dropdown" ngbDropdown>
+          <button class="btn btn-primary" type="button" ngbDropdownToggle>
+            周期
+          </button>
+          <ul class="dropdown-menu" ngbDropdownMenu>
+            <li class="dropdown-item">1分钟</li>
+            <li class="dropdown-item">10分钟</li>
+            <li class="dropdown-item">30分钟</li>
+            <li class="dropdown-item">1小时</li>
+          </ul>
+        </div>
+    </div>
+    <div class="size-container">
         <!--button class="btn {{ hb.class }} btn-demo">启动</button-->
         <button type="submit" class="btn btn-success btn-block">启动</button>
     </div>

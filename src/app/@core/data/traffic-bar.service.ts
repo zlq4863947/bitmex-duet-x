@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf,  Observable } from 'rxjs';
+import { Observable, of as observableOf } from 'rxjs';
+
 import { PeriodsService } from './periods.service';
 
 export class TrafficBar {
@@ -10,8 +11,7 @@ export class TrafficBar {
 
 @Injectable()
 export class TrafficBarService {
-
-  private data = { };
+  private data = {};
 
   constructor(private period: PeriodsService) {
     this.data = {

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class ElectricityService {
-
   private data = [
     {
       title: '2015',
@@ -58,8 +57,7 @@ export class ElectricityService {
     },
   ];
 
-  constructor() {
-  }
+  constructor() {}
 
   // TODO: observables
   getData() {

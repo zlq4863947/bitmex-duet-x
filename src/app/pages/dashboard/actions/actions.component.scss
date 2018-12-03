@@ -2,11 +2,10 @@
 @import '~@nebular/theme/styles/global/bootstrap/buttons';
 
 @include nb-install-component() {
-
   nb-card-body {
-    padding: 0 1.25rem 1.25rem 0;
     display: flex;
     flex-wrap: wrap;
+    padding: 0 1.25rem 1.25rem 0;
   }
 
   .container-title {
@@ -22,9 +21,9 @@
   }
 
   .subheader {
-    margin-bottom: 0.75rem;
+    color: nb-theme(color-fg-heading);
     font-size: 0.875rem;
     font-weight: nb-theme(font-weight-bolder);
-    color: nb-theme(color-fg-heading);
+    margin-bottom: 0.75rem;
   }
 }

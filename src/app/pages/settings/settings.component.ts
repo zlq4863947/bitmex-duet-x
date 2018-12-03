@@ -5,7 +5,5 @@ import { Component, OnDestroy } from '@angular/core';
   templateUrl: './settings.component.html',
 })
 export class SettingsComponent implements OnDestroy {
-
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 }

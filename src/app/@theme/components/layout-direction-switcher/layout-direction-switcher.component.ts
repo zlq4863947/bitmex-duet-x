@@ -1,5 +1,5 @@
-import { Component, OnDestroy, Input } from '@angular/core';
-import { NbLayoutDirectionService, NbLayoutDirection } from '@nebular/theme';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { NbLayoutDirection, NbLayoutDirectionService } from '@nebular/theme';
 import { takeWhile } from 'rxjs/operators/takeWhile';
 
 @Component({
@@ -27,9 +27,10 @@ export class LayoutDirectionSwitcherComponent implements OnDestroy {
   constructor(private directionService: NbLayoutDirectionService) {
     this.currentDirection = this.directionService.getDirection();
 
-    this.directionService.onDirectionChange()
+    this.directionService
+      .onDirectionChange()
       .pipe(takeWhile(() => this.alive))
-      .subscribe(newDirection => this.currentDirection = newDirection);
+      .subscribe((newDirection) => (this.currentDirection = newDirection));
   }
 
   toggleDirection(newDirection) {

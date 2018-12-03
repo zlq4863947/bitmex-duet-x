@@ -6,6 +6,5 @@ import { Component } from '@angular/core';
   templateUrl: './setting-trading.component.html',
 })
 export class SettingTradingComponent {
-
   radioModel = 'buy';
 }

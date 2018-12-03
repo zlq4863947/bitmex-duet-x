@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf,  Observable } from 'rxjs';
+import { Observable, of as observableOf } from 'rxjs';
+
 import { PeriodsService } from './periods.service';
 
 export class TrafficList {
@@ -19,7 +20,6 @@ export class TrafficList {
 
 @Injectable()
 export class TrafficListService {
-
   private getRandom = (roundTo: number) => Math.round(Math.random() * roundTo);
   private data = {};
 
@@ -66,12 +66,8 @@ export class TrafficListService {
   private reduceData(timePeriods: string[], getFirstDateInPeriod: () => string): TrafficList[] {
     return timePeriods.reduce((result, timePeriod, index) => {
       const hasResult = result[index - 1];
-      const prevDate = hasResult ?
-        result[index - 1].comparison.nextDate :
-        getFirstDateInPeriod();
-      const prevValue = hasResult ?
-        result[index - 1].comparison.nextValue :
-        this.getRandom(100);
+      const prevDate = hasResult ? result[index - 1].comparison.nextDate : getFirstDateInPeriod();
+      const prevValue = hasResult ? result[index - 1].comparison.nextValue : this.getRandom(100);
       const nextValue = this.getRandom(100);
       const deltaValue = prevValue - nextValue;
 

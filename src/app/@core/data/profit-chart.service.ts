@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { PeriodsService } from './periods.service';
 
 export class ProfitChart {
@@ -8,18 +9,9 @@ export class ProfitChart {
 
 @Injectable()
 export class ProfitChartService {
+  private year = ['2012', '2013', '2014', '2015', '2016', '2017', '2018'];
 
-  private year = [
-    '2012',
-    '2013',
-    '2014',
-    '2015',
-    '2016',
-    '2017',
-    '2018',
-  ];
-
-  private data = { };
+  private data = {};
 
   constructor(private period: PeriodsService) {
     this.data = {
@@ -34,11 +26,7 @@ export class ProfitChartService {
 
     return {
       chartLabel: this.period.getWeeks(),
-      data: [
-        this.getRandomData(nPoint),
-        this.getRandomData(nPoint),
-        this.getRandomData(nPoint),
-      ],
+      data: [this.getRandomData(nPoint), this.getRandomData(nPoint), this.getRandomData(nPoint)],
     };
   }
 
@@ -47,11 +35,7 @@ export class ProfitChartService {
 
     return {
       chartLabel: this.period.getMonths(),
-      data: [
-        this.getRandomData(nPoint),
-        this.getRandomData(nPoint),
-        this.getRandomData(nPoint),
-      ],
+      data: [this.getRandomData(nPoint), this.getRandomData(nPoint), this.getRandomData(nPoint)],
     };
   }
 
@@ -60,11 +44,7 @@ export class ProfitChartService {
 
     return {
       chartLabel: this.year,
-      data: [
-        this.getRandomData(nPoint),
-        this.getRandomData(nPoint),
-        this.getRandomData(nPoint),
-      ],
+      data: [this.getRandomData(nPoint), this.getRandomData(nPoint), this.getRandomData(nPoint)],
     };
   }
 

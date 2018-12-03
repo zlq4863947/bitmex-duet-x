@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { of as observableOf,  Observable } from 'rxjs';
+import { Observable, of as observableOf } from 'rxjs';
+
 import { PeriodsService } from './periods.service';
 
 export class UserActive {
@@ -11,7 +12,6 @@ export class UserActive {
 
 @Injectable()
 export class UserActivityService {
-
   private getRandom = (roundTo: number) => Math.round(Math.random() * roundTo);
 
   data = {};
