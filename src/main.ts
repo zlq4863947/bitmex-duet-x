@@ -8,7 +8,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import log from "./log";
+import * as log from 'electron-log';
 
 if (environment.production) {
   enableProdMode();

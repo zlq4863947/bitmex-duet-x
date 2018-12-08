@@ -2,7 +2,7 @@ import { app, BrowserWindow, screen, autoUpdater } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as settings from 'electron-settings';
-import log from './src/log';
+import * as log from 'electron-log';
 
 let win, serve;
 const args = process.argv.slice(1);
@@ -101,8 +101,7 @@ try {
     }
   });
   process.on('uncaughtException', (e) => {
-    log.error('an error happened')
-    log.error(e.message)
+    log.error(e)
   });
 
   /** when the update has been downloaded and is ready to be installed, notify the BrowserWindow */
