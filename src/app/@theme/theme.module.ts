@@ -29,7 +29,6 @@ import {
   ThemeSettingsComponent,
   ThemeSwitcherComponent,
   ThemeSwitcherListComponent,
-  TinyMCEComponent,
 } from './components';
 import { OneColumnLayoutComponent, SampleLayoutComponent, ThreeColumnsLayoutComponent, TwoColumnsLayoutComponent } from './layouts';
 import { CapitalizePipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -66,7 +65,6 @@ const COMPONENTS = [
   FooterComponent,
   SearchInputComponent,
   ThemeSettingsComponent,
-  TinyMCEComponent,
   OneColumnLayoutComponent,
   SampleLayoutComponent,
   ThreeColumnsLayoutComponent,

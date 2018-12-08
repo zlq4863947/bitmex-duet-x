@@ -1,8 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
 
-const Store = require('electron-store');
-const store = new Store();
-
 interface MysqlSettings {
   host: string;
   port: number;
@@ -17,9 +14,15 @@ interface MysqlSettings {
   templateUrl: './setting-mysql.component.html',
 })
 export class SettingMysqlComponent {
+  mysql: MysqlSettings = {
+    host: '127.0.0.1',
+    port: 3306,
+    username: 'root',
+    password: 'root',
+    db: 'test'
+  };
 
   constructor(public element: ElementRef) {
-    console.log(store.get('unicorn'));
   }
 
   getSettings(): MysqlSettings {
@@ -39,11 +42,9 @@ export class SettingMysqlComponent {
   }
 
   connectMysql() {
-    const t = this.getSettings()
-    // console.log(t);
+    //const t = this.getSettings()
+    console.log(this.mysql);
 
-    store.set('unicorn', t);
-    console.log(store.get('unicorn'));
     console.log('test connect to mysql!!')
   }
 }
