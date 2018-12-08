@@ -16,6 +16,27 @@
             "port": 9222,
             "sourceMaps": true,
             "webRoot": "${workspaceRoot}"
+        },
+        {
+            "name": "browser process debug",
+            "type": "node",
+            "request": "launch",
+            "outFiles": [
+                "${workspaceRoot}/main.js",
+            ],
+            "stopOnEntry": false,
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable":"${workspaceRoot}/node_modules/.bin/electron",
+                "windows": {
+                    "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+                },
+            "runtimeArgs": [
+                "--remote-debugging-port=9223",
+                "."
+            ],
+            "sourceMaps": true,
+            "timeout": 30000,
+            "protocol": "inspector",
         }
     ]
 }

@@ -18,6 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { ElectronService } from './@core/utils/electron.service';
+import { MysqlService } from './@core/services/mysql/mysql.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,6 +34,6 @@ import { ElectronService } from './@core/utils/electron.service';
     CoreModule.forRoot(),
   ],
   bootstrap: [AppComponent],
-  providers: [{ provide: APP_BASE_HREF, useValue: '/' }, ElectronService],
+  providers: [{ provide: APP_BASE_HREF, useValue: '/' }, ElectronService, MysqlService],
 })
 export class AppModule {}

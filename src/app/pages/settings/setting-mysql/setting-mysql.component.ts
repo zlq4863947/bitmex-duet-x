@@ -1,50 +1,51 @@
-import { Component, ElementRef } from '@angular/core';
-
-interface MysqlSettings {
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-  db: string; 
-}
+import { Component, OnInit } from '@angular/core';
+import { ElectronService } from '../../../@core/utils/electron.service';
+import { MysqlService } from '../../../@core/services/mysql/mysql.service';
+import { MysqlSettings } from '../../../@core/types';
 
 @Component({
   selector: 'ngx-setting-mysql',
   styleUrls: ['./setting-mysql.component.scss'],
   templateUrl: './setting-mysql.component.html',
 })
-export class SettingMysqlComponent {
-  mysql: MysqlSettings = {
-    host: '127.0.0.1',
-    port: 3306,
-    username: 'root',
-    password: 'root',
-    db: 'test'
-  };
+export class SettingMysqlComponent implements OnInit {
+  storeKey = 'mysql';
+  mysql: MysqlSettings;
 
-  constructor(public element: ElementRef) {
+  constructor(public electronService: ElectronService, public mysqlService: MysqlService) {}
+
+  ngOnInit() {
+    // this.electronService.settings.set('mysql', {... this.mysql});
+    // Example of electron settings
+    const test = this.electronService.settings.getAll();
+    console.log('test: ', test);
+    this.initSetting();
   }
 
-  getSettings(): MysqlSettings {
-    const inputHost = this.element.nativeElement.querySelector('#inputHost');
-    const inputPort = this.element.nativeElement.querySelector('#inputPort');
-    const inputUserName = this.element.nativeElement.querySelector('#inputUserName');
-    const inputPassword = this.element.nativeElement.querySelector('#inputPassword');
-    const inputDB = this.element.nativeElement.querySelector('#inputDB');
-    const settings: MysqlSettings = {
-      host: inputHost.value,
-      port: inputPort.value,
-      username: inputUserName.value,
-      password: inputPassword.value,
-      db: inputDB.value, 
+  initSetting() {
+    let mysqlSettings = this.electronService.settings.get(this.storeKey);
+    // 没有值的时候
+    if (!mysqlSettings) {
+      mysqlSettings = {
+        host: '127.0.0.1',
+        port: 3306,
+        username: 'root',
+        password: 'root',
+        database: 'duet'
+      };
+      // 配置初期化
+      this.electronService.settings.set(this.storeKey, mysqlSettings);
     }
-    return settings;
+    this.mysql = <any>mysqlSettings;
   }
 
-  connectMysql() {
+  async connectMysql() {
+    const con = await this.mysqlService.connection(this.mysql);
+    console.log(con)
     //const t = this.getSettings()
-    console.log(this.mysql);
+  }
 
-    console.log('test connect to mysql!!')
+  save() {
+    this.electronService.settings.set(this.storeKey, {...this.mysql});
   }
 }
