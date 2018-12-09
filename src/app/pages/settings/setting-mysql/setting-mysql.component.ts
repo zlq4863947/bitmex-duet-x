@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ToasterConfig, ToasterModule, ToasterService } from 'angular2-toaster/angular2-toaster';
 
 import { MysqlService } from '../../../@core/services/mysql/mysql.service';
 import { MysqlSettings } from '../../../@core/types';
 import { ElectronService } from '../../../@core/utils/electron.service';
+import { NotificationsService } from '../../../@core/utils/notifications.service';
 
 @Component({
   selector: 'ngx-setting-mysql',
@@ -11,10 +11,14 @@ import { ElectronService } from '../../../@core/utils/electron.service';
   templateUrl: './setting-mysql.component.html',
 })
 export class SettingMysqlComponent implements OnInit {
+  constructor(
+    public electronService: ElectronService,
+    public mysqlService: MysqlService,
+    public notificationsService: NotificationsService,
+  ) {}
+
   storeKey = 'mysql';
   mysql: MysqlSettings;
-
-  constructor(public electronService: ElectronService, public mysqlService: MysqlService, public toasterService: ToasterService) {}
 
   ngOnInit() {
     this.initSetting();
@@ -38,12 +42,17 @@ export class SettingMysqlComponent implements OnInit {
   }
 
   async connect() {
+    this.notificationsService.showSuccess({
+      title: '测试标题',
+      body: '测试内容',
+    });
+    /*
     const res = this.mysqlService.testConnection();
     console.log('res: ', res);
     const con = await this.mysqlService.connection(this.mysql);
     console.log(con);
     const res2 = this.mysqlService.testConnection();
-    console.log('res2: ', res2);
+    console.log('res2: ', res2);*/
   }
 
   save() {

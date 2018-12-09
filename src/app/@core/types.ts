@@ -5,3 +5,8 @@ export interface MysqlSettings {
   password: string;
   database: string;
 }
+
+export interface NotificationContent {
+  title?: string;
+  body?: string;
+}

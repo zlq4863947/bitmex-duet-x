@@ -12,10 +12,12 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToasterModule, ToasterService } from 'angular2-toaster';
 
 import { CoreModule } from './@core/core.module';
 import { MysqlService } from './@core/services/mysql/mysql.service';
 import { ElectronService } from './@core/utils/electron.service';
+import { NotificationsService } from './@core/utils/notifications.service';
 import { ThemeModule } from './@theme/theme.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,11 +31,12 @@ import { AppComponent } from './app.component';
     AppRoutingModule,
     FormsModule,
 
+    ToasterModule.forRoot(),
     NgbModule.forRoot(),
     ThemeModule.forRoot(),
     CoreModule.forRoot(),
   ],
   bootstrap: [AppComponent],
-  providers: [{ provide: APP_BASE_HREF, useValue: '/' }, ElectronService, MysqlService],
+  providers: [{ provide: APP_BASE_HREF, useValue: '/' }, ElectronService, MysqlService, NotificationsService, ToasterService],
 })
 export class AppModule {}
