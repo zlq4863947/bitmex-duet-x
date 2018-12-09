@@ -11,6 +11,16 @@ export interface TradingSettings {
   leverage: number;
   side: string;
 }
+export interface ExchangeSettings {
+  real: ApiKeySettings;
+  test: ApiKeySettings;
+  mode: string;
+}
+
+export interface ApiKeySettings {
+  apiKey: string;
+  secret: string;
+}
 
 export interface NotificationContent {
   title?: string;

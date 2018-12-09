@@ -10,29 +10,29 @@
                   <nb-tabset>
                     <nb-tab tabTitle="真实交易">
                       <div class="form-group row">
-                        <label for="inputAmount" class="col-sm-3 col-form-label">apiKey</label>
+                        <label class="col-sm-3 col-form-label">apiKey</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="inputAmount" placeholder="apiKey">
+                            <input [(ngModel)]="exchange.real.apiKey" name="realApiKey" type="text" class="form-control" placeholder="apiKey">
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputLeverage" class="col-sm-3 col-form-label">secret</label>
+                        <label class="col-sm-3 col-form-label">secret</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="inputLeverage" placeholder="secret">
+                            <input [(ngModel)]="exchange.real.secret" name="realSecret" type="text" class="form-control" placeholder="secret">
                         </div>
                       </div>
                     </nb-tab>
                     <nb-tab tabTitle="模拟交易">
                       <div class="form-group row">
-                        <label for="inputAmount" class="col-sm-3 col-form-label">apiKey</label>
+                        <label class="col-sm-3 col-form-label">apiKey</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="inputAmount" placeholder="apiKey">
+                            <input [(ngModel)]="exchange.test.apiKey" name="testApiKey" type="text" class="form-control" placeholder="apiKey">
                         </div>
                       </div>
                       <div class="form-group row">
-                        <label for="inputLeverage" class="col-sm-3 col-form-label">secret</label>
+                        <label class="col-sm-3 col-form-label">secret</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="inputLeverage" placeholder="secret">
+                            <input [(ngModel)]="exchange.test.secret" name="testSecret" type="text" class="form-control" placeholder="secret">
                         </div>
                       </div>
                     </nb-tab>
@@ -41,15 +41,15 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="inputSide" class="col-sm-3 col-form-label">运行模式</label>
+              <label class="col-sm-3 col-form-label">运行模式</label>
               <div class="col-sm-9">
-                  <div [(ngModel)]="radioModel" ngbRadioGroup name="radioSide"
+                  <div [(ngModel)]="exchange.mode" ngbRadioGroup name="mode"
                        class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group">
                     <label ngbButtonLabel class="btn btn-outline-primary">
-                      <input ngbButton type="radio" value="buy"> 真实交易
+                      <input ngbButton type="radio" value="real"> 真实交易
                     </label>
                     <label ngbButtonLabel class="btn btn-outline-primary">
-                      <input ngbButton type="radio" value="sell"> 模拟交易
+                      <input ngbButton type="radio" value="test"> 模拟交易
                     </label>
                   </div>
               </div>

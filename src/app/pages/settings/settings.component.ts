@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { SettingMysqlComponent } from './setting-mysql/setting-mysql.component';
 import { SettingTradingComponent } from './setting-trading/setting-trading.component';
+import { SettingExchangeComponent } from './setting-exchange/setting-exchange.component';
 import { NotificationsService } from '../../@core/utils/notifications.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class SettingsComponent implements OnInit {
 
   @ViewChild(SettingMysqlComponent) mysqlSettings: SettingMysqlComponent;
   @ViewChild(SettingTradingComponent) tradingSettings: SettingTradingComponent;
+  @ViewChild(SettingExchangeComponent) exchangeSettings: SettingExchangeComponent;
 
   ngOnInit() {}
 
@@ -22,6 +24,7 @@ export class SettingsComponent implements OnInit {
     try {
       this.mysqlSettings.save();
       this.tradingSettings.save();
+      this.exchangeSettings.save();
       this.notificationsService.success({
         title: '保存成功'
       });
