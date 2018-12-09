@@ -1,5 +1,7 @@
 {
   "productName": "bitmex-duet",
+  "appId": "com.electron.duet",
+  "copyright": "Copyright © 2018 zlq4863947",
   "directories": {
     "output": "release/"
   },
