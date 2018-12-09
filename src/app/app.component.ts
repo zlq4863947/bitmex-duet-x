@@ -14,7 +14,6 @@ import { ElectronService } from './@core/utils/electron.service';
 })
 export class AppComponent implements OnInit {
   constructor(public electronService: ElectronService, private analytics: AnalyticsService) {
-
     if (electronService.isElectron()) {
       console.log('Mode electron');
       console.log('Electron ipcRenderer', electronService.ipcRenderer);

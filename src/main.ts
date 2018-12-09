@@ -5,10 +5,10 @@
  */
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import * as log from 'electron-log';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
-import * as log from 'electron-log';
 
 if (environment.production) {
   enableProdMode();

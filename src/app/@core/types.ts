@@ -3,5 +3,5 @@ export interface MysqlSettings {
   port: number;
   username: string;
   password: string;
-  database: string; 
+  database: string;
 }

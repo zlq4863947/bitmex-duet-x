@@ -50,8 +50,8 @@ export class OrderTableComponent {
               clsName = 'cell_fail';
               break;
           }
-          return `<div class="${clsName}">${data}</div>`; 
-        }
+          return `<div class="${clsName}">${data}</div>`;
+        },
       },
     },
   };

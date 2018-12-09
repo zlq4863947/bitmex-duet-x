@@ -36,7 +36,7 @@ export class LogTableComponent {
       operation: {
         title: '操作',
         type: 'string',
-      }
+      },
     },
   };
 

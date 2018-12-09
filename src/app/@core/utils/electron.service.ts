@@ -1,14 +1,13 @@
-import { Injectable } from '@angular/core';
-
-import { ipcRenderer, webFrame, remote } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
+
+import { Injectable } from '@angular/core';
+import { ipcRenderer, remote, webFrame } from 'electron';
 import * as settings from 'electron-settings';
 
 @Injectable()
 export class ElectronService {
-
   ipcRenderer: typeof ipcRenderer;
   webFrame: typeof webFrame;
   remote: typeof remote;
@@ -34,6 +33,5 @@ export class ElectronService {
 
   isElectron = () => {
     return window && window.process && window.process.type;
-  }
-
+  };
 }

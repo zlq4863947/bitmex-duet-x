@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ElectronService } from '../../../@core/utils/electron.service';
+import { ToasterConfig, ToasterModule, ToasterService } from 'angular2-toaster/angular2-toaster';
+
 import { MysqlService } from '../../../@core/services/mysql/mysql.service';
 import { MysqlSettings } from '../../../@core/types';
+import { ElectronService } from '../../../@core/utils/electron.service';
 
 @Component({
   selector: 'ngx-setting-mysql',
@@ -12,13 +14,9 @@ export class SettingMysqlComponent implements OnInit {
   storeKey = 'mysql';
   mysql: MysqlSettings;
 
-  constructor(public electronService: ElectronService, public mysqlService: MysqlService) {}
+  constructor(public electronService: ElectronService, public mysqlService: MysqlService, public toasterService: ToasterService) {}
 
   ngOnInit() {
-    // this.electronService.settings.set('mysql', {... this.mysql});
-    // Example of electron settings
-    const test = this.electronService.settings.getAll();
-    console.log('test: ', test);
     this.initSetting();
   }
 
@@ -31,7 +29,7 @@ export class SettingMysqlComponent implements OnInit {
         port: 3306,
         username: 'root',
         password: 'root',
-        database: 'duet'
+        database: 'duet',
       };
       // 配置初期化
       this.electronService.settings.set(this.storeKey, mysqlSettings);
@@ -39,13 +37,16 @@ export class SettingMysqlComponent implements OnInit {
     this.mysql = <any>mysqlSettings;
   }
 
-  async connectMysql() {
+  async connect() {
+    const res = this.mysqlService.testConnection();
+    console.log('res: ', res);
     const con = await this.mysqlService.connection(this.mysql);
-    console.log(con)
-    //const t = this.getSettings()
+    console.log(con);
+    const res2 = this.mysqlService.testConnection();
+    console.log('res2: ', res2);
   }
 
   save() {
-    this.electronService.settings.set(this.storeKey, {...this.mysql});
+    this.electronService.settings.set(this.storeKey, { ...this.mysql });
   }
 }

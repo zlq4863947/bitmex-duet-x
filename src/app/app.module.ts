@@ -4,6 +4,7 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
 import '../polyfills';
+
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
@@ -13,12 +14,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { CoreModule } from './@core/core.module';
+import { MysqlService } from './@core/services/mysql/mysql.service';
+import { ElectronService } from './@core/utils/electron.service';
 import { ThemeModule } from './@theme/theme.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { ElectronService } from './@core/utils/electron.service';
-import { MysqlService } from './@core/services/mysql/mysql.service';
 
 @NgModule({
   declarations: [AppComponent],

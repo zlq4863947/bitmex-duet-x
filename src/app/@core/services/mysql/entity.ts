@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('order')
 export class Order {
@@ -28,7 +28,7 @@ export class Order {
 @Entity('log')
 export class Log {
   @PrimaryGeneratedColumn() id!: number;
-  
+
   @Column('bigint') time: number;
 
   @Column() symbol: string;
