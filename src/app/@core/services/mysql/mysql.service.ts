@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 import { Injectable } from '@angular/core';
-import { Connection, createConnection, getConnectionManager, getConnection } from 'typeorm';
+import { Connection, createConnection, getConnection, getConnectionManager } from 'typeorm';
 
 import { MysqlSettings } from '../../../@core/types';
 import * as entities from './entity';
@@ -39,7 +39,7 @@ export class MysqlService {
 
   getConnection(): Connection | undefined {
     if (this.isConnected()) {
-      return getConnection()
+      return getConnection();
     }
   }
   async disconnect() {

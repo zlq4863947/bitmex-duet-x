@@ -13,6 +13,7 @@ import { PlayerService } from './player.service';
 import { ProfitBarAnimationChartService } from './profit-bar-animation-chart.service';
 import { ProfitChartService } from './profit-chart.service';
 import { StateService } from './state.service';
+import { SymbolsService } from './symbols.service';
 import { TrafficBarService } from './traffic-bar.service';
 import { TrafficListService } from './traffic-list.service';
 import { UserActivityService } from './user-activity.service';
@@ -20,6 +21,7 @@ import { UserService } from './users.service';
 
 const SERVICES = [
   UserService,
+  SymbolsService,
   ElectricityService,
   StateService,
   OrderTableService,

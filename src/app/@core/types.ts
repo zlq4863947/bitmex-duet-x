@@ -22,6 +22,11 @@ export interface ApiKeySettings {
   secret: string;
 }
 
+export interface ActionsSettings {
+  symbol: string;
+  resolution: string;
+}
+
 export interface NotificationContent {
   title?: string;
   body?: string;

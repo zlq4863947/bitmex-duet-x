@@ -50,7 +50,7 @@ export class SettingMysqlComponent implements OnInit {
       });
     } else {
       this.notificationsService.success({
-        title: '连接成功'
+        title: '连接成功',
       });
     }
   }

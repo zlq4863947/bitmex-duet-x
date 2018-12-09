@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+
+import { SymbolsService } from '../../../@core/data/symbols.service';
 import { TradingSettings } from '../../../@core/types';
 import { ElectronService } from '../../../@core/utils/electron.service';
 import { NotificationsService } from '../../../@core/utils/notifications.service';
@@ -12,14 +14,16 @@ export class SettingTradingComponent implements OnInit {
   constructor(
     public electronService: ElectronService,
     public notificationsService: NotificationsService,
+    private symbolsService: SymbolsService,
   ) {}
 
   trading: TradingSettings;
   storeKey = 'trading';
-  symbols = ['XBTUSD', 'ADAZ18', 'BCHZ18', 'EOSZ18', 'ETHUSD', 'LTCZ18', 'TRXZ18', 'XRPZ18'];
+  symbols: string[];
 
   ngOnInit() {
     this.initSetting();
+    this.symbols = this.symbolsService.getSymbols();
   }
 
   initSetting() {
