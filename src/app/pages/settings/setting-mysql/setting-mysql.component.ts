@@ -42,17 +42,17 @@ export class SettingMysqlComponent implements OnInit {
   }
 
   async connect() {
-    this.notificationsService.showSuccess({
-      title: '测试标题',
-      body: '测试内容',
-    });
-    /*
-    const res = this.mysqlService.testConnection();
-    console.log('res: ', res);
-    const con = await this.mysqlService.connection(this.mysql);
-    console.log(con);
-    const res2 = this.mysqlService.testConnection();
-    console.log('res2: ', res2);*/
+    const res = await this.mysqlService.testConnect(this.mysql);
+    if (res.errorMsg) {
+      this.notificationsService.error({
+        title: '连接失败',
+        body: res.errorMsg,
+      });
+    } else {
+      this.notificationsService.success({
+        title: '连接成功'
+      });
+    }
   }
 
   save() {

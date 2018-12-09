@@ -10,23 +10,23 @@ export class NotificationsService {
   private showMsg(type: string, content: NotificationContent) {
     this.toasterService.pop(type, content.title, content.body);
   }
-  showSuccess(content: NotificationContent) {
+  success(content: NotificationContent) {
     this.showMsg('success', content);
   }
 
-  showError(content: NotificationContent) {
+  error(content: NotificationContent) {
     this.showMsg('error', content);
   }
 
-  showWarning(content: NotificationContent) {
+  warn(content: NotificationContent) {
     this.showMsg('warning', content);
   }
 
-  showInfo(content: NotificationContent) {
+  info(content: NotificationContent) {
     this.showMsg('info', content);
   }
 
-  showPrimary(content: NotificationContent) {
+  primary(content: NotificationContent) {
     this.showMsg('primary', content);
   }
 }

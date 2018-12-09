@@ -28,6 +28,7 @@ function createWindow() {
     height: 800,
     minWidth: 860,
     minHeight: 600,
+    title: 'BitMEX趋势机器人',
     frame: true,
     resizable: true,
     icon: path.join(__dirname, 'src/assets/img/icons/png/64x64.png')

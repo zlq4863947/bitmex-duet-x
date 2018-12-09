@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
     showCloseButton: true,
     tapToDismiss: true,
     timeout: 5000,
+    limit: 5,
   });
 
   ngOnInit(): void {
