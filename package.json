@@ -40,8 +40,8 @@
     "test": "npm run postinstall:web && ng test",
     "e2e": "npm run postinstall:web && ng e2e",
     "format": "npm run format:ts && npm run format:scss",
-    "format:ts": "npm run format:ts:import && prettier --config .prettierrc --write '{e2e,src}/**/*.ts'",
-    "format:ts:import": "import-sort --write '{e2e,src}/**/*.ts'",
+    "format:ts": "npm run format:ts:import && prettier --config .prettierrc --write '{e2e,src}/**/*.ts' './main.ts'",
+    "format:ts:import": "import-sort --write '{e2e,src}/**/*.ts' './main.ts'",
     "format:scss": "csscomb src"
   },
   "dependencies": {
