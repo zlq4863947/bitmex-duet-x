@@ -4,6 +4,7 @@ import { SymbolsService } from '../../../@core/data/symbols.service';
 import { ActionsSettings } from '../../../@core/types';
 import { ElectronService } from '../../../@core/utils/electron.service';
 import { NotificationsService } from '../../../@core/utils/notifications.service';
+import { RobotService } from '../../../@core/services/robot/robot.service';
 
 @Component({
   selector: 'ngx-dashboard-actions',
@@ -12,9 +13,10 @@ import { NotificationsService } from '../../../@core/utils/notifications.service
 })
 export class ActionsComponent implements OnInit {
   constructor(
-    public electronService: ElectronService,
-    public notificationsService: NotificationsService,
+    private electronService: ElectronService,
+    private notificationsService: NotificationsService,
     private symbolsService: SymbolsService,
+    private robotService: RobotService,
   ) {}
 
   actions: ActionsSettings;
@@ -48,21 +50,23 @@ export class ActionsComponent implements OnInit {
     this.electronService.settings.set(this.storeKey, { ...this.actions });
   }
 
+  launch() {
+    this.robotService.start()
+    if (!this.isStarted) {
+      this.start();
+    } else {
+      this.stop();
+    }
+  }
+  
   start() {
     this.save();
-    if (!this.isStarted) {
-      this.isStarted = true;
-      this.statusName = '启动中';
-    } else {
-      this.isStarted = false;
-      this.statusName = '启动';
-    }
+    this.isStarted = true;
+    this.statusName = '启动中';
   }
 
   stop() {
-    if (this.isStarted) {
-      this.isStarted = false;
-      this.statusName = '启动';
-    }
+    this.isStarted = false;
+    this.statusName = '启动';
   }
 }

@@ -27,6 +27,13 @@ export interface ActionsSettings {
   resolution: string;
 }
 
+export interface ApplicationSettings {
+  actions: ActionsSettings;
+  exchange: ExchangeSettings;
+  mysql: MysqlSettings;
+  trading: TradingSettings;
+}
+
 export interface NotificationContent {
   title?: string;
   body?: string;

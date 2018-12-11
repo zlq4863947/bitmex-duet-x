@@ -25,10 +25,10 @@
         </div>
     </div>
     <div class="size-container">
-        <button type="button" class="btn btn-success btn-block" (click)="start()" [disabled]="isStarted">{{statusName}}</button>
+        <button type="button" class="btn btn-success btn-block" (click)="launch()" [disabled]="isStarted">{{statusName}}</button>
     </div>
     <div class="size-container">
-        <button type="button" class="btn btn-danger btn-block" (click)="stop()" [disabled]="isStarted == false">停止</button>
+        <button type="button" class="btn btn-danger btn-block" (click)="launch()" [disabled]="isStarted == false">停止</button>
     </div>
   </nb-card-body>
 </nb-card>
