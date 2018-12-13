@@ -16,9 +16,9 @@ import { ToasterModule, ToasterService } from 'angular2-toaster';
 
 import { CoreModule } from './@core/core.module';
 import { MysqlService } from './@core/services/mysql/mysql.service';
+import { RobotService } from './@core/services/robot/robot.service';
 import { ElectronService } from './@core/utils/electron.service';
 import { NotificationsService } from './@core/utils/notifications.service';
-import { RobotService } from './@core/services/robot/robot.service';
 import { ThemeModule } from './@theme/theme.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';

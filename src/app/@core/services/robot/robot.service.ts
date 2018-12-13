@@ -2,13 +2,11 @@ import 'reflect-metadata';
 
 import { Injectable } from '@angular/core';
 
-import { ElectronService } from '../../utils/electron.service';
-
 import { ApplicationSettings } from '../../types';
+import { ElectronService } from '../../utils/electron.service';
 
 @Injectable()
 export class RobotService {
-
   constructor(private electronService: ElectronService) {}
 
   start() {

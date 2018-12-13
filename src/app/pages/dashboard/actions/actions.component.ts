@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SymbolsService } from '../../../@core/data/symbols.service';
-import { ActionsSettings } from '../../../@core/types';
+import { RobotService } from '../../../@core/services/robot/robot.service';
+import { ActionsSettings, ResolutionOption } from '../../../@core/types';
 import { ElectronService } from '../../../@core/utils/electron.service';
 import { NotificationsService } from '../../../@core/utils/notifications.service';
-import { RobotService } from '../../../@core/services/robot/robot.service';
 
 @Component({
   selector: 'ngx-dashboard-actions',
@@ -22,7 +22,7 @@ export class ActionsComponent implements OnInit {
   actions: ActionsSettings;
   storeKey = 'actions';
   symbols: string[];
-  resolutions: string[];
+  resolutions: ResolutionOption[];
   statusName = '启动';
   isStarted = false;
 
@@ -38,7 +38,10 @@ export class ActionsComponent implements OnInit {
     if (!settings) {
       settings = {
         symbol: 'XBTUSD',
-        resolution: '1分钟',
+        resolution: {
+          resolution: '1',
+          name: '1分钟'
+        },
       };
       // 配置初期化
       this.electronService.settings.set(this.storeKey, settings);
@@ -47,26 +50,32 @@ export class ActionsComponent implements OnInit {
   }
 
   save() {
-    this.electronService.settings.set(this.storeKey, { ...this.actions });
+    this.electronService.settings.set(this.storeKey, <any> this.actions);
   }
 
   launch() {
-    this.robotService.start()
+    this.robotService.start();
     if (!this.isStarted) {
       this.start();
     } else {
       this.stop();
     }
   }
-  
+
   start() {
     this.save();
     this.isStarted = true;
     this.statusName = '启动中';
+    this.notificationsService.success({
+      title: '启动机器人',
+    });
   }
 
   stop() {
     this.isStarted = false;
     this.statusName = '启动';
+    this.notificationsService.error({
+      title: '机器人已停止',
+    });
   }
 }

@@ -24,7 +24,7 @@ export interface ApiKeySettings {
 
 export interface ActionsSettings {
   symbol: string;
-  resolution: string;
+  resolution: ResolutionOption;
 }
 
 export interface ApplicationSettings {
@@ -37,4 +37,9 @@ export interface ApplicationSettings {
 export interface NotificationContent {
   title?: string;
   body?: string;
+}
+
+export interface ResolutionOption {
+  resolution: string;
+  name: string;
 }

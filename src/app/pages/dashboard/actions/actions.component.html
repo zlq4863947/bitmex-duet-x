@@ -15,11 +15,11 @@
     <div class="size-container">
         <div class="dropdown" ngbDropdown>
             <button class="btn btn-primary" type="button" ngbDropdownToggle>
-              {{ actions.resolution }}
+              {{ actions.resolution.name }}
             </button>
             <ul class="dropdown-menu" ngbDropdownMenu>
               <li class="dropdown-item" *ngFor="let r of resolutions" (click)="actions.resolution = r">
-               {{ r }}
+               {{ r.name }}
               </li>
             </ul>
         </div>
