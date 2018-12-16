@@ -41,7 +41,6 @@ export class SettingExchangeComponent implements OnInit {
   }
 
   save() {
-    console.log(this.exchange);
     this.electronService.settings.set(this.storeKey, <any>this.exchange);
   }
 }

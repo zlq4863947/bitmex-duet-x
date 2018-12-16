@@ -4,6 +4,7 @@ import { Helper, Scheduler, logger } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
 import * as types from './type';
+import { Job } from 'node-schedule';
 
 export interface IStatus {
   symbol: string;
@@ -28,6 +29,7 @@ export class Robot {
   event: Event;
   // 交易者
   trader: Trader;
+  job?: Job;
 
   constructor() {}
 
@@ -48,10 +50,14 @@ export class Robot {
   }
 
   async start(config: ApplicationSettings) {
+    if (this.job) {
+      logger.error('禁止重复启动机器人！！');
+      return;
+    }
     this.init(config);
     logger.info(`启动机器人`);
     await this.trader.updateLeverage(this.status.symbol, this.status.leverage);
-    Scheduler.min(this.status.resolution, async () => {
+    this.job = Scheduler.min(this.status.resolution, async () => {
       try {
         logger.info(`执行${this.status.resolution}分钟定时任务。。。。`);
         logger.info(`系统状态: ${JSON.stringify(this.status)}`);
@@ -63,6 +69,13 @@ export class Robot {
         logger.error(`定时任务[异常终了] ${err.message}`);
       }
     });
+  }
+
+  stop() {
+    if(this.job) {
+      this.job.cancel();
+      logger.info(`停止机器人`);
+    }
   }
 
   async doOrder(action: types.OrderSide, price: number) {

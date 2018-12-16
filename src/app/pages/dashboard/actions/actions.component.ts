@@ -54,18 +54,18 @@ export class ActionsComponent implements OnInit {
   }
 
   async launch() {
-    await this.robotService.start();
     if (!this.isStarted) {
-      this.start();
+      await this.start();
     } else {
       this.stop();
     }
   }
 
-  start() {
+  async start() {
     this.save();
     this.isStarted = true;
     this.statusName = '启动中';
+    await this.robotService.start();
     this.notificationsService.success({
       title: '启动机器人',
     });
@@ -74,6 +74,7 @@ export class ActionsComponent implements OnInit {
   stop() {
     this.isStarted = false;
     this.statusName = '启动';
+    this.robotService.stop();
     this.notificationsService.error({
       title: '机器人已停止',
     });

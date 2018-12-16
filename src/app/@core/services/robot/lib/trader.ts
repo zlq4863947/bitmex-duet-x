@@ -60,7 +60,6 @@ export class Trader {
       orderQty: input.amount,
       price: input.price,
       ordType: 'Limit', // Market
-      execInst: 'ParticipateDoNotInitiate',
     };
     const timer = Helper.getTimer();
     logger.info(`发出订单指令[启动] ${JSON.stringify(orderOptions)}`);
