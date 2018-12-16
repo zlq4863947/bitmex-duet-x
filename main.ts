@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as url from 'url';
 
-import { BrowserWindow, Menu, app, autoUpdater, dialog, screen, shell } from 'electron';
+import { BrowserWindow, Menu, app, autoUpdater, dialog, screen, shell, session } from 'electron';
 import * as log from 'electron-log';
 import * as settings from 'electron-settings';
 
@@ -276,9 +276,24 @@ try {
   // Some APIs can only be used after this event occurs.
   app.on('ready', () => {
     createWindow();
-    if (settings.get('updatecheck', {}) === true) {
+    /*if (settings.get('updatecheck', {}) === true) {
       autoUpdater.checkForUpdates();
-    }
+    }*/
+    // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
+    // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
+    session.defaultSession.webRequest.onBeforeRequest({urls: []}, (details, callback) => {
+      // console.log('details.url: ', details.url)
+      if (details.url.indexOf('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33') !== -1) {
+        callback({
+          redirectURL: details.url.replace(
+            '7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33',
+            '57c9d07b416b5a2ea23d28247300e4af36329bdc'
+          )
+        })
+      } else {
+        callback({ cancel: false })
+      }
+    })
   });
 
   // Quit when all windows are closed.
@@ -302,10 +317,10 @@ try {
   });
 
   /** when the update has been downloaded and is ready to be installed, notify the BrowserWindow */
-  autoUpdater.on('update-downloaded', (info) => {
+  /*autoUpdater.on('update-downloaded', (info) => {
     log.info(info);
     win.webContents.send('updateReady');
-  });
+  });*/
 } catch (e) {
   log.error(e.message);
 }

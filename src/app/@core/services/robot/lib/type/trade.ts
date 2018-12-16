@@ -1,6 +1,6 @@
 export enum OrderSide {
-  Buy = 'Buy',
-  Sell = 'Sell',
+  Buy = 'buy',
+  Sell = 'sell',
 }
 
 export interface IOrder {

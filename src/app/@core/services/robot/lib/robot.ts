@@ -1,7 +1,7 @@
 import { ApplicationSettings } from '@duet-core/types';
 
 import { Helper, Scheduler, logger } from './common';
-import { IchimokuInput, SmaInput, ichimoku, sma } from './indicator';
+import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
 import * as types from './type';
 

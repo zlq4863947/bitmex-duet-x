@@ -5,6 +5,7 @@ import { ExchangeSettings } from '@duet-core/types';
 import { logger } from '../../common';
 import * as types from '../../type';
 import { Endpoints } from './endpoints';
+
 const crypto = require('crypto');
 
 const qs = require('qs');
@@ -12,11 +13,6 @@ const qs = require('qs');
 export interface RestResponse {
   headers: Headers;
   body: { [attr: string]: any };
-}
-
-export interface IRest {
-  test: boolean;
-  credential: types.ICredential;
 }
 
 /**
@@ -32,7 +28,7 @@ export class Rest {
   private apiRoot = '/api/v1/';
   private credential: types.ICredential;
 
-  constructor(config: ExchangeSettings) {
+  constructor(config: ExchangeSettings, proxy?: string) {
     this.mode = <'test' | 'real'>config.mode;
     if (this.mode === 'real') {
       this.baseUrl = this.urls.api;
@@ -47,6 +43,9 @@ export class Rest {
         apiKey: config.test.apiKey,
         secret: config.test.secret,
       };
+    }
+    if (proxy) {
+      this.baseUrl = proxy + '/' + this.baseUrl;
     }
   }
 

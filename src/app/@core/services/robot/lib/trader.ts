@@ -3,6 +3,7 @@ import { ExchangeSettings } from '@duet-core/types';
 import { Rest } from './api';
 import { Helper, logger } from './common';
 import * as types from './type';
+import { environment } from '../../../../../environments/environment';
 
 export interface IRestOrders {
   symbol: string;
@@ -15,7 +16,7 @@ export class Trader {
   rest: Rest;
 
   constructor(config: ExchangeSettings) {
-    this.rest = new Rest(config);
+    this.rest = new Rest(config, environment.production ? '' : 'http://127.0.0.1:7070');
   }
 
   filter = {
