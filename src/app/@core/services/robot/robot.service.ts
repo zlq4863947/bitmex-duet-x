@@ -2,15 +2,23 @@ import 'reflect-metadata';
 
 import { Injectable } from '@angular/core';
 
-import { ApplicationSettings } from '../../types';
-import { ElectronService } from '../../utils/electron.service';
+import { ApplicationSettings } from '@duet-core/types';
+import { ElectronService, NotificationsService } from '@duet-core/utils';
+
+import { Robot } from './lib/robot';
 
 @Injectable()
 export class RobotService {
-  constructor(private electronService: ElectronService) {}
+  private robot: Robot;
+  constructor(private electronService: ElectronService, private notificationsService: NotificationsService) {
+    this.robot = new Robot();
+    /*const injector = Injector.create({providers: [{provide: Robot, deps: []}]});
+      this.robot = injector.get(Robot)// .create(config)
+      this.robot.create(config);*/
+  }
 
-  start() {
-    const res = <ApplicationSettings>(<any>this.electronService.settings.getAll());
-    console.log('robot: ', res.actions);
+  async start() {
+    const config = <ApplicationSettings>(<any>this.electronService.settings.getAll());
+    await this.robot.start(config);
   }
 }

@@ -12,6 +12,7 @@ import { AnalyticsService } from './@core/utils/analytics.service';
 import { ElectronService } from './@core/utils/electron.service';
 
 @Component({
+  moduleId: module.id,
   selector: 'ngx-app',
   template: '<toaster-container [toasterconfig]="config"></toaster-container><router-outlet></router-outlet>',
 })

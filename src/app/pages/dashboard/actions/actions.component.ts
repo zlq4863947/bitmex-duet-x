@@ -40,7 +40,7 @@ export class ActionsComponent implements OnInit {
         symbol: 'XBTUSD',
         resolution: {
           resolution: '1',
-          name: '1分钟'
+          name: '1分钟',
         },
       };
       // 配置初期化
@@ -50,11 +50,11 @@ export class ActionsComponent implements OnInit {
   }
 
   save() {
-    this.electronService.settings.set(this.storeKey, <any> this.actions);
+    this.electronService.settings.set(this.storeKey, <any>this.actions);
   }
 
-  launch() {
-    this.robotService.start();
+  async launch() {
+    await this.robotService.start();
     if (!this.isStarted) {
       this.start();
     } else {

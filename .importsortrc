@@ -2,6 +2,6 @@
   "parser": "typescript",
   "style": "module-alias",
   "options": {
-    "alias": ["@broker-trade-application"]
+    "alias": ["@duet-core"]
   }
 }
