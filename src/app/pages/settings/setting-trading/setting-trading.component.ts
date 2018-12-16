@@ -32,7 +32,7 @@ export class SettingTradingComponent implements OnInit {
     if (!settings) {
       settings = {
         symbol: 'XBTUSD',
-        side: 'buy',
+        side: 'Buy',
         amount: '',
         leverage: '',
       };

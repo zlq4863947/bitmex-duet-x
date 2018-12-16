@@ -12,6 +12,10 @@ module.exports = {
         alias: {
             typeorm: path.resolve(__dirname, "../node_modules/typeorm/typeorm-model-shim")
         }
+    },
+    watchOptions: {
+        aggregateTimeout: 10000,
+        poll: 5000
     }
     // end of extra configs
 };
