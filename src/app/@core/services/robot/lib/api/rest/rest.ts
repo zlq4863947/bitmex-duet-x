@@ -97,15 +97,6 @@ export class Rest {
     };
   }
 
-  private getRateLimit(headers: Headers) {
-    const rateLimit: types.IRateLimit = {
-      remaining: Number(headers.get('x-ratelimit-remaining')),
-      reset: Number(headers.get('x-ratelimit-reset')),
-      limit: Number(headers.get('x-ratelimit-limit')),
-    };
-    return rateLimit;
-  }
-
   /**
    * const res: any[] = await rest.getPosition({
    *   filter: { symbol: 'XBTUSD' },
@@ -202,5 +193,14 @@ export class Rest {
     const reponse = await fetch(url, options);
     const json = await reponse.json();
     return json;
+  }
+
+  private getRateLimit(headers: Headers) {
+    const rateLimit: types.IRateLimit = {
+      remaining: Number(headers.get('x-ratelimit-remaining')),
+      reset: Number(headers.get('x-ratelimit-reset')),
+      limit: Number(headers.get('x-ratelimit-limit')),
+    };
+    return rateLimit;
   }
 }

@@ -6,10 +6,6 @@ import { NotificationContent } from '../types';
 @Injectable()
 export class NotificationsService {
   constructor(private toasterService: ToasterService) {}
-
-  private showMsg(type: string, content: NotificationContent) {
-    this.toasterService.pop(type, content.title, content.body);
-  }
   success(content: NotificationContent) {
     this.showMsg('success', content);
   }
@@ -28,5 +24,9 @@ export class NotificationsService {
 
   primary(content: NotificationContent) {
     this.showMsg('primary', content);
+  }
+
+  private showMsg(type: string, content: NotificationContent) {
+    this.toasterService.pop(type, content.title, content.body);
   }
 }

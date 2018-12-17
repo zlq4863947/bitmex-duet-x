@@ -11,15 +11,15 @@ import { NotificationsService } from '../../../@core/utils/notifications.service
   templateUrl: './setting-trading.component.html',
 })
 export class SettingTradingComponent implements OnInit {
+  trading: TradingSettings;
+  storeKey = 'trading';
+  symbols: string[];
+
   constructor(
     public electronService: ElectronService,
     public notificationsService: NotificationsService,
     private symbolsService: SymbolsService,
   ) {}
-
-  trading: TradingSettings;
-  storeKey = 'trading';
-  symbols: string[];
 
   ngOnInit() {
     this.initSetting();

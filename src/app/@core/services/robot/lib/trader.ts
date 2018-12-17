@@ -1,9 +1,9 @@
 import { ExchangeSettings } from '@duet-core/types';
 
+import { environment } from '../../../../../environments/environment';
 import { Rest } from './api';
 import { Helper, logger } from './common';
 import * as types from './type';
-import { environment } from '../../../../../environments/environment';
 
 export interface IRestOrders {
   symbol: string;
@@ -14,10 +14,6 @@ export interface IRestOrders {
 }
 export class Trader {
   rest: Rest;
-
-  constructor(config: ExchangeSettings) {
-    this.rest = new Rest(config, environment.production ? '' : 'http://127.0.0.1:7070');
-  }
 
   filter = {
     onlineOrder(orders: types.Order[] | undefined) {
@@ -51,6 +47,10 @@ export class Trader {
       return [];
     },
   };
+
+  constructor(config: ExchangeSettings) {
+    this.rest = new Rest(config, environment.production ? '' : 'http://127.0.0.1:7070');
+  }
 
   // 下单
   async order(input: types.IOrder) {
@@ -175,7 +175,7 @@ export class Trader {
 
   async getOnlineOrder(symbol: string) {
     // 取得8小时内订单
-    let allOrders = await this.getRestOrders({ symbol, beforeHour: 8 });
+    const allOrders = await this.getRestOrders({ symbol, beforeHour: 8 });
     if (!allOrders || allOrders.length === 0) {
       return;
     }
@@ -184,7 +184,7 @@ export class Trader {
 
   async getOnlineOrders(symbol: string) {
     // 取得8小时内订单
-    let allOrders = await this.getRestOrders({ symbol, beforeHour: 8 });
+    const allOrders = await this.getRestOrders({ symbol, beforeHour: 8 });
     if (!allOrders || allOrders.length === 0) {
       return;
     }

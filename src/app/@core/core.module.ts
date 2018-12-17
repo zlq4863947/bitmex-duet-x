@@ -79,14 +79,14 @@ export const NB_CORE_PROVIDERS = [
   declarations: [],
 })
 export class CoreModule {
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
-    throwIfAlreadyLoaded(parentModule, 'CoreModule');
-  }
-
   static forRoot(): ModuleWithProviders {
     return <ModuleWithProviders>{
       ngModule: CoreModule,
       providers: [...NB_CORE_PROVIDERS],
     };
+  }
+
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
+    throwIfAlreadyLoaded(parentModule, 'CoreModule');
   }
 }

@@ -43,13 +43,12 @@
             <div class="form-group row">
               <label class="col-sm-3 col-form-label">运行模式</label>
               <div class="col-sm-9">
-                  <div [(ngModel)]="exchange.mode" ngbRadioGroup name="mode"
-                       class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group">
+                  <div [(ngModel)]="exchange.mode" ngbRadioGroup name="mode" class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group">
                     <label ngbButtonLabel class="btn btn-outline-primary">
-                      <input ngbButton type="radio" value="real"> 真实交易
+                      <input ngbButton type="radio" value="real" name="exReal" > 真实交易
                     </label>
                     <label ngbButtonLabel class="btn btn-outline-primary">
-                      <input ngbButton type="radio" value="test"> 模拟交易
+                      <input ngbButton type="radio" value="test" name="exTest"> 模拟交易
                     </label>
                   </div>
               </div>

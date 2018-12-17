@@ -1,10 +1,11 @@
+import { Job } from 'node-schedule';
+
 import { ApplicationSettings } from '@duet-core/types';
 
 import { Helper, Scheduler, logger } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
 import * as types from './type';
-import { Job } from 'node-schedule';
 
 export interface IStatus {
   symbol: string;
@@ -72,7 +73,7 @@ export class Robot {
   }
 
   stop() {
-    if(this.job) {
+    if (this.job) {
       this.job.cancel();
       logger.info(`停止机器人`);
     }
@@ -145,9 +146,8 @@ export class Robot {
     if (lastClose > baseline && lastClose > ma) {
       logger.info(`收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`);
       action = types.OrderSide.Buy;
-    }
-    // 卖出
-    else if (lastClose < baseline && lastClose < ma) {
+    } else if (lastClose < baseline && lastClose < ma) {
+      // 卖出
       logger.info(`收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`);
       action = types.OrderSide.Sell;
     } else {

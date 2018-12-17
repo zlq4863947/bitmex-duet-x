@@ -10,11 +10,11 @@ import { SettingTradingComponent } from './setting-trading/setting-trading.compo
   templateUrl: './settings.component.html',
 })
 export class SettingsComponent implements OnInit {
-  constructor(public notificationsService: NotificationsService) {}
-
   @ViewChild(SettingMysqlComponent) mysqlSettings: SettingMysqlComponent;
   @ViewChild(SettingTradingComponent) tradingSettings: SettingTradingComponent;
   @ViewChild(SettingExchangeComponent) exchangeSettings: SettingExchangeComponent;
+
+  constructor(public notificationsService: NotificationsService) {}
 
   ngOnInit() {}
 

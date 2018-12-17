@@ -6,9 +6,7 @@
               {{ actions.symbol }}
             </button>
             <ul class="dropdown-menu" ngbDropdownMenu>
-              <li class="dropdown-item" *ngFor="let s of symbols" (click)="actions.symbol = s">
-               {{ s }}
-              </li>
+              <li class="dropdown-item" *ngFor="let s of symbols" (click)="actions.symbol = s">{{ s }}</li>
             </ul>
         </div>
     </div>
@@ -18,9 +16,7 @@
               {{ actions.resolution.name }}
             </button>
             <ul class="dropdown-menu" ngbDropdownMenu>
-              <li class="dropdown-item" *ngFor="let r of resolutions" (click)="actions.resolution = r">
-               {{ r.name }}
-              </li>
+              <li class="dropdown-item" *ngFor="let r of resolutions" (click)="actions.resolution = r">{{ r.name }}</li>
             </ul>
         </div>
     </div>

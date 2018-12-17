@@ -1,0 +1,33 @@
+{
+  "attr-bans": [
+    "background",
+    "bgcolor",
+    "border",
+    "frameborder",
+    "longdesc",
+    "marginwidth",
+    "marginheight",
+    "scrolling",
+    "style",
+    "width",
+    "height"
+  ],
+  "attr-name-style": false,
+  "attr-no-dup": true,
+  "attr-no-unsafe-char": true,
+  "attr-order": false,
+  "attr-quote-style": false,
+  "attr-req-value": false,
+  "attr-validate": false,
+  "class-no-dup": true,
+  "head-req-title": false,
+  "id-class-style": "dash",
+  "id-no-dup": true,
+  "img-req-alt": false,
+  "img-req-src": false,
+  "indent-style": "spaces",
+  "indent-width": 2,
+  "label-req-for": false,
+  "spec-char-escape": false,
+  "tag-bans": ["style", "b"]
+}

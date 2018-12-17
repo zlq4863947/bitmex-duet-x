@@ -12,9 +12,7 @@
                       {{ trading.symbol }}
                     </button>
                     <ul class="dropdown-menu" ngbDropdownMenu>
-                      <li class="dropdown-item" *ngFor="let s of symbols" (click)="trading.symbol = s">
-                       {{ s }}
-                      </li>
+                      <li class="dropdown-item" *ngFor="let s of symbols" (click)="trading.symbol = s">{{ s }}</li>
                     </ul>
                   </div>
               </div>
@@ -34,13 +32,12 @@
             <div class="form-group row">
               <label for="inputSide" class="col-sm-3 col-form-label">交易方向</label>
               <div class="col-sm-9">
-                  <div [(ngModel)]="trading.side" ngbRadioGroup name="radioSide2"
-                       class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group">
+                  <div [(ngModel)]="trading.side" ngbRadioGroup name="radioSide2" class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group">
                     <label ngbButtonLabel class="btn btn-outline-primary">
-                      <input ngbButton type="radio" value="Buy"> 买入
+                      <input ngbButton type="radio" value="Buy" name="sideBuy"> 买入
                     </label>
                     <label ngbButtonLabel class="btn btn-outline-primary">
-                      <input ngbButton type="radio" value="Sell"> 卖出
+                      <input ngbButton type="radio" value="Sell" name="sideSell"> 卖出
                     </label>
                   </div>
               </div>

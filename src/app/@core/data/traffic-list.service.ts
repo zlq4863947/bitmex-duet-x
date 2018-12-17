@@ -20,7 +20,6 @@ export class TrafficList {
 
 @Injectable()
 export class TrafficListService {
-  private getRandom = (roundTo: number) => Math.round(Math.random() * roundTo);
   private data = {};
 
   constructor(private period: PeriodsService) {
@@ -30,6 +29,12 @@ export class TrafficListService {
       year: this.getDataYear(),
     };
   }
+
+  getTrafficListData(period: string): Observable<TrafficList> {
+    return observableOf(this.data[period]);
+  }
+
+  private getRandom = (roundTo: number) => Math.round(Math.random() * roundTo);
 
   private getDataWeek(): TrafficList[] {
     const getFirstDateInPeriod = () => {
@@ -88,9 +93,5 @@ export class TrafficListService {
 
       return [...result, item];
     }, []);
-  }
-
-  getTrafficListData(period: string): Observable<TrafficList> {
-    return observableOf(this.data[period]);
   }
 }

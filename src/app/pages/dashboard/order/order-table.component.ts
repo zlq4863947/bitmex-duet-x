@@ -43,12 +43,14 @@ export class OrderTableComponent {
         valuePrepareFunction: (data) => {
           let clsName;
           switch (data) {
-            case '已成交':
+            case '已成交': {
               clsName = 'cell_success';
               break;
-            case '已取消':
+            }
+            case '已取消': {
               clsName = 'cell_fail';
               break;
+            }
           }
           return `<div class="${clsName}">${data}</div>`;
         },

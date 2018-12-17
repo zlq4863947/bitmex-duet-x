@@ -12,7 +12,7 @@ export class PlayerService {
   current: number;
   playlist: Track[] = [
     {
-      name: "Don't Wanna Fight",
+      name: 'Wanna Fight',
       artist: 'Alabama Shakes',
       url: 'https://p.scdn.co/mp3-preview/6156cdbca425a894972c02fca9d76c0b70e001af',
       cover: 'assets/images/cover1.jpg',

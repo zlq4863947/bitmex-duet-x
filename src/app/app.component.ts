@@ -17,6 +17,14 @@ import { ElectronService } from './@core/utils/electron.service';
   template: '<toaster-container [toasterconfig]="config"></toaster-container><router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
+  config: ToasterConfig = new ToasterConfig({
+    positionClass: 'toast-bottom-right',
+    showCloseButton: true,
+    tapToDismiss: true,
+    timeout: 5000,
+    limit: 5,
+  });
+
   constructor(private toasterService: ToasterService, public electronService: ElectronService, private analytics: AnalyticsService) {
     if (electronService.isElectron()) {
       console.log('Mode electron');
@@ -26,14 +34,6 @@ export class AppComponent implements OnInit {
       console.log('Mode web');
     }
   }
-
-  config: ToasterConfig = new ToasterConfig({
-    positionClass: 'toast-bottom-right',
-    showCloseButton: true,
-    tapToDismiss: true,
-    timeout: 5000,
-    limit: 5,
-  });
 
   ngOnInit(): void {
     this.analytics.trackPageViews();

@@ -13,7 +13,7 @@ export class ProfitBarAnimationChartService {
   }
 
   getDataForFirstLine(): number[] {
-    return this.createEmptyArray(100).map((_, index) => {
+    return this.createEmptyArray(100).map((value, index) => {
       const oneFifth = index / 5;
 
       return (Math.sin(oneFifth) * (oneFifth - 10) + index / 6) * 5;
@@ -21,7 +21,7 @@ export class ProfitBarAnimationChartService {
   }
 
   getDataForSecondLine(): number[] {
-    return this.createEmptyArray(100).map((_, index) => {
+    return this.createEmptyArray(100).map((value, index) => {
       const oneFifth = index / 5;
 
       return (Math.cos(oneFifth) * (oneFifth - 10) + index / 6) * 5;

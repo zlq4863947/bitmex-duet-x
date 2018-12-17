@@ -11,14 +11,14 @@ import { NotificationsService } from '../../../@core/utils/notifications.service
   templateUrl: './setting-mysql.component.html',
 })
 export class SettingMysqlComponent implements OnInit {
+  storeKey = 'mysql';
+  mysql: MysqlSettings;
+
   constructor(
     public electronService: ElectronService,
     public mysqlService: MysqlService,
     public notificationsService: NotificationsService,
   ) {}
-
-  storeKey = 'mysql';
-  mysql: MysqlSettings;
 
   ngOnInit() {
     this.initSetting();

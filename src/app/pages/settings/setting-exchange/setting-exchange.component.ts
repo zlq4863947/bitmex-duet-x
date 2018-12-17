@@ -10,10 +10,10 @@ import { NotificationsService } from '../../../@core/utils/notifications.service
   templateUrl: './setting-exchange.component.html',
 })
 export class SettingExchangeComponent implements OnInit {
-  constructor(public electronService: ElectronService, public notificationsService: NotificationsService) {}
-
   exchange: ExchangeSettings;
   storeKey = 'exchange';
+
+  constructor(public electronService: ElectronService, public notificationsService: NotificationsService) {}
 
   ngOnInit() {
     this.initSetting();

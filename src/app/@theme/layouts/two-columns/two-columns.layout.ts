@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
-import { takeWhile } from 'rxjs/operators/takeWhile';
+import { takeWhile } from 'rxjs/operators';
 
 // TODO: move layouts into the framework
 @Component({
@@ -26,9 +26,9 @@ import { takeWhile } from 'rxjs/operators/takeWhile';
   `,
 })
 export class TwoColumnsLayoutComponent implements OnDestroy {
-  private alive = true;
-
   currentTheme: string;
+
+  private alive = true;
 
   constructor(protected themeService: NbThemeService) {
     this.themeService

@@ -12,19 +12,19 @@ import { NotificationsService } from '../../../@core/utils/notifications.service
   templateUrl: './actions.component.html',
 })
 export class ActionsComponent implements OnInit {
-  constructor(
-    private electronService: ElectronService,
-    private notificationsService: NotificationsService,
-    private symbolsService: SymbolsService,
-    private robotService: RobotService,
-  ) {}
-
   actions: ActionsSettings;
   storeKey = 'actions';
   symbols: string[];
   resolutions: ResolutionOption[];
   statusName = '启动';
   isStarted = false;
+
+  constructor(
+    private electronService: ElectronService,
+    private notificationsService: NotificationsService,
+    private symbolsService: SymbolsService,
+    private robotService: RobotService,
+  ) {}
 
   ngOnInit() {
     this.initSetting();

@@ -21,6 +21,10 @@ export class ProfitChartService {
     };
   }
 
+  getProfitChartData(period: string): ProfitChart {
+    return this.data[period];
+  }
+
   private getDataForWeekPeriod(): ProfitChart {
     const nPoint = this.period.getWeeks().length;
 
@@ -52,9 +56,5 @@ export class ProfitChartService {
     return Array.from(Array(nPoints)).map(() => {
       return Math.round(Math.random() * 500);
     });
-  }
-
-  getProfitChartData(period: string): ProfitChart {
-    return this.data[period];
   }
 }

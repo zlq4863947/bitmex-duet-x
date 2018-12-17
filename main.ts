@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as url from 'url';
 
-import { BrowserWindow, Menu, app, autoUpdater, dialog, screen, shell, session } from 'electron';
+import { BrowserWindow, Menu, app, autoUpdater, dialog, screen, session, shell } from 'electron';
 import * as log from 'electron-log';
 import * as settings from 'electron-settings';
 
@@ -67,9 +67,9 @@ function createWindow() {
             if (focusedWindow) {
               // 重载之后, 刷新并关闭所有的次要窗体
               if (focusedWindow.id === 1) {
-                BrowserWindow.getAllWindows().forEach(function(win) {
-                  if (win.id > 1) {
-                    win.close();
+                BrowserWindow.getAllWindows().forEach((winEl) => {
+                  if (winEl.id > 1) {
+                    winEl.close();
                   }
                 });
               }
