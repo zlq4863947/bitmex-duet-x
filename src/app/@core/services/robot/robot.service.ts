@@ -4,8 +4,7 @@ import { Injectable } from '@angular/core';
 
 import { ApplicationSettings } from '@duet-core/types';
 import { ElectronService, NotificationsService } from '@duet-core/utils';
-
-import { Robot } from './lib/robot';
+import { Robot } from '@duet-robot/robot';
 
 @Injectable()
 export class RobotService {

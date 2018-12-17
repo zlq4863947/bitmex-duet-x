@@ -12,7 +12,10 @@
     "paths": {
       "@duet-core/*": [
         "app/@core/*"
-      ]
+      ],
+      "@duet-robot/*": [
+        "lib/*"
+      ],
     }
   },
   "files": [

@@ -19,7 +19,10 @@
     "paths": {
       "@duet-core/*": [
         "src/app/@core/*"
-      ]
+      ],
+      "@duet-robot/*": [
+        "src/lib/*"
+      ],
     }
   },
   "include": [

@@ -2,6 +2,6 @@
   "parser": "typescript",
   "style": "module-alias",
   "options": {
-    "alias": ["@duet-core"]
+    "alias": ["@duet-core", "@duet-robot"]
   }
 }

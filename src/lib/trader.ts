@@ -1,6 +1,6 @@
 import { ExchangeSettings } from '@duet-core/types';
 
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../environments/environment';
 import { Rest } from './api';
 import { Helper, logger } from './common';
 import * as types from './type';

@@ -14,7 +14,10 @@
       ],
       "@duet-core/*": [
         "app/@core/*"
-      ]
+      ],
+      "@duet-robot/*": [
+        "lib/*"
+      ],
     }
   },
   "exclude": [
