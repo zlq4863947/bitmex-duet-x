@@ -1,6 +1,7 @@
 import { Job } from 'node-schedule';
 
 import { ApplicationSettings } from '@duet-core/types';
+import { MysqlService} from '@duet-core/services'
 
 import { Helper, Scheduler, logger } from './common';
 import { ichimoku, sma } from './indicator';
@@ -31,10 +32,11 @@ export class Robot {
   // 交易者
   trader: Trader;
   job?: Job;
+  isFrist = true;
 
-  constructor() {}
+  constructor(private mysqlService: MysqlService) {}
 
-  init(config: ApplicationSettings) {
+  reload(config: ApplicationSettings) {
     const side = <types.OrderSide>config.trading.side;
     this.status = {
       symbol: config.actions.symbol,
@@ -55,9 +57,7 @@ export class Robot {
       logger.error('禁止重复启动机器人！！');
       return;
     }
-    this.init(config);
-    logger.info(`启动机器人`);
-    await this.trader.updateLeverage(this.status.symbol, this.status.leverage);
+    this.reload(config);
     this.job = Scheduler.min(this.status.resolution, async () => {
       try {
         logger.info(`执行${this.status.resolution}分钟定时任务。。。。`);
@@ -70,11 +70,17 @@ export class Robot {
         logger.error(`定时任务[异常终了] ${err.message}`);
       }
     });
+    logger.info(`启动机器人`);
+    if (this.isFrist) {
+      await this.trader.updateLeverage(this.status.symbol, this.status.leverage);
+    }
+    this.isFrist = false;
   }
 
   stop() {
     if (this.job) {
       this.job.cancel();
+      this.job = undefined;
       logger.info(`停止机器人`);
     }
   }
@@ -96,6 +102,8 @@ export class Robot {
         logger.info(`订单信息: ${JSON.stringify(input)}`);
         if (this.status.isOrder) {
           const orderInfo = await this.trader.order(input);
+          const saveRes = await this.mysqlService.saveOrder(orderInfo);
+          console.log('saveRes: ', saveRes);
           if (!orderInfo) {
             throw Error(`订单${this.status.step}下单异常 - 执行返回结果为空`);
           }
@@ -115,7 +123,7 @@ export class Robot {
         logger.info(`执行订单${this.status.step}[终了] ${Helper.endTimer(timer)}`);
         this.status.step = this.status.step === types.Step.Order1 ? types.Step.Order2 : types.Step.Order1;
       } else {
-        logger.info(`执行订单${this.status.step}不满足执行[终了] ${Helper.endTimer(timer)}`);
+        logger.info(`执行订单${this.status.step}不满足执行[终了] 买入/卖出动作(${this.getOrderSide(this.status.step)}) ！= 本次动作(${action}) ${Helper.endTimer(timer)}`);
       }
     } catch (err) {
       logger.error(`执行订单[异常终了] ${err.message}`);

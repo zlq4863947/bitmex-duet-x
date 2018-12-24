@@ -337,8 +337,8 @@ export interface Order extends Error {
   avgPx?: number;
   multiLegReportingType?: string;
   text?: string;
-  transactTime?: Date;
-  timestamp?: Date;
+  transactTime?: string;
+  timestamp?: string;
 }
 
 export interface OrderBook {

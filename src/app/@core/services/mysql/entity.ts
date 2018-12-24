@@ -6,17 +6,17 @@ export class Order {
 
   @Column() oriderId: string;
 
-  @Column('bigint') time: number;
-
   @Column() symbol: string;
 
   @Column('float') price: number;
 
   @Column('float') amount: number;
 
-  @Column() side: number;
+  @Column() side: string;
 
-  @Column() status: number;
+  @Column() status: string;
+
+  @Column() time: string;
 
   constructor(obj?: Order) {
     if (obj) {

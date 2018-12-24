@@ -20,6 +20,10 @@ export class Helper {
     return moment(timestamp).isAfter(moment().add(-5, 's'));
   }
 
+  static formatTime(time: number|string) {
+    return moment(time).format('YYYY-MM-DD HH:mm:ss');
+  }
+
   /**
    * 输出： "2018-06-22T17:36:38+09:00"
    * @param hour number
