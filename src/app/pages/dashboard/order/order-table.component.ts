@@ -14,7 +14,12 @@ export class OrderTableComponent {
 
   constructor(private service: OrderTableService) {
     this.settings = this.service.getSettings();
+    this.loadData();
+  }
+
+  loadData() {
     this.service.getData().then((data) => {
+      console.log('data: ', data)
       this.source.load(data);
     });
   }

@@ -31,7 +31,7 @@ import {
   ThemeSwitcherListComponent,
 } from './components';
 import { OneColumnLayoutComponent, SampleLayoutComponent, ThreeColumnsLayoutComponent, TwoColumnsLayoutComponent } from './layouts';
-import { CapitalizePipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
+import { CapitalizePipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe, EvaIconsPipe } from './pipes';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { DEFAULT_THEME } from './styles/theme.default';
@@ -73,7 +73,7 @@ const COMPONENTS = [
 
 const ENTRY_COMPONENTS = [ThemeSwitcherListComponent];
 
-const PIPES = [CapitalizePipe, PluralPipe, RoundPipe, TimingPipe, NumberWithCommasPipe];
+const PIPES = [CapitalizePipe, PluralPipe, RoundPipe, TimingPipe, NumberWithCommasPipe, EvaIconsPipe];
 
 const NB_THEME_PROVIDERS = [
   ...NbThemeModule.forRoot(
