@@ -3,14 +3,20 @@ import 'reflect-metadata';
 import { Injectable } from '@angular/core';
 import { Connection, createConnection, getConnection, getConnectionManager } from 'typeorm';
 
+import { ApplicationSettings } from '@duet-core/types';
+import { ElectronService } from '@duet-core/utils';
+import { Helper } from '@duet-robot/common';
+import { Order } from '@duet-robot/type';
+
 import { MysqlSettings } from '../../../@core/types';
 import * as entities from './entity';
-import { Order } from '@duet-robot/type';
-import { Helper } from '@duet-robot/common';
 
 @Injectable()
 export class MysqlService {
+
   private connectionName = 'default';
+
+  constructor(private electronService: ElectronService) {}
 
   async connect(settings: MysqlSettings): Promise<{ conn?: Connection; errorMsg?: string }> {
     try {
@@ -64,13 +70,21 @@ export class MysqlService {
     if (this.isConnected()) {
       return { conn: this.getConnection() };
     }
-    return await this.connect(settings)
+    return await this.connect(settings);
+  }
+
+  async autoConnect() {
+    if (this.isConnected()) {
+      return { conn: this.getConnection() };
+    }
+    const config = <ApplicationSettings>(<any>this.electronService.settings.getAll());
+    return await this.connect(config.mysql);
   }
 
   async saveOrder(order: Order) {
-    const conn = this.getConnection();
-    if (conn) {
-      const repo = conn.getRepository(entities.Order);
+    const res = await this.autoConnect();
+    if (res && res.conn) {
+      const repo = res.conn.getRepository(entities.Order);
       const orderInfo = new entities.Order();
       orderInfo.oriderId = order.orderID;
       orderInfo.symbol = order.symbol;
@@ -80,6 +94,14 @@ export class MysqlService {
       orderInfo.status = order.ordStatus;
       orderInfo.time = Helper.formatTime(order.timestamp);
       return await repo.save(orderInfo);
+    }
+  }
+
+  async getOrders(): Promise<entities.Order[] | undefined> {
+    const res = await this.autoConnect();
+    if (res && res.conn) {
+      const repo = res.conn.getRepository(entities.Order);
+      return await repo.createQueryBuilder().getMany();
     }
   }
 }

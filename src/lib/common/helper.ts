@@ -20,7 +20,7 @@ export class Helper {
     return moment(timestamp).isAfter(moment().add(-5, 's'));
   }
 
-  static formatTime(time: number|string) {
+  static formatTime(time: number | string) {
     return moment(time).format('YYYY-MM-DD HH:mm:ss');
   }
 

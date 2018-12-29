@@ -68,7 +68,7 @@ export class Rest {
       postBody = JSON.stringify(data);
     }
     // 1分钟过期时间
-    const expires = Math.round(Date.now() / 1000) + 60*3;
+    const expires = Math.round(Date.now() / 1000) + 60 * 3;
     // 签名内容（verb + path + nonce + data）
     const signContent = method + this.apiRoot + endpoint + query + expires + postBody;
     // 请求的签名
@@ -171,7 +171,7 @@ export class Rest {
     };
     const query = Object.keys(input).length !== 0 ? '?' + qs.stringify(input) : '';
     // 1分钟过期时间
-    const expires = Math.round(Date.now() / 1000) + 60*3;
+    const expires = Math.round(Date.now() / 1000) + 60 * 3;
     const method = types.HttpMothed.GET;
     // 签名内容（verb + path + nonce + input）
     const signContent = method + '/api/udf/history' + query + expires;

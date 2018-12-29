@@ -1,7 +1,7 @@
 import { Job } from 'node-schedule';
 
+import { MysqlService } from '@duet-core/services';
 import { ApplicationSettings } from '@duet-core/types';
-import { MysqlService} from '@duet-core/services'
 
 import { Helper, Scheduler, logger } from './common';
 import { ichimoku, sma } from './indicator';
@@ -123,7 +123,11 @@ export class Robot {
         logger.info(`执行订单${this.status.step}[终了] ${Helper.endTimer(timer)}`);
         this.status.step = this.status.step === types.Step.Order1 ? types.Step.Order2 : types.Step.Order1;
       } else {
-        logger.info(`执行订单${this.status.step}不满足执行[终了] 买入/卖出动作(${this.getOrderSide(this.status.step)}) ！= 本次动作(${action}) ${Helper.endTimer(timer)}`);
+        logger.info(
+          `执行订单${this.status.step}不满足执行[终了] 买入/卖出动作(${this.getOrderSide(
+            this.status.step,
+          )}) ！= 本次动作(${action}) ${Helper.endTimer(timer)}`,
+        );
       }
     } catch (err) {
       logger.error(`执行订单[异常终了] ${err.message}`);
