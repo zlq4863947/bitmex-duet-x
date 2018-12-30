@@ -8,6 +8,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
+    title: '日志',
+    icon: 'nb-compose',
+    link: '/pages/log',
+    home: true,
+  },
+  {
     title: '回测',
     icon: 'nb-shuffle',
     link: '/pages/backtest',

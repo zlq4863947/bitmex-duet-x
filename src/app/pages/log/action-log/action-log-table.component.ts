@@ -4,11 +4,11 @@ import { LocalDataSource } from 'ng2-smart-table';
 import { LogTableService } from '../../../@core/data/log-table.service';
 
 @Component({
-  selector: 'ngx-log-table',
-  styleUrls: ['./log-table.component.scss'],
-  templateUrl: './log-table.component.html',
+  selector: 'ngx-action-log-table',
+  styleUrls: ['./action-log-table.component.scss'],
+  templateUrl: './action-log-table.component.html',
 })
-export class LogTableComponent {
+export class ActionLogTableComponent {
   settings = {
     hideSubHeader: true,
     actions: {
