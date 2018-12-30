@@ -31,7 +31,7 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-
+    
     ToasterModule.forRoot(),
     NgbModule.forRoot(),
     ThemeModule.forRoot(),

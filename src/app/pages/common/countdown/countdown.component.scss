@@ -1,0 +1,12 @@
+@import '../../../@theme/styles/themes';
+@import '~@nebular/theme/styles/global/bootstrap/buttons';
+
+@include nb-install-component() {
+  .countdown {
+    font-size: 1.75rem;
+    font-weight: 500;
+    font-family: Exo;
+    color: aliceblue;
+    margin: 1.7rem 0 0 1.25rem;
+  }
+}

@@ -7,7 +7,6 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import { SettingsModule } from './settings/settings.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { PagesComponent } from './pages.component';
-//import { LogComponent } from './log/log.component';
 
 const PAGES_COMPONENTS = [PagesComponent];
 
