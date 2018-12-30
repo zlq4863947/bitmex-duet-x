@@ -13,7 +13,6 @@ import * as entities from './entity';
 
 @Injectable()
 export class MysqlService {
-
   private connectionName = 'default';
 
   constructor(private electronService: ElectronService) {}
@@ -101,7 +100,10 @@ export class MysqlService {
     const res = await this.autoConnect();
     if (res && res.conn) {
       const repo = res.conn.getRepository(entities.Order);
-      return await repo.createQueryBuilder('order').orderBy('order.time', 'DESC').getMany();
+      return await repo
+        .createQueryBuilder('order')
+        .orderBy('order.time', 'DESC')
+        .getMany();
     }
   }
 }

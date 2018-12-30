@@ -4,9 +4,9 @@ import { ThemeModule } from '../@theme/theme.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { LogModule } from './log/log.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
-import { SettingsModule } from './settings/settings.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { PagesComponent } from './pages.component';
+import { SettingsModule } from './settings/settings.module';
 
 const PAGES_COMPONENTS = [PagesComponent];
 

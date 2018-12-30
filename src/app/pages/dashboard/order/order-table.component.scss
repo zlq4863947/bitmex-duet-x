@@ -7,26 +7,27 @@
   }
 
   .eva-icon-container {
+    @include nb-rtl(right, auto);
+    @include nb-rtl(left, 0);
+
+    cursor: pointer;
     fill: nb-theme(card-fg-text);
+    padding: 1.5rem;
     position: absolute;
     right: 0;
     top: 0;
-    @include nb-rtl(right, auto);
-    @include nb-rtl(left, 0);
-    padding: 1.5rem;
-    cursor: pointer;
   }
-  
+
   .icon {
     display: inline-block;
-    width: 4rem;
+    font-size: 1.25rem;
     padding: 1.25rem 0;
     text-align: center;
-    font-size: 1.25rem;
+    width: 4rem;
 
     i:hover {
-      opacity: 0.8;
       cursor: pointer;
+      opacity: 0.8;
     }
   }
 }

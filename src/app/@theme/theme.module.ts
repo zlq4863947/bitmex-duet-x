@@ -31,7 +31,7 @@ import {
   ThemeSwitcherListComponent,
 } from './components';
 import { OneColumnLayoutComponent, SampleLayoutComponent, ThreeColumnsLayoutComponent, TwoColumnsLayoutComponent } from './layouts';
-import { CapitalizePipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe, EvaIconsPipe } from './pipes';
+import { CapitalizePipe, EvaIconsPipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
 import { CORPORATE_THEME } from './styles/theme.corporate';
 import { COSMIC_THEME } from './styles/theme.cosmic';
 import { DEFAULT_THEME } from './styles/theme.default';
