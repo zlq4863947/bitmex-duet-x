@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as settings from 'electron-settings';
 
-import { ActionsSettings, ApplicationSettings, ExchangeSettings, MysqlSettings, StoreKey, TradingSettings } from '../types';
+import { ActionsSettings, ApplicationSettings, ExchangeSettings, MysqlSettings, StoreKey, TradingSettings, RobotProcess } from '../types';
 
 @Injectable()
 export class SettingsService {
@@ -78,8 +78,8 @@ export class SettingsService {
     return <any>settings;
   }
 
-  setTrading(mysql: TradingSettings) {
-    this.settings.set(StoreKey.Trading, <any>mysql);
+  setTrading(trading: TradingSettings) {
+    this.settings.set(StoreKey.Trading, <any>trading);
   }
 
   getTrading(): TradingSettings {
@@ -94,6 +94,23 @@ export class SettingsService {
       };
       // 配置初期化
       this.setTrading(<any>settings);
+    }
+    return <any>settings;
+  }
+
+  setProcess(process: RobotProcess) {
+    this.settings.set(StoreKey.Process, <any>process);
+  }
+
+  getProcess(): RobotProcess {
+    let settings = this.settings.get(StoreKey.Process);
+    // 没有值的时候
+    if (!settings) {
+      settings = {
+        isActived: false
+      };
+      // 配置初期化
+      this.setProcess(<any>settings);
     }
     return <any>settings;
   }

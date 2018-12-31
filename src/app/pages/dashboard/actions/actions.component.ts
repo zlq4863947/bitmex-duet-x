@@ -16,7 +16,7 @@ export class ActionsComponent implements OnInit {
   symbols: string[];
   resolutions: ResolutionOption[];
   statusName = '启动';
-  isStarted = false;
+  isStarted: boolean;
 
   constructor(
     private settingsService: SettingsService,
@@ -26,6 +26,7 @@ export class ActionsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isStarted = this.settingsService.getProcess().isActived;
     this.actions = this.settingsService.getActions();
     this.symbols = this.symbolsService.getSymbols();
     this.resolutions = this.symbolsService.getResolutions();
@@ -46,6 +47,9 @@ export class ActionsComponent implements OnInit {
   async start() {
     this.save();
     this.isStarted = true;
+    this.settingsService.setProcess({
+      isActived: true
+    });
     this.statusName = '启动中';
     await this.robotService.start();
     this.notificationsService.success({
@@ -55,6 +59,9 @@ export class ActionsComponent implements OnInit {
 
   stop() {
     this.isStarted = false;
+    this.settingsService.setProcess({
+      isActived: false
+    });
     this.statusName = '启动';
     this.robotService.stop();
     this.notificationsService.error({

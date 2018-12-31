@@ -26,7 +26,7 @@ export interface ActionsSettings {
   symbol: string;
   resolution: ResolutionOption;
 }
-export interface RotbotProcess {
+export interface RobotProcess {
   // 是否为活动状态
   isActived: boolean;
 }
@@ -53,4 +53,5 @@ export enum StoreKey {
   Exchange = 'exchange',
   Mysql = 'mysql',
   Trading = 'trading',
+  Process = 'process'
 }
