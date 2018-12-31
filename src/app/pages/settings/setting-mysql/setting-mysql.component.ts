@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { MysqlService } from '@duet-core/services';
 import { MysqlSettings } from '@duet-core/types';
-import { ElectronService, NotificationsService } from '@duet-core/utils';
+import { NotificationsService, SettingsService } from '@duet-core/utils';
 
 @Component({
   selector: 'ngx-setting-mysql',
@@ -10,34 +10,16 @@ import { ElectronService, NotificationsService } from '@duet-core/utils';
   templateUrl: './setting-mysql.component.html',
 })
 export class SettingMysqlComponent implements OnInit {
-  storeKey = 'mysql';
   mysql: MysqlSettings;
 
   constructor(
-    public electronService: ElectronService,
+    public settingsService: SettingsService,
     public mysqlService: MysqlService,
     public notificationsService: NotificationsService,
   ) {}
 
   ngOnInit() {
-    this.initSetting();
-  }
-
-  initSetting() {
-    let mysqlSettings = this.electronService.settings.get(this.storeKey);
-    // 没有值的时候
-    if (!mysqlSettings) {
-      mysqlSettings = {
-        host: '127.0.0.1',
-        port: 3306,
-        username: 'root',
-        password: 'root',
-        database: 'duet',
-      };
-      // 配置初期化
-      this.electronService.settings.set(this.storeKey, mysqlSettings);
-    }
-    this.mysql = <any>mysqlSettings;
+    this.mysql = this.settingsService.getMysql();
   }
 
   async connect() {
@@ -55,6 +37,6 @@ export class SettingMysqlComponent implements OnInit {
   }
 
   save() {
-    this.electronService.settings.set(this.storeKey, { ...this.mysql });
+    this.settingsService.setMysql(this.mysql);
   }
 }

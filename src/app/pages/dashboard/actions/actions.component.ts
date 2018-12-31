@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { SymbolsService } from '../../../@core/data/symbols.service';
 import { RobotService } from '../../../@core/services/robot/robot.service';
 import { ActionsSettings, ResolutionOption } from '../../../@core/types';
-import { ElectronService } from '../../../@core/utils/electron.service';
 import { NotificationsService } from '../../../@core/utils/notifications.service';
+import { SettingsService } from '../../../@core/utils/settings.service';
 
 @Component({
   selector: 'ngx-dashboard-actions',
@@ -13,44 +13,26 @@ import { NotificationsService } from '../../../@core/utils/notifications.service
 })
 export class ActionsComponent implements OnInit {
   actions: ActionsSettings;
-  storeKey = 'actions';
   symbols: string[];
   resolutions: ResolutionOption[];
   statusName = '启动';
   isStarted = false;
 
   constructor(
-    private electronService: ElectronService,
+    private settingsService: SettingsService,
     private notificationsService: NotificationsService,
     private symbolsService: SymbolsService,
     private robotService: RobotService,
   ) {}
 
   ngOnInit() {
-    this.initSetting();
+    this.actions = this.settingsService.getActions();
     this.symbols = this.symbolsService.getSymbols();
     this.resolutions = this.symbolsService.getResolutions();
   }
 
-  initSetting() {
-    let settings = this.electronService.settings.get(this.storeKey);
-    // 没有值的时候
-    if (!settings) {
-      settings = {
-        symbol: 'XBTUSD',
-        resolution: {
-          resolution: '1',
-          name: '1分钟',
-        },
-      };
-      // 配置初期化
-      this.electronService.settings.set(this.storeKey, settings);
-    }
-    this.actions = <any>settings;
-  }
-
   save() {
-    this.electronService.settings.set(this.storeKey, <any>this.actions);
+    this.settingsService.setActions(this.actions);
   }
 
   async launch() {

@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Job } from 'node-schedule';
 
 import { MysqlService } from '@duet-core/services';
@@ -26,6 +27,9 @@ export interface RuleOutput {
   close: number;
 }
 
+@Injectable({
+  providedIn: 'root',
+})
 export class Robot {
   status: IStatus;
   event: Event;

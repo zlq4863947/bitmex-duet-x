@@ -12,14 +12,12 @@ import { MysqlService } from '../mysql/mysql.service';
   providedIn: 'root',
 })
 export class RobotService {
-  private robot: Robot;
   constructor(
     private electronService: ElectronService,
     private notificationsService: NotificationsService,
     private mysqlService: MysqlService,
-  ) {
-    this.robot = new Robot(mysqlService);
-  }
+    private robot: Robot,
+  ) {}
 
   async start() {
     const config = <ApplicationSettings>(<any>this.electronService.settings.getAll());

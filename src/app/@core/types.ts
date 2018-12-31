@@ -26,6 +26,10 @@ export interface ActionsSettings {
   symbol: string;
   resolution: ResolutionOption;
 }
+export interface RotbotProcess {
+  // 是否为活动状态
+  isActived: boolean;
+}
 
 export interface ApplicationSettings {
   actions: ActionsSettings;
@@ -42,4 +46,11 @@ export interface NotificationContent {
 export interface ResolutionOption {
   resolution: string;
   name: string;
+}
+
+export enum StoreKey {
+  Actions = 'actions',
+  Exchange = 'exchange',
+  Mysql = 'mysql',
+  Trading = 'trading',
 }

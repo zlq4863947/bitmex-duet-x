@@ -4,7 +4,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Observable, Subscription } from 'rxjs';
 
-import { OrderTableService, Order } from '../../../@core/data/order-table.service';
+import { Order, OrderTableService } from '../../../@core/data/order-table.service';
 
 @Component({
   selector: 'ngx-order-table',
@@ -12,7 +12,7 @@ import { OrderTableService, Order } from '../../../@core/data/order-table.servic
   templateUrl: './order-table.component.html',
 })
 export class OrderTableComponent implements OnDestroy {
-  private orderData: Order[]
+  private orderData: Order[];
   settings: any;
   source: LocalDataSource = new LocalDataSource();
 
@@ -24,6 +24,7 @@ export class OrderTableComponent implements OnDestroy {
 
   constructor(private service: OrderTableService) {
     this.settings = this.service.getSettings();
+    this.loadData();
     this.sub = this.timer.subscribe(async () => {
       await this.loadData();
     });
@@ -34,10 +35,9 @@ export class OrderTableComponent implements OnDestroy {
   }
 
   async loadData() {
-    const data =await this.service.getData()
+    const data = await this.service.getData();
     if (!this.orderData || JSON.stringify(this.orderData) !== JSON.stringify(data)) {
       this.orderData = data;
-      console.log('load data')
       this.source.load(data);
     }
   }

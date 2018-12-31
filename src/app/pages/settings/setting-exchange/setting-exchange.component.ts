@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ExchangeSettings } from '../../../@core/types';
-import { ElectronService } from '../../../@core/utils/electron.service';
+import { SettingsService } from '../../../@core/utils/settings.service';
 import { NotificationsService } from '../../../@core/utils/notifications.service';
 
 @Component({
@@ -11,36 +11,14 @@ import { NotificationsService } from '../../../@core/utils/notifications.service
 })
 export class SettingExchangeComponent implements OnInit {
   exchange: ExchangeSettings;
-  storeKey = 'exchange';
 
-  constructor(public electronService: ElectronService, public notificationsService: NotificationsService) {}
+  constructor(public settingsService: SettingsService, public notificationsService: NotificationsService) {}
 
   ngOnInit() {
-    this.initSetting();
-  }
-
-  initSetting() {
-    let settings = this.electronService.settings.get(this.storeKey);
-    // 没有值的时候
-    if (!settings) {
-      settings = {
-        real: {
-          apiKey: '',
-          secret: '',
-        },
-        test: {
-          apiKey: '',
-          secret: '',
-        },
-        mode: 'real',
-      };
-      // 配置初期化
-      this.electronService.settings.set(this.storeKey, settings);
-    }
-    this.exchange = <any>settings;
+    this.exchange = this.settingsService.getExchange();
   }
 
   save() {
-    this.electronService.settings.set(this.storeKey, <any>this.exchange);
+    this.settingsService.setExchange(this.exchange);
   }
 }

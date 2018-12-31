@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Connection, createConnection, getConnection, getConnectionManager } from 'typeorm';
 
 import { ApplicationSettings } from '@duet-core/types';
-import { ElectronService } from '@duet-core/utils';
+import { SettingsService } from '@duet-core/utils';
 import { Helper } from '@duet-robot/common';
 import { Order } from '@duet-robot/type';
 
@@ -15,7 +15,7 @@ import * as entities from './entity';
 export class MysqlService {
   private connectionName = 'default';
 
-  constructor(private electronService: ElectronService) {}
+  constructor(private settingsService: SettingsService) {}
 
   async connect(settings: MysqlSettings): Promise<{ conn?: Connection; errorMsg?: string }> {
     try {
@@ -76,7 +76,7 @@ export class MysqlService {
     if (this.isConnected()) {
       return { conn: this.getConnection() };
     }
-    const config = <ApplicationSettings>(<any>this.electronService.settings.getAll());
+    const config = <ApplicationSettings>(<any>this.settingsService.settings.getAll());
     return await this.connect(config.mysql);
   }
 
