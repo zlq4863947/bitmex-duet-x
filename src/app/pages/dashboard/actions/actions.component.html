@@ -26,17 +26,6 @@
     <div class="size-container">
         <button type="button" class="btn btn-danger btn-block" (click)="launch()" [disabled]="isStarted == false">停止</button>
     </div>
-    <ngx-countdown #countdown></ngx-countdown>
-
-<button (click)="stop1()" class="btn btn-link btn-sm">stop</button>
-<button (click)="restart1()" class="btn btn-link btn-sm">restart</button>
-    <!--
-
-    <ngx-countdown [config]="{leftTime: 45, demand: true}" #cd1 (event)="cd1.onEvent($event)"></ngx-countdown>
-<button (click)="cd1.pause()" class="btn btn-link btn-sm">pause</button>
-<button (click)="cd1.resume()" class="btn btn-link btn-sm">resume</button>
-<button (click)="cd1.stop()" class="btn btn-link btn-sm">stop</button>
-<button (click)="cd1.restart()" class="btn btn-link btn-sm">restart</button>
-    -->
+    <ngx-clock></ngx-clock>
   </nb-card-body>
 </nb-card>

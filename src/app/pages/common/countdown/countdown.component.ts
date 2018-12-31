@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CountdownComponent as BaseCountdownComponent } from 'ngx-countdown';
 
+/**
+ * <ngx-countdown #countdown></ngx-countdown>
+ * https://github.com/cipchk/ngx-countdown
+ */
 @Component({
   selector: 'ngx-countdown',
   template: `

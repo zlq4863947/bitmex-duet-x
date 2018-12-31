@@ -24,6 +24,10 @@ export class Helper {
     return moment(time).format('YYYY-MM-DD HH:mm:ss');
   }
 
+  static formatTimeStartHour(time: number | string) {
+    return moment(time).format('HH:mm:ss');
+  }
+
   /**
    * 输出： "2018-06-22T17:36:38+09:00"
    * @param hour number

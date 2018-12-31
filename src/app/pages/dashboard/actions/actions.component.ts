@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { SymbolsService } from '../../../@core/data/symbols.service';
 import { RobotService } from '../../../@core/services/robot/robot.service';
 import { ActionsSettings, ResolutionOption } from '../../../@core/types';
 import { ElectronService } from '../../../@core/utils/electron.service';
 import { NotificationsService } from '../../../@core/utils/notifications.service';
-import { CountdownComponent } from '../../common/countdown/countdown.component';
 
 @Component({
   selector: 'ngx-dashboard-actions',
@@ -13,7 +12,6 @@ import { CountdownComponent } from '../../common/countdown/countdown.component';
   templateUrl: './actions.component.html',
 })
 export class ActionsComponent implements OnInit {
-  @ViewChild('countdown') counter: CountdownComponent;
   actions: ActionsSettings;
   storeKey = 'actions';
   symbols: string[];
@@ -68,34 +66,17 @@ export class ActionsComponent implements OnInit {
     this.isStarted = true;
     this.statusName = '启动中';
     await this.robotService.start();
-    this.counter.restart();
     this.notificationsService.success({
       title: '启动机器人',
     });
   }
 
   stop() {
-    this.counter.stop();
     this.isStarted = false;
     this.statusName = '启动';
     this.robotService.stop();
     this.notificationsService.error({
       title: '机器人已停止',
     });
-  }
-
-  stop1() {
-    this.counter.stop();
-  }
-
-  restart1() {
-    this.counter.config.leftTime = 10
-    this.counter.config.stopTime = (Math.floor(Date.now()/1000) + 10) * 1000;
-    setTimeout(() => this.counter.restart());
-  }
-
-  finishTest() {
-    console.log(this.counter)
-    this.counter.stop()
   }
 }
