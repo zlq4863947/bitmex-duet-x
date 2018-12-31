@@ -19,8 +19,7 @@ import { Helper } from '@duet-robot/common';
 export class ClockComponent implements OnDestroy {
 
   private timer: Observable<number> = Observable.create((observer) => {
-    let i = 0;
-    let timer = setInterval(() => observer.next(i++), 1000);
+    let timer = setInterval(() => observer.next(), 1000);
     return () => clearInterval(timer);
   });
   private sub: Subscription;
