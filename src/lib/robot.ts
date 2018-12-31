@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Job } from 'node-schedule';
 
-import { MysqlService } from '@duet-core/services';
+import { MysqlService } from '../app/@core/services/mysql/mysql.service';
 import { ApplicationSettings } from '@duet-core/types';
 
 import { Helper, Scheduler, logger } from './common';
