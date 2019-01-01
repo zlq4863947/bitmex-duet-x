@@ -53,5 +53,5 @@ export enum StoreKey {
   Exchange = 'exchange',
   Mysql = 'mysql',
   Trading = 'trading',
-  Process = 'process'
+  Process = 'process',
 }

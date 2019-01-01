@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ExchangeSettings } from '../../../@core/types';
-import { SettingsService } from '../../../@core/utils/settings.service';
 import { NotificationsService } from '../../../@core/utils/notifications.service';
+import { SettingsService } from '../../../@core/utils/settings.service';
 
 @Component({
   selector: 'ngx-setting-exchange',

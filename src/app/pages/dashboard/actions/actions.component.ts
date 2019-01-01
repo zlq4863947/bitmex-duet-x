@@ -48,7 +48,7 @@ export class ActionsComponent implements OnInit {
     this.save();
     this.isStarted = true;
     this.settingsService.setProcess({
-      isActived: true
+      isActived: true,
     });
     this.statusName = '启动中';
     await this.robotService.start();
@@ -60,7 +60,7 @@ export class ActionsComponent implements OnInit {
   stop() {
     this.isStarted = false;
     this.settingsService.setProcess({
-      isActived: false
+      isActived: false,
     });
     this.statusName = '启动';
     this.robotService.stop();

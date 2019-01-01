@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as settings from 'electron-settings';
 
-import { ActionsSettings, ApplicationSettings, ExchangeSettings, MysqlSettings, StoreKey, TradingSettings, RobotProcess } from '../types';
+import { ActionsSettings, ApplicationSettings, ExchangeSettings, MysqlSettings, RobotProcess, StoreKey, TradingSettings } from '../types';
 
 @Injectable()
 export class SettingsService {
@@ -107,7 +107,7 @@ export class SettingsService {
     // 没有值的时候
     if (!settings) {
       settings = {
-        isActived: false
+        isActived: false,
       };
       // 配置初期化
       this.setProcess(<any>settings);

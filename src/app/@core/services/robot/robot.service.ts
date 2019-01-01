@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import { Injectable } from '@angular/core';
 
-import { SettingsService, NotificationsService } from '@duet-core/utils';
+import { NotificationsService, SettingsService } from '@duet-core/utils';
 import { Robot } from '@duet-robot/robot';
 
 import { MysqlService } from '../mysql/mysql.service';
