@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Job } from 'node-schedule';
 
 import { ApplicationSettings } from '@duet-core/types';
+import { SettingsService, NotificationsService } from '@duet-core/utils';
 
 import { MysqlService } from '../app/@core/services/mysql/mysql.service';
 import { Helper, Scheduler, logger } from './common';
@@ -31,6 +32,7 @@ export interface RuleOutput {
   providedIn: 'root',
 })
 export class Robot {
+  settings: ApplicationSettings;
   status: IStatus;
   event: Event;
   // 交易者
@@ -38,9 +40,14 @@ export class Robot {
   job?: Job;
   isFrist = true;
 
-  constructor(private mysqlService: MysqlService) {}
+  constructor(
+    private settingsService: SettingsService,
+    private notificationsService: NotificationsService,
+    private mysqlService: MysqlService
+  ) {}
 
-  reload(config: ApplicationSettings) {
+  reload() {
+    const config = this.settingsService.getApplicationSettings();
     const side = <types.OrderSide>config.trading.side;
     this.status = {
       symbol: config.actions.symbol,
@@ -53,18 +60,29 @@ export class Robot {
       isOrder: true,
       step: types.Step.Order1,
     };
+    this.syncProcess();
     this.trader = new Trader(config.exchange);
   }
 
-  async start(config: ApplicationSettings) {
+  syncProcess() {
+    const process = this.settingsService.getProcess();
+    process.status = this.status;
+    this.settingsService.setProcess(process);
+  }
+
+  async start() {
     if (this.job) {
-      logger.error('禁止重复启动机器人！！');
+      this.notificationsService.error({
+        title: '禁止重复启动机器人！！',
+      });
       return;
     }
-    this.reload(config);
+    this.reload();
     this.job = Scheduler.min(this.status.resolution, async () => {
       try {
-        logger.info(`执行${this.status.resolution}分钟定时任务。。。。`);
+        this.notificationsService.success({
+          title:`执行${this.status.resolution}分钟定时任务。。。。`,
+        });
         logger.info(`系统状态: ${JSON.stringify(this.status)}`);
         const res = await this.rule();
         if (res.action) {
@@ -86,7 +104,9 @@ export class Robot {
       this.job.cancel();
       this.job = undefined;
       logger.info(`停止机器人`);
+      return true;
     }
+    return false;
   }
 
   async doOrder(action: types.OrderSide, price: number) {
@@ -126,6 +146,7 @@ export class Robot {
         }
         logger.info(`执行订单${this.status.step}[终了] ${Helper.endTimer(timer)}`);
         this.status.step = this.status.step === types.Step.Order1 ? types.Step.Order2 : types.Step.Order1;
+        this.syncProcess();
       } else {
         logger.info(
           `执行订单${this.status.step}不满足执行[终了] 买入/卖出动作(${this.getOrderSide(
@@ -134,6 +155,10 @@ export class Robot {
         );
       }
     } catch (err) {
+      this.notificationsService.error({
+        title: '执行订单异常',
+        body: err.message,
+      });
       logger.error(`执行订单[异常终了] ${err.message}`);
     }
   }
@@ -161,13 +186,25 @@ export class Robot {
     // 买入
     if (lastClose > baseline && lastClose > ma) {
       logger.info(`收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`);
+      this.notificationsService.info({
+        title: '交易规则',
+        body: `收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`,
+      });
       action = types.OrderSide.Buy;
     } else if (lastClose < baseline && lastClose < ma) {
       // 卖出
       logger.info(`收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`);
+      this.notificationsService.info({
+        title: '交易规则',
+        body: `收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`,
+      });
       action = types.OrderSide.Sell;
     } else {
       logger.info(`交易规则计算未满足买入、卖出条件，待机`);
+      this.notificationsService.info({
+        title: '交易规则',
+        body: `交易规则计算未满足买入、卖出条件，待机`,
+      });
     }
     return {
       action,

@@ -18,7 +18,7 @@ export class RobotService {
     private robot: Robot,
   ) {}
 
-  async start() {
+  async start(): Promise<boolean> {
     const config = this.settingsService.getApplicationSettings();
     const res = await this.mysqlService.init(config.mysql);
     if (res && res.errorMsg) {
@@ -26,12 +26,13 @@ export class RobotService {
         title: '数据库连接出错',
         body: res.errorMsg,
       });
-      return;
+      return false;
     }
-    await this.robot.start(config);
+    await this.robot.start();
+    return true;
   }
 
   stop() {
-    this.robot.stop();
+    return this.robot.stop();
   }
 }

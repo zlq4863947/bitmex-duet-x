@@ -45,25 +45,27 @@ export class ActionsComponent implements OnInit {
   }
 
   async start() {
-    this.save();
-    this.isStarted = true;
-    this.settingsService.setProcess({
-      isActived: true,
-    });
-    this.statusName = '启动中';
-    await this.robotService.start();
-    this.notificationsService.success({
-      title: '启动机器人',
-    });
+    const result = await this.robotService.start();
+    if (result) {
+      this.save();
+      this.isStarted = true;
+      const process = this.settingsService.getProcess();
+      process.isActived = true;
+      this.settingsService.setProcess(process);
+      this.statusName = '启动中';
+      this.notificationsService.success({
+        title: '启动机器人',
+      });
+    }
   }
 
   stop() {
-    this.isStarted = false;
-    this.settingsService.setProcess({
-      isActived: false,
-    });
-    this.statusName = '启动';
     this.robotService.stop();
+    this.isStarted = false;
+    const process = this.settingsService.getProcess();
+    process.isActived = false;
+    this.settingsService.setProcess(process);
+    this.statusName = '启动';
     this.notificationsService.error({
       title: '机器人已停止',
     });

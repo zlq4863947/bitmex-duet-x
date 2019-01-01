@@ -6,10 +6,11 @@ import 'style-loader!angular2-toaster/toaster.css';
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
 import { Component, OnInit } from '@angular/core';
-import { ToasterConfig, ToasterService } from 'angular2-toaster';
+import { ToasterConfig } from 'angular2-toaster';
 
 import { AnalyticsService } from './@core/utils/analytics.service';
 import { ElectronService } from './@core/utils/electron.service';
+import { MysqlService } from '@duet-core/services';
 
 @Component({
   moduleId: module.id,
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit {
     limit: 5,
   });
 
-  constructor(private toasterService: ToasterService, public electronService: ElectronService, private analytics: AnalyticsService) {
+  constructor(public electronService: ElectronService, private analytics: AnalyticsService) {
     if (electronService.isElectron()) {
       console.log('Mode electron');
       console.log('Electron ipcRenderer', electronService.ipcRenderer);

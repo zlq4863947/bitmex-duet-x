@@ -17,7 +17,7 @@ import { Job } from 'node-schedule';
 export class Scheduler {
   static min(minute: number, fn: () => {}) {
     const job = new Job(fn);
-    job.schedule(`*/${minute} * * * *`);
+    job.schedule(`1 */${minute} * * * *`);
     return job;
   }
 

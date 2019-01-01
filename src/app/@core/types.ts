@@ -1,3 +1,5 @@
+import { IStatus } from '@duet-robot/robot'
+
 export interface MysqlSettings {
   host: string;
   port: number;
@@ -29,6 +31,7 @@ export interface ActionsSettings {
 export interface RobotProcess {
   // 是否为活动状态
   isActived: boolean;
+  status: IStatus;
 }
 
 export interface ApplicationSettings {
@@ -36,6 +39,7 @@ export interface ApplicationSettings {
   exchange: ExchangeSettings;
   mysql: MysqlSettings;
   trading: TradingSettings;
+  process: RobotProcess;
 }
 
 export interface NotificationContent {
