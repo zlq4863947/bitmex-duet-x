@@ -51,11 +51,11 @@
     "lint:e2e": "tslint -c tslint.json -p 'e2e/tsconfig.e2e.json'"
   },
   "dependencies": {
+    "bitmex-ws": "^1.1.0",
     "electron-log": "^2.2.17",
     "electron-settings": "^3.2.0",
     "moment": "^2.23.0",
     "mysql": "^2.16.0",
-    "ngx-countdown": "^3.1.0",
     "pace-js": "^1.0.2",
     "reflect-metadata": "^0.1.12",
     "tech-indicator": "^1.0.1",
