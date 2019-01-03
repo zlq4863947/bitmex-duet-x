@@ -1,4 +1,4 @@
-import { IStatus } from '@duet-robot/robot'
+import { IStatus } from '@duet-robot/robot';
 
 export interface MysqlSettings {
   host: string;
@@ -16,7 +16,7 @@ export interface TradingSettings {
 export interface ExchangeSettings {
   real: ApiKeySettings;
   test: ApiKeySettings;
-  mode: string;
+  mode: 'real' | 'test';
 }
 
 export interface ApiKeySettings {

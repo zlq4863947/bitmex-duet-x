@@ -8,9 +8,10 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { Component, OnInit } from '@angular/core';
 import { ToasterConfig } from 'angular2-toaster';
 
+import { MysqlService } from '@duet-core/services';
+
 import { AnalyticsService } from './@core/utils/analytics.service';
 import { ElectronService } from './@core/utils/electron.service';
-import { MysqlService } from '@duet-core/services';
 
 @Component({
   moduleId: module.id,

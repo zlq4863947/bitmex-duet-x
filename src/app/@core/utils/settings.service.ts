@@ -108,7 +108,7 @@ export class SettingsService {
     if (!settings) {
       settings = {
         isActived: false,
-        status: {}
+        status: {},
       };
       // 配置初期化
       this.setProcess(<any>settings);

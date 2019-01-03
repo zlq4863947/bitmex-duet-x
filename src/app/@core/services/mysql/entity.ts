@@ -1,10 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('order')
 export class Order {
-  @PrimaryGeneratedColumn() id!: number;
-
-  @Column() oriderId: string;
+  @PrimaryColumn() orderId: string;
 
   @Column() symbol: string;
 

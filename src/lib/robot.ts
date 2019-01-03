@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
+import { BitmexWS } from 'bitmex-ws';
+import { ExchangeOptions } from 'bitmex-ws/lib/types';
 import { Job } from 'node-schedule';
 
-import { ApplicationSettings } from '@duet-core/types';
-import { SettingsService, NotificationsService } from '@duet-core/utils';
+import { ApplicationSettings, ExchangeSettings } from '@duet-core/types';
+import { NotificationsService, SettingsService } from '@duet-core/utils';
 
 import { MysqlService } from '../app/@core/services/mysql/mysql.service';
 import { Helper, Scheduler, logger } from './common';
@@ -37,13 +39,14 @@ export class Robot {
   event: Event;
   // 交易者
   trader: Trader;
+  ws: BitmexWS;
   job?: Job;
   isFrist = true;
 
   constructor(
     private settingsService: SettingsService,
     private notificationsService: NotificationsService,
-    private mysqlService: MysqlService
+    private mysqlService: MysqlService,
   ) {}
 
   reload() {
@@ -62,6 +65,31 @@ export class Robot {
     };
     this.syncProcess();
     this.trader = new Trader(config.exchange);
+    const exOptions = this.getExchangeOptions(config.exchange);
+    this.ws = new BitmexWS(exOptions);
+    this.ws.order$(this.status.symbol).subscribe(async (order) => {
+      await this.mysqlService.syncOrder(order);
+    });
+  }
+
+  private getExchangeOptions(config: ExchangeSettings) {
+    let exOptions: ExchangeOptions;
+    if (config.mode === 'test') {
+      const test = config.test;
+      exOptions = {
+        apiKey: test.apiKey,
+        apiSecret: test.secret,
+        testnet: true,
+      };
+    } else {
+      const real = config.real;
+      exOptions = {
+        apiKey: real.apiKey,
+        apiSecret: real.secret,
+        testnet: false,
+      };
+    }
+    return exOptions;
   }
 
   syncProcess() {
@@ -81,7 +109,7 @@ export class Robot {
     this.job = Scheduler.min(this.status.resolution, async () => {
       try {
         this.notificationsService.success({
-          title:`执行${this.status.resolution}分钟定时任务。。。。`,
+          title: `执行${this.status.resolution}分钟定时任务。。。。`,
         });
         logger.info(`系统状态: ${JSON.stringify(this.status)}`);
         const res = await this.rule();

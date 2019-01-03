@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { BitmexWS } from 'bitmex-ws';
 
 import { SymbolsService } from '../../../@core/data/symbols.service';
 import { RobotService } from '../../../@core/services/robot/robot.service';
 import { ActionsSettings, ResolutionOption } from '../../../@core/types';
 import { NotificationsService } from '../../../@core/utils/notifications.service';
 import { SettingsService } from '../../../@core/utils/settings.service';
-import { BitmexWS } from 'bitmex-ws';
 
 @Component({
   selector: 'ngx-dashboard-actions',
@@ -31,15 +31,6 @@ export class ActionsComponent implements OnInit {
     this.actions = this.settingsService.getActions();
     this.symbols = this.symbolsService.getSymbols();
     this.resolutions = this.symbolsService.getResolutions();
-    const bitmex = new BitmexWS({
-      apiKey: 'xcWx4ts3A5sluYBupjvvNAnO',
-      apiSecret: 'rpeJNuMp-8uAJTae6UUed2kyt-bGfGIGQ_Rh033TFuhheK4l',
-      testnet: true
-    });
-
-    bitmex.order$('xbtusd').subscribe((orderbook) => {
-      console.log('order:', orderbook);
-    });
   }
 
   save() {
