@@ -7,14 +7,17 @@ import { ApplicationSettings, ExchangeSettings } from '@duet-core/types';
 import { NotificationsService, SettingsService } from '@duet-core/utils';
 
 import { MysqlService } from '../app/@core/services/mysql/mysql.service';
+import { Log } from '../app/@core/services/mysql/entity';
 import { Helper, Scheduler, logger } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
 import * as types from './type';
+import { OrderSide, OrderStatus } from './type';
 
 export interface IStatus {
   symbol: string;
   resolution: number;
+  resolutionName: string;
   amount: number;
   leverage: number;
   side: types.OrderSide;
@@ -58,6 +61,7 @@ export class Robot {
       side,
       leverage: config.trading.leverage,
       resolution: +config.actions.resolution.resolution,
+      resolutionName: config.actions.resolution.name,
       inverseSide: side === types.OrderSide.Sell ? types.OrderSide.Buy : types.OrderSide.Sell,
       isInitSell: side === types.OrderSide.Sell,
       isOrder: true,
@@ -68,7 +72,10 @@ export class Robot {
     const exOptions = this.getExchangeOptions(config.exchange);
     this.ws = new BitmexWS(exOptions);
     this.ws.order$(this.status.symbol).subscribe(async (order) => {
-      await this.mysqlService.syncOrder(order);
+      logger.info(`subscribe order: ${JSON.stringify(order)}`);
+      if (order && order.ordStatus && order.ordStatus !== OrderStatus.New) {
+        await this.mysqlService.syncOrder(order);
+      }
     });
   }
 
@@ -155,7 +162,7 @@ export class Robot {
         if (this.status.isOrder) {
           const orderInfo = await this.trader.order(input);
           const saveRes = await this.mysqlService.saveOrder(orderInfo);
-          console.log('saveRes: ', saveRes);
+          logger.info(`saveRes: ${JSON.stringify(saveRes)}`);
           if (!orderInfo) {
             throw Error(`订单${this.status.step}下单异常 - 执行返回结果为空`);
           }
@@ -177,9 +184,7 @@ export class Robot {
         this.syncProcess();
       } else {
         logger.info(
-          `执行订单${this.status.step}不满足执行[终了] 买入/卖出动作(${this.getOrderSide(
-            this.status.step,
-          )}) ！= 本次动作(${action}) ${Helper.endTimer(timer)}`,
+          `执行订单${this.status.step}不满足${action === OrderSide.Buy ? '买入' : '卖出'}条件[终了] ${Helper.endTimer(timer)}`,
         );
       }
     } catch (err) {
@@ -228,16 +233,41 @@ export class Robot {
       });
       action = types.OrderSide.Sell;
     } else {
-      logger.info(`交易规则计算未满足买入、卖出条件，待机`);
+      const logText = `交易规则计算未满足${this.getOrderSide(this.status.step) === OrderSide.Buy ? '买入' : '卖出'}条件，待机`;
+      logger.info(logText);
       this.notificationsService.info({
         title: '交易规则',
-        body: `交易规则计算未满足买入、卖出条件，待机`,
+        body: logText,
       });
     }
+    await this.saveDBLog(bars, action);
     return {
       action,
       close: lastClose,
     };
+  }
+
+  private async saveDBLog(udfBar: types.UdfResponse, action?: types.OrderSide) {
+    const log = new Log();
+    if (!action) {
+      log.operation = '待机';
+    } else {
+      log.operation = action === types.OrderSide.Buy ? '买入' : '卖出';
+    }
+    log.symbol = this.status.symbol;
+    log.resolution = this.status.resolutionName;
+    log.time = Helper.formatTime(Date.now());
+    // 存储最后50条k线数据
+    const bars = {
+      t: udfBar.t.slice(Math.max(udfBar.t.length - 50, 1)),
+      c: udfBar.c.slice(Math.max(udfBar.c.length - 50, 1)),
+      o: udfBar.o.slice(Math.max(udfBar.o.length - 50, 1)),
+      h: udfBar.h.slice(Math.max(udfBar.h.length - 50, 1)),
+      l: udfBar.l.slice(Math.max(udfBar.l.length - 50, 1)),
+      v: udfBar.v.slice(Math.max(udfBar.v.length - 50, 1)),
+    }
+    log.memo = JSON.stringify(bars);
+    await this.mysqlService.saveLog(log);
   }
 
   // 获取相应步骤的买入/卖出操作

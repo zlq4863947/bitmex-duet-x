@@ -105,6 +105,16 @@ export class MysqlService {
       if (dbOrder && dbOrder.status !== order.ordStatus) {
         dbOrder.status = order.ordStatus;
         await repo.save(dbOrder);
+      } else if (order && order.price) {
+        const orderInfo = new entities.Order();
+        orderInfo.orderId = order.orderID;
+        orderInfo.symbol = order.symbol;
+        orderInfo.amount = order.orderQty;
+        orderInfo.price = order.price;
+        orderInfo.side = order.side;
+        orderInfo.status = order.ordStatus;
+        orderInfo.time = Helper.formatTime(Date.now());
+        await repo.save(orderInfo);
       }
     }
   }
@@ -116,6 +126,25 @@ export class MysqlService {
       return await repo
         .createQueryBuilder('order')
         .orderBy('order.time', 'DESC')
+        .getMany();
+    }
+  }
+
+  async saveLog(log: entities.Log) {
+    const res = await this.autoConnect();
+    if (res && res.conn) {
+      const repo = res.conn.getRepository(entities.Log);
+      return await repo.save(log);
+    }
+  }
+
+  async getLogs(): Promise<entities.Log[] | undefined> {
+    const res = await this.autoConnect();
+    if (res && res.conn) {
+      const repo = res.conn.getRepository(entities.Log);
+      return await repo
+        .createQueryBuilder('log')
+        .orderBy('log.time', 'DESC')
         .getMany();
     }
   }

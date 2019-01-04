@@ -27,15 +27,17 @@ export class Order {
 export class Log {
   @PrimaryGeneratedColumn() id!: number;
 
-  @Column('bigint') time: number;
+  @Column() time: string;
 
   @Column() symbol: string;
 
   @Column() resolution: string;
 
-  @Column() content: string;
-
   @Column() operation: string;
+
+  @Column({ length: 300, nullable: true }) content: string;
+
+  @Column({ length: 3000, nullable: true }) memo: string;
 
   constructor(obj?: Log) {
     if (obj) {
