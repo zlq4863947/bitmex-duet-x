@@ -14,6 +14,14 @@ import { Trader } from './trader';
 import * as types from './type';
 import { OrderSide, OrderStatus } from './type';
 
+// 机器人运行状态
+export enum RobotState {
+  // 策略执行中
+  Ruling = 'Ruling',
+  // 订单中
+  Ordering = 'Ordering'
+}
+
 export interface IStatus {
   symbol: string;
   resolution: number;
@@ -23,7 +31,10 @@ export interface IStatus {
   side: types.OrderSide;
   inverseSide: types.OrderSide;
   isInitSell: boolean;
+  // 是否真实下单
   isOrder: boolean;
+  robotState: RobotState;
+  orderInfo?: types.Order; 
   // 当前步骤
   step: types.Step;
 }
@@ -65,6 +76,7 @@ export class Robot {
       inverseSide: side === types.OrderSide.Sell ? types.OrderSide.Buy : types.OrderSide.Sell,
       isInitSell: side === types.OrderSide.Sell,
       isOrder: true,
+      robotState: RobotState.Ruling,
       step: types.Step.Order1,
     };
     this.syncProcess();
@@ -74,7 +86,14 @@ export class Robot {
     this.ws.order$(this.status.symbol).subscribe(async (order) => {
       logger.info(`subscribe order: ${JSON.stringify(order)}`);
       if (order && order.ordStatus && order.ordStatus !== OrderStatus.New) {
-        await this.mysqlService.syncOrder(order);
+        const fmtOrder: types.Order = {
+          orderID: order.orderID,
+          symbol: order.symbol,
+          orderQty: order.orderQty,
+          price: order.price,
+          ordStatus: order.ordStatus,
+        }
+        await this.mysqlService.syncOrder(fmtOrder);
       }
     });
   }
@@ -115,8 +134,11 @@ export class Robot {
     this.reload();
     this.job = Scheduler.min(this.status.resolution, async () => {
       try {
+        const result = await this.checkStatus();
+        // 继续执行
+        if (!result) return;
         this.notificationsService.success({
-          title: `执行${this.status.resolution}分钟定时任务。。。。`,
+          title: `执行${this.status.resolution}分钟定时任务...`,
         });
         logger.info(`系统状态: ${JSON.stringify(this.status)}`);
         const res = await this.rule();
@@ -130,6 +152,9 @@ export class Robot {
     logger.info(`启动机器人`);
     if (this.isFrist) {
       await this.trader.updateLeverage(this.status.symbol, this.status.leverage);
+      this.notificationsService.success({
+        title: `更新${this.status.symbol}杠杆为:${this.status.leverage}`,
+      });
     }
     this.isFrist = false;
   }
@@ -144,23 +169,75 @@ export class Robot {
     return false;
   }
 
-  async doOrder(action: types.OrderSide, price: number) {
+  /**
+   * 检查同步状态,返回是否可以继续执行的结果
+   */
+  private async checkStatus(): Promise<Boolean> {
+    try {
+
+      if (this.status.orderInfo) {
+        const orderId = this.status.orderInfo.orderID;
+        // 获取交易所订单信息
+        const onlineOrder = await this.trader.getOrderById(this.status.symbol, orderId);
+        // 没有在线订单
+        if (!onlineOrder) {
+          const logText = `未查询到委托ID:${orderId}`;
+          this.notificationsService.error({
+            title: logText,
+          });
+          logger.error(logText);
+          return;
+        }
+        if (onlineOrder.ordStatus === types.OrderStatus.New) {
+          return false;
+        }
+        const dbOrder = await this.mysqlService.getOrderById(orderId);
+        if (!dbOrder || onlineOrder.ordStatus !== dbOrder.status) {
+          // 同步订单状态
+          await this.mysqlService.syncOrder(onlineOrder)
+      
+          switch (onlineOrder.ordStatus) {
+            case types.OrderStatus.Canceled:
+            case types.OrderStatus.Rejected:
+              this.status.orderInfo = undefined;
+              this.status.robotState = RobotState.Ruling;
+              return true;
+            case types.OrderStatus.PartiallyFilled:
+              return false;
+            case types.OrderStatus.Filled:
+              this.status.orderInfo = undefined;
+              this.status.robotState = RobotState.Ruling;
+              this.status.step = this.status.step === types.Step.Order1 ? types.Step.Order2 : types.Step.Order1;
+              return true;
+          }
+        }
+      }
+      return true;
+    } catch (err) {
+      logger.error(`状态检查[异常终了] ${err.message}`);
+    }
+  }
+
+  async doOrder(ruleAction: types.OrderSide, price: number) {
     logger.info(`执行订单${this.status.step}[启动]`);
 
     try {
       const timer = Helper.getTimer();
+      const action = this.getOrderSide(this.status.step);
       // 买入/卖出动作 == 本次动作
-      if (this.getOrderSide(this.status.step) === action) {
+      if (action === ruleAction) {
         // this.status.step === types.Step.Order1
         const input = {
           symbol: this.status.symbol,
-          side: action,
+          side: ruleAction,
           price,
           amount: this.status.amount,
         };
         logger.info(`订单信息: ${JSON.stringify(input)}`);
         if (this.status.isOrder) {
+          this.status.robotState = RobotState.Ordering;
           const orderInfo = await this.trader.order(input);
+          this.status.orderInfo = orderInfo;
           const saveRes = await this.mysqlService.saveOrder(orderInfo);
           logger.info(`saveRes: ${JSON.stringify(saveRes)}`);
           if (!orderInfo) {
@@ -188,6 +265,7 @@ export class Robot {
         );
       }
     } catch (err) {
+      this.status.robotState = RobotState.Ruling;
       this.notificationsService.error({
         title: '执行订单异常',
         body: err.message,

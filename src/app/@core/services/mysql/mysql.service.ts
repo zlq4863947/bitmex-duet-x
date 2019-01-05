@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 
 import { Injectable } from '@angular/core';
-import { Order as BitmexOrder } from 'bitmex-ws/lib/types';
 import { Connection, createConnection, getConnection, getConnectionManager } from 'typeorm';
 
 import { ApplicationSettings } from '@duet-core/types';
@@ -92,12 +91,12 @@ export class MysqlService {
       orderInfo.price = order.price;
       orderInfo.side = order.side;
       orderInfo.status = order.ordStatus;
-      orderInfo.time = Helper.formatTime(order.timestamp);
+      orderInfo.time = Helper.formatTime(Date.now());
       return await repo.save(orderInfo);
     }
   }
 
-  async syncOrder(order: BitmexOrder) {
+  async syncOrder(order: Order) {
     const res = await this.autoConnect();
     if (res && res.conn) {
       const repo = res.conn.getRepository(entities.Order);
@@ -127,6 +126,14 @@ export class MysqlService {
         .createQueryBuilder('order')
         .orderBy('order.time', 'DESC')
         .getMany();
+    }
+  }
+
+  async getOrderById(orderId: string): Promise<entities.Order | undefined> {
+    const res = await this.autoConnect();
+    if (res && res.conn) {
+      const repo = res.conn.getRepository(entities.Order);
+      return await repo.findOne(orderId);
     }
   }
 

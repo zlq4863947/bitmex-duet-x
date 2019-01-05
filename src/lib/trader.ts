@@ -166,11 +166,11 @@ export class Trader {
     };
     logger.info(`获取当前订单(orderID)[启动] ${JSON.stringify(orderOptions)}`);
     const res = await this.rest.getOrder(orderOptions);
-    if (!res) {
+    if (!res || res.orders.length === 0) {
       return;
     }
     logger.info(`获取当前订单(orderID)[终了] ${JSON.stringify(res)}`);
-    return res.orders;
+    return res.orders[res.orders.length - 1];
   }
 
   async getOnlineOrder(symbol: string) {
