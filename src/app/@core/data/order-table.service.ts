@@ -4,6 +4,15 @@ import { MysqlService } from '@duet-core/services';
 import { Helper } from '@duet-robot/common';
 import { OrderSide, OrderStatus } from '@duet-robot/type';
 
+export interface Order {
+  time: string;
+  symbol: string;
+  price: number;
+  amount: number;
+  side: string;
+  status: string;
+}
+
 @Injectable()
 export class OrderTableService {
   constructor(private mysqlService: MysqlService) {}
@@ -84,13 +93,4 @@ export class OrderTableService {
       }
     }
   }
-}
-
-export interface Order {
-  time: string;
-  symbol: string;
-  price: number;
-  amount: number;
-  side: string;
-  status: string;
 }

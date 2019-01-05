@@ -6,8 +6,8 @@ import { Job } from 'node-schedule';
 import { ApplicationSettings, ExchangeSettings } from '@duet-core/types';
 import { NotificationsService, SettingsService } from '@duet-core/utils';
 
-import { MysqlService } from '../app/@core/services/mysql/mysql.service';
 import { Log } from '../app/@core/services/mysql/entity';
+import { MysqlService } from '../app/@core/services/mysql/mysql.service';
 import { Helper, Scheduler, logger } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
@@ -19,7 +19,7 @@ export enum RobotState {
   // 策略执行中
   Ruling = 'Ruling',
   // 订单中
-  Ordering = 'Ordering'
+  Ordering = 'Ordering',
 }
 
 export interface IStatus {
@@ -34,7 +34,7 @@ export interface IStatus {
   // 是否真实下单
   isOrder: boolean;
   robotState: RobotState;
-  orderInfo?: types.Order; 
+  orderInfo?: types.Order;
   // 当前步骤
   step: types.Step;
 }
@@ -92,7 +92,7 @@ export class Robot {
           orderQty: order.orderQty,
           price: order.price,
           ordStatus: order.ordStatus,
-        }
+        };
         await this.mysqlService.syncOrder(fmtOrder);
       }
     });
@@ -174,7 +174,6 @@ export class Robot {
    */
   private async checkStatus(): Promise<Boolean> {
     try {
-
       if (this.status.orderInfo) {
         const orderId = this.status.orderInfo.orderID;
         // 获取交易所订单信息
@@ -194,8 +193,8 @@ export class Robot {
         const dbOrder = await this.mysqlService.getOrderById(orderId);
         if (!dbOrder || onlineOrder.ordStatus !== dbOrder.status) {
           // 同步订单状态
-          await this.mysqlService.syncOrder(onlineOrder)
-      
+          await this.mysqlService.syncOrder(onlineOrder);
+
           switch (onlineOrder.ordStatus) {
             case types.OrderStatus.Canceled:
             case types.OrderStatus.Rejected:
@@ -260,9 +259,7 @@ export class Robot {
         this.status.step = this.status.step === types.Step.Order1 ? types.Step.Order2 : types.Step.Order1;
         this.syncProcess();
       } else {
-        logger.info(
-          `执行订单${this.status.step}不满足${action === OrderSide.Buy ? '买入' : '卖出'}条件[终了] ${Helper.endTimer(timer)}`,
-        );
+        logger.info(`执行订单${this.status.step}不满足${action === OrderSide.Buy ? '买入' : '卖出'}条件[终了] ${Helper.endTimer(timer)}`);
       }
     } catch (err) {
       this.status.robotState = RobotState.Ruling;
@@ -343,7 +340,7 @@ export class Robot {
       h: udfBar.h.slice(Math.max(udfBar.h.length - 50, 1)),
       l: udfBar.l.slice(Math.max(udfBar.l.length - 50, 1)),
       v: udfBar.v.slice(Math.max(udfBar.v.length - 50, 1)),
-    }
+    };
     log.memo = JSON.stringify(bars);
     await this.mysqlService.saveLog(log);
   }
