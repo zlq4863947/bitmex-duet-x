@@ -76,6 +76,7 @@ export class Robot {
       inverseSide: side === types.OrderSide.Sell ? types.OrderSide.Buy : types.OrderSide.Sell,
       isInitSell: side === types.OrderSide.Sell,
       isOrder: true,
+      orderInfo: undefined,
       robotState: RobotState.Ruling,
       step: types.Step.Order1,
     };
@@ -206,7 +207,6 @@ export class Robot {
             case types.OrderStatus.Filled:
               this.status.orderInfo = undefined;
               this.status.robotState = RobotState.Ruling;
-              this.status.step = this.status.step === types.Step.Order1 ? types.Step.Order2 : types.Step.Order1;
               return true;
           }
         }
