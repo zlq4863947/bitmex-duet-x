@@ -4,7 +4,7 @@ import { ResolutionOption } from '../types';
 
 @Injectable()
 export class SymbolsService {
-  private symbols = ['XBTUSD', 'ADAZ18', 'BCHZ18', 'EOSZ18', 'ETHUSD', 'LTCZ18', 'TRXZ18', 'XRPZ18'];
+  private symbols = ['XBTUSD', 'ADAZ19', 'BCHZ19', 'EOSZ19', 'ETHUSD', 'LTCZ19', 'TRXZ19', 'XRPZ19'];
   private resolutions: ResolutionOption[] = [
     { resolution: '1', name: '1分钟' },
     { resolution: '5', name: '5分钟' },
