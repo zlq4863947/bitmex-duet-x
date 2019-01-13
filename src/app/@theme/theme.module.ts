@@ -19,6 +19,7 @@ import {
   NbUserModule,
 } from '@nebular/theme';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TooltipModule } from 'ng2-tooltip-directive';
 
 import {
   FooterComponent,
@@ -52,6 +53,7 @@ const NB_MODULES = [
   NbPopoverModule,
   NbContextMenuModule,
   NgbModule,
+  TooltipModule,
   NbSecurityModule, // *nbIsGranted directive,
   NbProgressBarModule,
 ];

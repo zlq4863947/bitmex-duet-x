@@ -1,6 +1,6 @@
 {
   "name": "bitmex-duet-x",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "bitmex trade robot",
   "license": "MIT",
   "author": {
@@ -56,6 +56,7 @@
     "electron-settings": "^3.2.0",
     "moment": "^2.23.0",
     "mysql": "^2.16.0",
+    "ng2-tooltip-directive": "^2.1.6",
     "pace-js": "^1.0.2",
     "reflect-metadata": "^0.1.12",
     "tech-indicator": "^1.0.1",

@@ -1,6 +1,6 @@
-const moment = require('moment');
+import * as moment from 'moment';
 
-export let logger = {
+export const logger = {
   on: (ev: string, fn: (e: Error) => void) => {},
   info: (msg: string) => console.log(`[${moment().format()}]`, msg),
   debug: (msg: string) => console.debug(`[${moment().format()}]`, msg),
