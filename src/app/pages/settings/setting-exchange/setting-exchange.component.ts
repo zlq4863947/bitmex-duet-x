@@ -39,18 +39,25 @@ export class SettingExchangeComponent implements OnInit {
       trader = new Trader(this.exchange)
     }
     this.exchange.mode = prevMode;
-    const res = await trader.updateLeverage('XBTUSD', 2);
-    if(res && res.order) {
-      if(res.order.error) {
-        this.notificationsService.error({
-          title: '验证apikey失败!',
-          body: `错误信息: ${res.order.error.message}`
-        });
-      } else {
-        this.notificationsService.success({
-          title: '验证apikey成功!'
-        });
+    try {
+      const res = await trader.updateLeverage('XBTUSD', 2);
+      if(res && res.order) {
+        if(res.order.error) {
+          this.notificationsService.error({
+            title: '验证apikey失败!',
+            body: `错误信息: ${res.order.error.message}`
+          });
+        } else {
+          this.notificationsService.success({
+            title: '验证apikey成功!'
+          });
+        }
       }
+    } catch (error) {
+      this.notificationsService.error({
+        title: '网络连接失败!',
+        body: `错误信息: ${error.message}`
+      });
     }
   }
 }
