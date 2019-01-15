@@ -1,8 +1,8 @@
-import * as moment from 'moment';
+import elog from 'electron-log';
 
 export const logger = {
   on: (ev: string, fn: (e: Error) => void) => {},
-  info: (msg: string) => console.log(`[${moment().format()}]`, msg),
-  debug: (msg: string) => console.debug(`[${moment().format()}]`, msg),
-  error: (msg: string) => console.error(`[${moment().format()}]`, msg),
+  info: (msg: string) => elog.info(msg),
+  debug: (msg: string) => elog.debug(msg),
+  error: (msg: string) => elog.error(msg),
 };

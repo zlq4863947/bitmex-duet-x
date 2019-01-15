@@ -2,8 +2,14 @@ import * as path from 'path';
 import * as url from 'url';
 
 import { BrowserWindow, Menu, app, autoUpdater, dialog, screen, session, shell } from 'electron';
-import * as log from 'electron-log';
+import log from 'electron-log';
 import * as settings from 'electron-settings';
+
+log.transports.file.level = 'info';
+log.transports.console.level = false;
+log.transports.rendererConsole.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}'
+//log.transports.file.file = __dirname + '/bitmex-dust.log';
+//console.log(__dirname + '/bitmex-dust.log')
 
 let win, serve;
 const args = process.argv.slice(1);
