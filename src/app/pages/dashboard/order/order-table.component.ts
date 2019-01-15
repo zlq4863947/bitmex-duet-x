@@ -17,7 +17,7 @@ export class OrderTableComponent implements OnDestroy {
   source: LocalDataSource = new LocalDataSource();
 
   timer: Observable<number> = Observable.create((observer) => {
-    let timer = setInterval(() => observer.next(), 1000);
+    let timer = setInterval(() => observer.next(), 2000);
     return () => clearInterval(timer);
   });
   sub: Subscription;
