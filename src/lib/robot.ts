@@ -11,11 +11,12 @@ import { MysqlService } from '../app/@core/services/mysql/mysql.service';
 import { Helper, Scheduler, logger } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
-import * as types from './type';
-import { OrderSide, OrderStatus } from './type';
+import { OrderSide, OrderStatus, Order, Step, UdfResponse } from './type';
 
 // 机器人运行状态
 export enum RobotState {
+  // 待机中
+  Waiting = 'Waiting',
   // 策略执行中
   Ruling = 'Ruling',
   // 订单中
@@ -28,19 +29,19 @@ export interface IStatus {
   resolutionName: string;
   amount: number;
   leverage: number;
-  side: types.OrderSide;
-  inverseSide: types.OrderSide;
+  side: OrderSide;
+  inverseSide: OrderSide;
   isInitSell: boolean;
   // 是否真实下单
   isOrder: boolean;
   robotState: RobotState;
-  orderInfo?: types.Order;
+  orderInfo?: Order;
   // 当前步骤
-  step: types.Step;
+  step: Step;
 }
 
 export interface RuleOutput {
-  action?: types.OrderSide;
+  action?: OrderSide;
   close: number;
 }
 
@@ -65,7 +66,7 @@ export class Robot {
 
   reload() {
     const config = this.settingsService.getApplicationSettings();
-    const side = <types.OrderSide>config.trading.side;
+    const side = <OrderSide>config.trading.side;
     this.status = {
       symbol: config.actions.symbol,
       amount: config.trading.amount,
@@ -73,12 +74,12 @@ export class Robot {
       leverage: config.trading.leverage,
       resolution: +config.actions.resolution.resolution,
       resolutionName: config.actions.resolution.name,
-      inverseSide: side === types.OrderSide.Sell ? types.OrderSide.Buy : types.OrderSide.Sell,
-      isInitSell: side === types.OrderSide.Sell,
+      inverseSide: side === OrderSide.Sell ? OrderSide.Buy : OrderSide.Sell,
+      isInitSell: side === OrderSide.Sell,
       isOrder: true,
       orderInfo: undefined,
-      robotState: RobotState.Ruling,
-      step: types.Step.Order1,
+      robotState: RobotState.Waiting,
+      step: Step.Order1,
     };
     this.syncProcess();
     this.trader = new Trader(config.exchange);
@@ -87,7 +88,7 @@ export class Robot {
     this.ws.order$(this.status.symbol).subscribe(async (order) => {
       logger.info(`subscribe order: ${JSON.stringify(order)}`);
       if (order && order.ordStatus && order.ordStatus !== OrderStatus.New) {
-        const fmtOrder: types.Order = {
+        const fmtOrder: Order = {
           orderID: order.orderID,
           symbol: order.symbol,
           orderQty: order.orderQty,
@@ -142,9 +143,13 @@ export class Robot {
           title: `执行${this.status.resolution}分钟定时任务...`,
         });
         logger.info(`系统状态: ${JSON.stringify(this.status)}`);
+        this.status.robotState = RobotState.Ruling;
         const res = await this.rule();
+        this.status.robotState = RobotState.Waiting;
         if (res.action) {
+          this.status.robotState = RobotState.Ordering;
           await this.doOrder(res.action, res.close);
+          this.status.robotState = RobotState.Waiting;
         }
       } catch (err) {
         logger.error(`定时任务[异常终了] ${err.message}`);
@@ -164,6 +169,7 @@ export class Robot {
     if (this.job) {
       this.job.cancel();
       this.job = undefined;
+      this.status.robotState = RobotState.Waiting;
       logger.info(`停止机器人`);
       return true;
     }
@@ -175,6 +181,10 @@ export class Robot {
    */
   private async checkStatus(): Promise<Boolean> {
     try {
+      if (this.status.robotState === RobotState.Ordering || this.status.robotState === RobotState.Ruling) {
+        console.log(`机器人状态为：${this.status.robotState}, 取消继续执行`);
+        return;
+      }
       if (this.status.orderInfo) {
         const orderId = this.status.orderInfo.orderID;
         // 获取交易所订单信息
@@ -188,7 +198,7 @@ export class Robot {
           logger.error(logText);
           return;
         }
-        if (onlineOrder.ordStatus === types.OrderStatus.New) {
+        if (onlineOrder.ordStatus === OrderStatus.New) {
           return false;
         }
         const dbOrder = await this.mysqlService.getOrderById(orderId);
@@ -197,16 +207,16 @@ export class Robot {
           await this.mysqlService.syncOrder(onlineOrder);
 
           switch (onlineOrder.ordStatus) {
-            case types.OrderStatus.Canceled:
-            case types.OrderStatus.Rejected:
+            case OrderStatus.Canceled:
+            case OrderStatus.Rejected:
               this.status.orderInfo = undefined;
-              this.status.robotState = RobotState.Ruling;
+              this.status.robotState = RobotState.Waiting;
               return true;
-            case types.OrderStatus.PartiallyFilled:
+            case OrderStatus.PartiallyFilled:
               return false;
-            case types.OrderStatus.Filled:
+            case OrderStatus.Filled:
               this.status.orderInfo = undefined;
-              this.status.robotState = RobotState.Ruling;
+              this.status.robotState = RobotState.Waiting;
               return true;
           }
         }
@@ -217,7 +227,7 @@ export class Robot {
     }
   }
 
-  async doOrder(ruleAction: types.OrderSide, price: number) {
+  async doOrder(ruleAction: OrderSide, price: number) {
     logger.info(`执行订单${this.status.step}[启动]`);
 
     try {
@@ -225,7 +235,7 @@ export class Robot {
       const action = this.getOrderSide(this.status.step);
       // 买入/卖出动作 == 本次动作
       if (action === ruleAction) {
-        // this.status.step === types.Step.Order1
+        // this.status.step === Step.Order1
         const input = {
           symbol: this.status.symbol,
           side: ruleAction,
@@ -251,12 +261,12 @@ export class Robot {
               throw Error(`订单${this.status.step}下单异常 - 未知错误。${orderInfo.error.message}`);
             }
           }
-          if (orderInfo.ordStatus === types.OrderStatus.Canceled || orderInfo.ordStatus === types.OrderStatus.Rejected) {
-            throw Error(`订单${this.status.step}被${orderInfo.ordStatus === types.OrderStatus.Canceled ? '取消' : '拒绝'}`);
+          if (orderInfo.ordStatus === OrderStatus.Canceled || orderInfo.ordStatus === OrderStatus.Rejected) {
+            throw Error(`订单${this.status.step}被${orderInfo.ordStatus === OrderStatus.Canceled ? '取消' : '拒绝'}`);
           }
         }
         logger.info(`执行订单${this.status.step}[终了] ${Helper.endTimer(timer)}`);
-        this.status.step = this.status.step === types.Step.Order1 ? types.Step.Order2 : types.Step.Order1;
+        this.status.step = this.status.step === Step.Order1 ? Step.Order2 : Step.Order1;
         this.syncProcess();
       } else {
         logger.info(`执行订单${this.status.step}不满足${action === OrderSide.Buy ? '买入' : '卖出'}条件[终了] ${Helper.endTimer(timer)}`);
@@ -298,7 +308,7 @@ export class Robot {
         title: '交易规则',
         body: `收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`,
       });
-      action = types.OrderSide.Buy;
+      action = OrderSide.Buy;
     } else if (lastClose < baseline && lastClose < ma) {
       // 卖出
       logger.info(`收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`);
@@ -306,7 +316,7 @@ export class Robot {
         title: '交易规则',
         body: `收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`,
       });
-      action = types.OrderSide.Sell;
+      action = OrderSide.Sell;
     } else {
       const logText = `交易规则计算未满足${this.getOrderSide(this.status.step) === OrderSide.Buy ? '买入' : '卖出'}条件，待机`;
       logger.info(logText);
@@ -322,12 +332,12 @@ export class Robot {
     };
   }
 
-  private async saveDBLog(udfBar: types.UdfResponse, action?: types.OrderSide) {
+  private async saveDBLog(udfBar: UdfResponse, action?: OrderSide) {
     const log = new Log();
     if (!action) {
       log.operation = '待机';
     } else {
-      log.operation = action === types.OrderSide.Buy ? '买入' : '卖出';
+      log.operation = action === OrderSide.Buy ? '买入' : '卖出';
     }
     log.symbol = this.status.symbol;
     log.resolution = this.status.resolutionName;
@@ -346,7 +356,7 @@ export class Robot {
   }
 
   // 获取相应步骤的买入/卖出操作
-  private getOrderSide(step: types.Step): types.OrderSide {
-    return step === types.Step.Order1 ? this.status.side : this.status.inverseSide;
+  private getOrderSide(step: Step): OrderSide {
+    return step === Step.Order1 ? this.status.side : this.status.inverseSide;
   }
 }
