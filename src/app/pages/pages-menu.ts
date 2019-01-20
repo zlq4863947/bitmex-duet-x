@@ -21,6 +21,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: '设置',
     icon: 'nb-gear',
-    link: '/pages/settings',
+    children: [
+      {
+        title: '交易',
+        link: '/pages/settings/app',
+      },
+      {
+        title: '系统',
+        link: '/pages/settings/system',
+      },
+    ],
   },
 ];

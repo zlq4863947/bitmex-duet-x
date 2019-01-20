@@ -5,7 +5,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LogComponent } from './log/log.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { PagesComponent } from './pages.component';
-import { SettingsComponent } from './settings/settings.component';
 
 const routes: Routes = [
   {
@@ -22,7 +21,7 @@ const routes: Routes = [
       },
       {
         path: 'settings',
-        component: SettingsComponent,
+        loadChildren: './settings/settings.module#SettingsModule',
       },
       {
         path: '**',

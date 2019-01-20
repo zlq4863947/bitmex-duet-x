@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
-import { SymbolsService } from '../../../@core/data/symbols.service';
-import { TradingSettings } from '../../../@core/types';
-import { NotificationsService } from '../../../@core/utils/notifications.service';
-import { SettingsService } from '../../../@core/utils/settings.service';
+import { SymbolsService } from '../../../../@core/data/symbols.service';
+import { TradingSettings } from '../../../../@core/types';
+import { NotificationsService } from '../../../../@core/utils/notifications.service';
+import { SettingsService } from '../../../../@core/utils/settings.service';
 
 @Component({
   selector: 'ngx-setting-trading',

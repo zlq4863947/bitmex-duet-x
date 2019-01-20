@@ -20,6 +20,7 @@ import { RobotService } from './@core/services/robot/robot.service';
 import { ElectronService } from './@core/utils/electron.service';
 import { NotificationsService } from './@core/utils/notifications.service';
 import { SettingsService } from './@core/utils/settings.service';
+import { SettingsModule } from './pages/settings/settings.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,6 +32,7 @@ import { AppComponent } from './app.component';
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    SettingsModule,
     FormsModule,
 
     ToasterModule.forRoot(),

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { Trader } from '@duet-robot/trader';
 
-import { ExchangeSettings } from '../../../@core/types';
-import { NotificationsService } from '../../../@core/utils/notifications.service';
-import { SettingsService } from '../../../@core/utils/settings.service';
+import { ExchangeSettings } from '../../../../@core/types';
+import { NotificationsService } from '../../../../@core/utils/notifications.service';
+import { SettingsService } from '../../../../@core/utils/settings.service';
 
 @Component({
   selector: 'ngx-setting-exchange',
