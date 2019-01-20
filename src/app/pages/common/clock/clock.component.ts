@@ -20,13 +20,13 @@ import { Helper } from '@duet-robot/common';
   template: '<div class="clock"> {{ time }}</div>',
 })
 export class ClockComponent implements OnDestroy {
+  time: string;
+
   private timer: Observable<number> = Observable.create((observer) => {
-    let timer = setInterval(() => observer.next(), 1000);
+    const timer = setInterval(() => observer.next(), 1000);
     return () => clearInterval(timer);
   });
   private sub: Subscription;
-
-  time: string;
 
   constructor() {
     this.show();

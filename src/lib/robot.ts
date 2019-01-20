@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BitmexWS } from 'bitmex-ws';
-import { ExchangeOptions } from 'bitmex-ws/lib/types';
 import { Job } from 'node-schedule';
 
-import { ApplicationSettings, ExchangeSettings } from '@duet-core/types';
+import { ApplicationSettings } from '@duet-core/types';
 import { NotificationsService, SettingsService } from '@duet-core/utils';
 
 import { Log } from '../app/@core/services/mysql/entity';
 import { MysqlService } from '../app/@core/services/mysql/mysql.service';
-import { Helper, Scheduler, logger } from './common';
+import { Helper, Scheduler, getExchangeOptions, logger } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
-import { OrderSide, OrderStatus, Order, Step, UdfResponse } from './type';
+import { Order, OrderSide, OrderStatus, Step, UdfResponse } from './type';
 
 // 机器人运行状态
 export enum RobotState {
@@ -83,7 +82,7 @@ export class Robot {
     };
     this.syncProcess();
     this.trader = new Trader(config.exchange);
-    const exOptions = this.getExchangeOptions(config.exchange);
+    const exOptions = getExchangeOptions(config.exchange);
     this.ws = new BitmexWS(exOptions);
     this.ws.order$(this.status.symbol).subscribe(async (order) => {
       logger.info(`subscribe order: ${JSON.stringify(order)}`);
@@ -98,26 +97,6 @@ export class Robot {
         await this.mysqlService.syncOrder(fmtOrder);
       }
     });
-  }
-
-  private getExchangeOptions(config: ExchangeSettings) {
-    let exOptions: ExchangeOptions;
-    if (config.mode === 'test') {
-      const test = config.test;
-      exOptions = {
-        apiKey: test.apiKey,
-        apiSecret: test.secret,
-        testnet: true,
-      };
-    } else {
-      const real = config.real;
-      exOptions = {
-        apiKey: real.apiKey,
-        apiSecret: real.secret,
-        testnet: false,
-      };
-    }
-    return exOptions;
   }
 
   syncProcess() {
@@ -138,7 +117,9 @@ export class Robot {
       try {
         const result = await this.checkStatus();
         // 继续执行
-        if (!result) return;
+        if (!result) {
+          return;
+        }
         this.notificationsService.success({
           title: `执行${this.status.resolution}分钟定时任务...`,
         });
@@ -208,16 +189,19 @@ export class Robot {
 
           switch (onlineOrder.ordStatus) {
             case OrderStatus.Canceled:
-            case OrderStatus.Rejected:
+            case OrderStatus.Rejected: {
               this.status.orderInfo = undefined;
               this.status.robotState = RobotState.Waiting;
               return true;
-            case OrderStatus.PartiallyFilled:
+            }
+            case OrderStatus.PartiallyFilled: {
               return false;
-            case OrderStatus.Filled:
+            }
+            case OrderStatus.Filled: {
               this.status.orderInfo = undefined;
               this.status.robotState = RobotState.Waiting;
               return true;
+            }
           }
         }
       }
@@ -227,7 +211,7 @@ export class Robot {
     }
   }
 
-  async doOrder(ruleAction: OrderSide, price: number) {
+  private async doOrder(ruleAction: OrderSide, price: number) {
     logger.info(`执行订单${this.status.step}[启动]`);
 
     try {
@@ -281,7 +265,7 @@ export class Robot {
     }
   }
 
-  async rule(): Promise<RuleOutput> {
+  private async rule(): Promise<RuleOutput> {
     const bars = await this.trader.getBars(this.status.symbol, this.status.resolution);
     const ichimokuRes = ichimoku({
       high: bars.h,

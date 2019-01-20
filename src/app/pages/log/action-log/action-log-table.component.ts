@@ -11,15 +11,15 @@ import { Log } from '../../../@core/services/mysql/entity';
   templateUrl: './action-log-table.component.html',
 })
 export class ActionLogTableComponent implements OnDestroy {
-  private logData: Log[];
   settings: any;
   source: LocalDataSource = new LocalDataSource();
 
   timer: Observable<number> = Observable.create((observer) => {
-    let timer = setInterval(() => observer.next(), 2000);
+    const timer = setInterval(() => observer.next(), 2000);
     return () => clearInterval(timer);
   });
   sub: Subscription;
+  private logData: Log[];
 
   constructor(private service: LogTableService) {
     this.settings = this.service.getSettings();

@@ -25,17 +25,17 @@ export class SettingsService {
   }
 
   getActions(): ActionsSettings {
-    let settings = this.settings.get(StoreKey.Actions);
+    let actionsSettings = this.settings.get(StoreKey.Actions);
     // 没有值的时候
-    if (!settings) {
-      settings = {
+    if (!actionsSettings) {
+      actionsSettings = {
         symbol: 'XBTUSD',
         resolution: { resolution: '1', name: '1分钟' },
       };
       // 配置初期化
-      this.setActions(<any>settings);
+      this.setActions(<any>actionsSettings);
     }
-    return <any>settings;
+    return <any>actionsSettings;
   }
 
   setExchange(exchange: ExchangeSettings) {
@@ -43,18 +43,18 @@ export class SettingsService {
   }
 
   getExchange(): ExchangeSettings {
-    let settings = this.settings.get(StoreKey.Exchange);
+    let exSettings = this.settings.get(StoreKey.Exchange);
     // 没有值的时候
-    if (!settings) {
-      settings = {
+    if (!exSettings) {
+      exSettings = {
         real: { apiKey: '', secret: '' },
         test: { apiKey: '', secret: '' },
         mode: 'real',
       };
       // 配置初期化
-      this.setExchange(<any>settings);
+      this.setExchange(<any>exSettings);
     }
-    return <any>settings;
+    return <any>exSettings;
   }
 
   setMysql(mysql: MysqlSettings) {
@@ -62,10 +62,10 @@ export class SettingsService {
   }
 
   getMysql(): MysqlSettings {
-    let settings = this.settings.get(StoreKey.Mysql);
+    let mysqlSettings = this.settings.get(StoreKey.Mysql);
     // 没有值的时候
-    if (!settings) {
-      settings = {
+    if (!mysqlSettings) {
+      mysqlSettings = {
         host: '127.0.0.1',
         port: 3306,
         username: 'root',
@@ -73,9 +73,9 @@ export class SettingsService {
         database: 'duet',
       };
       // 配置初期化
-      this.setMysql(<any>settings);
+      this.setMysql(<any>mysqlSettings);
     }
-    return <any>settings;
+    return <any>mysqlSettings;
   }
 
   setTrading(trading: TradingSettings) {
@@ -83,19 +83,19 @@ export class SettingsService {
   }
 
   getTrading(): TradingSettings {
-    let settings = this.settings.get(StoreKey.Trading);
+    let tradingSettings = this.settings.get(StoreKey.Trading);
     // 没有值的时候
-    if (!settings) {
-      settings = {
+    if (!tradingSettings) {
+      tradingSettings = {
         symbol: 'XBTUSD',
         side: 'Buy',
         amount: '',
         leverage: '',
       };
       // 配置初期化
-      this.setTrading(<any>settings);
+      this.setTrading(<any>tradingSettings);
     }
-    return <any>settings;
+    return <any>tradingSettings;
   }
 
   setProcess(process: RobotProcess) {
@@ -103,16 +103,16 @@ export class SettingsService {
   }
 
   getProcess(): RobotProcess {
-    let settings = this.settings.get(StoreKey.Process);
+    let processSettings = this.settings.get(StoreKey.Process);
     // 没有值的时候
-    if (!settings) {
-      settings = {
+    if (!processSettings) {
+      processSettings = {
         isActived: false,
         status: {},
       };
       // 配置初期化
-      this.setProcess(<any>settings);
+      this.setProcess(<any>processSettings);
     }
-    return <any>settings;
+    return <any>processSettings;
   }
 }

@@ -12,15 +12,16 @@ import { Order, OrderTableService } from '../../../@core/data/order-table.servic
   templateUrl: './order-table.component.html',
 })
 export class OrderTableComponent implements OnDestroy {
-  private orderData: Order[];
   settings: any;
   source: LocalDataSource = new LocalDataSource();
 
   timer: Observable<number> = Observable.create((observer) => {
-    let timer = setInterval(() => observer.next(), 2000);
+    const timer = setInterval(() => observer.next(), 2000);
     return () => clearInterval(timer);
   });
   sub: Subscription;
+
+  private orderData: Order[];
 
   constructor(private service: OrderTableService) {
     this.settings = this.service.getSettings();

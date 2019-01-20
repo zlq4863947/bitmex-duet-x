@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 
+import { Trader } from '@duet-robot/trader';
+
 import { ExchangeSettings } from '../../../@core/types';
 import { NotificationsService } from '../../../@core/utils/notifications.service';
 import { SettingsService } from '../../../@core/utils/settings.service';
-import { Trader } from '@duet-robot/trader';
 
 @Component({
   selector: 'ngx-setting-exchange',
@@ -33,30 +34,30 @@ export class SettingExchangeComponent implements OnInit {
     const prevMode = this.exchange.mode;
     if (this.activated === 'real') {
       this.exchange.mode = 'real';
-      trader = new Trader(this.exchange)
+      trader = new Trader(this.exchange);
     } else {
       this.exchange.mode = 'test';
-      trader = new Trader(this.exchange)
+      trader = new Trader(this.exchange);
     }
     this.exchange.mode = prevMode;
     try {
       const res = await trader.updateLeverage('XBTUSD', 2);
-      if(res && res.order) {
-        if(res.order.error) {
+      if (res && res.order) {
+        if (res.order.error) {
           this.notificationsService.error({
             title: '验证apikey失败!',
-            body: `错误信息: ${res.order.error.message}`
+            body: `错误信息: ${res.order.error.message}`,
           });
         } else {
           this.notificationsService.success({
-            title: '验证apikey成功!'
+            title: '验证apikey成功!',
           });
         }
       }
     } catch (error) {
       this.notificationsService.error({
         title: '网络连接失败!',
-        body: `错误信息: ${error.message}`
+        body: `错误信息: ${error.message}`,
       });
     }
   }

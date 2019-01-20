@@ -7,9 +7,9 @@ import * as settings from 'electron-settings';
 
 log.transports.file.level = 'info';
 log.transports.console.level = false;
-log.transports.rendererConsole.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}'
-//log.transports.file.file = __dirname + '/bitmex-dust.log';
-//console.log(__dirname + '/bitmex-dust.log')
+log.transports.rendererConsole.format = '[{y}-{m}-{d} {h}:{i}:{s}.{ms}] [{level}] {text}';
+// log.transports.file.file = __dirname + '/bitmex-dust.log';
+// console.log(__dirname + '/bitmex-dust.log')
 
 let win, serve;
 const args = process.argv.slice(1);

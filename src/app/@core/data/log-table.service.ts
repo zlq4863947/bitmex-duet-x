@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { MysqlService } from '@duet-core/services';
 
-
 @Injectable()
 export class LogTableService {
   constructor(private mysqlService: MysqlService) {}

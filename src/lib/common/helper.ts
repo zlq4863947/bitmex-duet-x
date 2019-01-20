@@ -1,3 +1,7 @@
+import { ExchangeOptions } from 'bitmex-ws/lib/types';
+
+import { ExchangeSettings } from '@duet-core/types';
+
 import * as types from '../type';
 
 const moment = require('moment');
@@ -84,4 +88,24 @@ export class Helper {
     };
     return qs.stringify(query);
   }
+}
+
+export function getExchangeOptions(config: ExchangeSettings) {
+  let exOptions: ExchangeOptions;
+  if (config.mode === 'test') {
+    const test = config.test;
+    exOptions = {
+      apiKey: test.apiKey,
+      apiSecret: test.secret,
+      testnet: true,
+    };
+  } else {
+    const real = config.real;
+    exOptions = {
+      apiKey: real.apiKey,
+      apiSecret: real.secret,
+      testnet: false,
+    };
+  }
+  return exOptions;
 }
