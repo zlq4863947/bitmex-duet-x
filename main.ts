@@ -164,8 +164,8 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1200,
     height: 800,
-    minWidth: 860,
-    minHeight: 600,
+    minWidth: 1200,
+    minHeight: 750,
     title: 'BitMEX趋势机器人',
     frame: true,
     resizable: true,

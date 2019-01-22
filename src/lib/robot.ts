@@ -124,11 +124,8 @@ export class Robot {
           title: `执行${this.status.resolution}分钟定时任务...`,
         });
         logger.info(`系统状态: ${JSON.stringify(this.status)}`);
-        this.status.robotState = RobotState.Ruling;
         const res = await this.rule();
-        this.status.robotState = RobotState.Waiting;
         if (res.action) {
-          this.status.robotState = RobotState.Ordering;
           await this.doOrder(res.action, res.close);
           this.status.robotState = RobotState.Waiting;
         }
@@ -212,6 +209,10 @@ export class Robot {
   }
 
   private async doOrder(ruleAction: OrderSide, price: number) {
+    if (this.status.robotState !== RobotState.Waiting) {
+      return;
+    }
+    this.status.robotState = RobotState.Ordering;
     logger.info(`执行订单${this.status.step}[启动]`);
 
     try {
@@ -266,54 +267,65 @@ export class Robot {
   }
 
   private async rule(): Promise<RuleOutput> {
-    const bars = await this.trader.getBars(this.status.symbol, this.status.resolution);
-    const ichimokuRes = ichimoku({
-      high: bars.h,
-      low: bars.l,
-    });
-    const smaRes = sma({
-      values: bars.c,
-    });
-    if (bars.c.length === 0 || ichimokuRes.length === 0 || smaRes.length === 0) {
-      logger.error(`获取指标数据出错：bars.c: ${bars.c}, ichimokuRes: ${ichimokuRes}, smaRes: ${smaRes}`);
-    }
-    const lastClose = bars.c[bars.c.length - 1];
-    if (!lastClose) {
-      logger.info(`最近k线为空，取消检测。`);
-      return { action: undefined, close: 0 };
-    }
-    const baseline = ichimokuRes[ichimokuRes.length - 1].base;
-    const ma = smaRes[smaRes.length - 1];
-    let action;
-    // 买入
-    if (lastClose > baseline && lastClose > ma) {
-      logger.info(`收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`);
-      this.notificationsService.info({
-        title: '交易规则',
-        body: `收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`,
+    try {
+      if (this.status.robotState !== RobotState.Waiting) {
+        return;
+      }
+      this.status.robotState = RobotState.Ruling;
+      const bars = await this.trader.getBars(this.status.symbol, this.status.resolution);
+      const ichimokuRes = ichimoku({
+        high: bars.h,
+        low: bars.l,
       });
-      action = OrderSide.Buy;
-    } else if (lastClose < baseline && lastClose < ma) {
-      // 卖出
-      logger.info(`收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`);
-      this.notificationsService.info({
-        title: '交易规则',
-        body: `收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`,
+      const smaRes = sma({
+        values: bars.c,
       });
-      action = OrderSide.Sell;
-    } else {
-      const logText = `交易规则计算未满足${this.getOrderSide(this.status.step) === OrderSide.Buy ? '买入' : '卖出'}条件，待机`;
-      logger.info(logText);
-      this.notificationsService.info({
-        title: '交易规则',
-        body: logText,
-      });
+      if (bars.c.length === 0 || ichimokuRes.length === 0 || smaRes.length === 0) {
+        logger.error(`获取指标数据出错：bars.c: ${bars.c}, ichimokuRes: ${ichimokuRes}, smaRes: ${smaRes}`);
+      }
+      const lastClose = bars.c[bars.c.length - 1];
+      if (!lastClose) {
+        logger.info(`最近k线为空，取消检测。`);
+        this.status.robotState = RobotState.Waiting;
+        return { action: undefined, close: 0 };
+      }
+      const baseline = ichimokuRes[ichimokuRes.length - 1].base;
+      const ma = smaRes[smaRes.length - 1];
+      let action;
+      // 买入
+      if (lastClose > baseline && lastClose > ma) {
+        logger.info(`收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`);
+        this.notificationsService.info({
+          title: '交易规则',
+          body: `收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`,
+        });
+        action = OrderSide.Buy;
+      } else if (lastClose < baseline && lastClose < ma) {
+        // 卖出
+        logger.info(`收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`);
+        this.notificationsService.info({
+          title: '交易规则',
+          body: `收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`,
+        });
+        action = OrderSide.Sell;
+      } else {
+        const logText = `交易规则计算未满足${this.getOrderSide(this.status.step) === OrderSide.Buy ? '买入' : '卖出'}条件，待机`;
+        logger.info(logText);
+        this.notificationsService.info({
+          title: '交易规则',
+          body: logText,
+        });
+      }
+      await this.saveDBLog(bars, action);
+      this.status.robotState = RobotState.Waiting;
+      return {
+        action,
+        close: lastClose,
+      };
+    } catch (err) {
+      this.status.robotState = RobotState.Waiting;
+      logger.error(`检查策略[异常终了] ${err.message}`);
     }
-    await this.saveDBLog(bars, action);
-    return {
-      action,
-      close: lastClose,
-    };
   }
 
   private async saveDBLog(udfBar: UdfResponse, action?: OrderSide) {
