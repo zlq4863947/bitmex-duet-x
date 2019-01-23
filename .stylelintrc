@@ -5,7 +5,7 @@
     "./tools/stylelint/no-nested-mixin/index.js"
   ],
   "rules": {
-    "bitbank/selector-no-deep": true,
+    "bitbank/selector-no-deep": false,
     "bitbank/no-nested-mixin": true,
     "bitbank/selector-nested-pattern-scoped": [".*[^&]$", {
       "message": "The & operator is not allowed at the end of theme selectors.",
@@ -16,26 +16,20 @@
     "color-hex-case": "lower",
     "color-no-invalid-hex": true,
     "declaration-colon-space-after": "always",
-    "indentation": 2,
     "length-zero-no-unit": true,
     "max-line-length": 140,
     "max-empty-lines": 1,
-    "max-nesting-depth": [1, { "ignoreAtRules": ["media"] }],
     "no-eol-whitespace": true,
     "no-missing-end-of-source-newline": true,
     "number-leading-zero": "always",
     "number-no-trailing-zeros": true,
-    "rule-empty-line-before": [ "always", {
-      "except": ["first-nested"],
-      "ignore": ["after-comment"]
-    } ],
 
     "string-no-newline": true,
     "string-quotes": "single",
 
     "unit-case": "lower",
     "unit-no-unknown": true,
-    "unit-whitelist": ["px", "%", "deg", "ms", "em", "vh", "vw", "vmin"],
+    "unit-whitelist": ["px", "%", "deg", "ms", "em", "vh", "vw", "vmin", "rem", "s"],
 
     "value-list-comma-space-after": "always-single-line",
     "value-list-comma-space-before": "never",
@@ -54,10 +48,6 @@
     "declaration-block-semicolon-space-after": "always-single-line",
     "declaration-block-semicolon-newline-before": "never-multi-line",
     "declaration-block-semicolon-newline-after": "always-multi-line",
-    "declaration-property-value-blacklist": [
-        { "/.*/": ["initial"] },
-        { "message": "The `initial` value is not supported in IE."}
-    ],
 
     "block-closing-brace-newline-after": "always",
     "block-closing-brace-newline-before": "always-multi-line",
