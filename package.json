@@ -134,6 +134,7 @@
     "protractor": "5.1.2",
     "rimraf": "2.6.1",
     "rxjs-tslint": "^0.1.6",
+    "rxjs-tslint-rules": "^4.15.0",
     "stylelint": "7.13.0",
     "ts-node": "^8.0.1",
     "tslint": "5.7.0",

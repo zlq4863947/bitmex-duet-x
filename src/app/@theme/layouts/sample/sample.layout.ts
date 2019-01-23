@@ -89,9 +89,9 @@ export class SampleLayoutComponent implements OnDestroy {
   layout: any = {};
   sidebar: any = {};
 
-  private alive = true;
-
   currentTheme: string;
+
+  private alive = true;
 
   constructor(
     protected stateService: StateService,

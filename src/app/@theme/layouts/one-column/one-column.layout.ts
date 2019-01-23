@@ -30,9 +30,9 @@ import { takeWhile } from 'rxjs/operators';
   `,
 })
 export class OneColumnLayoutComponent implements OnDestroy {
-  private alive = true;
-
   currentTheme: string;
+
+  private alive = true;
 
   constructor(protected themeService: NbThemeService) {
     this.themeService
