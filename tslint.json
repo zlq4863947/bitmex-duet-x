@@ -4,7 +4,9 @@
     "rxjs-tslint-rules"
   ],
   "rulesDirectory": [
-    "node_modules/codelyzer"
+    "node_modules/codelyzer",
+    "node_modules/rxjs-tslint",
+    "node_modules/vrsource-tslint-rules/rules"
   ],
   "rules": {
     "arrow-return-shorthand": true,
