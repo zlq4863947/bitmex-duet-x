@@ -16,10 +16,11 @@ import {
   NbSidebarModule,
   NbTabsetModule,
   NbThemeModule,
+  NbToastrModule,
+  NbTooltipModule,
   NbUserModule,
 } from '@nebular/theme';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TooltipModule } from 'ng2-tooltip-directive';
 
 import {
   FooterComponent,
@@ -30,6 +31,7 @@ import {
   ThemeSettingsComponent,
   ThemeSwitcherComponent,
   ThemeSwitcherListComponent,
+  ToggleSettingsButtonComponent,
 } from './components';
 import { OneColumnLayoutComponent, SampleLayoutComponent, ThreeColumnsLayoutComponent, TwoColumnsLayoutComponent } from './layouts';
 import { CapitalizePipe, EvaIconsPipe, NumberWithCommasPipe, PluralPipe, RoundPipe, TimingPipe } from './pipes';
@@ -53,9 +55,10 @@ const NB_MODULES = [
   NbPopoverModule,
   NbContextMenuModule,
   NgbModule,
-  TooltipModule,
   NbSecurityModule, // *nbIsGranted directive,
   NbProgressBarModule,
+  NbToastrModule,
+  NbTooltipModule,
 ];
 
 const COMPONENTS = [
@@ -71,6 +74,7 @@ const COMPONENTS = [
   SampleLayoutComponent,
   ThreeColumnsLayoutComponent,
   TwoColumnsLayoutComponent,
+  ToggleSettingsButtonComponent,
 ];
 
 const ENTRY_COMPONENTS = [ThemeSwitcherListComponent];
@@ -86,6 +90,7 @@ const NB_THEME_PROVIDERS = [
   ).providers,
   ...NbSidebarModule.forRoot().providers,
   ...NbMenuModule.forRoot().providers,
+  ...NbToastrModule.forRoot().providers,
 ];
 
 @NgModule({

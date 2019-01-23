@@ -1,6 +1,6 @@
 @import '../../styles/themes';
 @import '~bootstrap/scss/mixins/breakpoints';
-@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+@import '~@nebular/theme/styles/global/breakpoints';
 
 @include nb-install-component() {
   @include media-breakpoint-down(xs) {
@@ -33,23 +33,27 @@
   }
 
   nb-sidebar.settings-sidebar {
-    $sidebar-width: 7.5rem;
+    $sidebar-width: 19rem;
+
+    @include nb-ltr(transform, translateX(100%));
+    @include nb-rtl(transform, translateX(-100%));
 
     overflow: hidden;
-    transition: width 0.3s ease;
+    transition: transform 0.3s ease;
     width: $sidebar-width;
+    &.start {
+      @include nb-ltr(transform, translateX(-100%));
+      @include nb-rtl(transform, translateX(100%));
+    }
 
-    &.collapsed {
-      width: 0;
+    &.expanded,
+    &.expanded.start {
+      transform: translateX(0);
+    }
 
-       /deep/ .main-container {
-        width: 0;
-
-        .scrollable {
-          padding: 1.25rem;
-          width: $sidebar-width;
-        }
-      }
+     /deep/ .scrollable {
+      padding: 3.4rem 0.25rem;
+      width: $sidebar-width;
     }
 
      /deep/ .main-container {
@@ -124,6 +128,28 @@
       i,
       span {
         vertical-align: middle;
+      }
+    }
+
+     /deep/ nb-menu {
+      & > .menu-items {
+        & > .menu-item:first-child {
+          .menu-title {
+            &::after {
+              background: nb-theme(color-danger);
+              border-radius: nb-theme(radius);
+              color: nb-theme(color-white);
+              content: 'new';
+              font-size: nb-theme(font-size-sm);
+              margin-left: 1rem;
+              padding: 0 0.5rem;
+            }
+          }
+        }
+      }
+
+      .nb-e-commerce {
+        font-size: 2rem;
       }
     }
 

@@ -5,11 +5,18 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./switcher.component.scss'],
   template: `
     <label class="switch-label" [class.vertical]="vertical">
-      <span class="first" [class.active]="vertical || isFirstValue()"> {{ vertical ? currentValueLabel() : firstValueLabel }} </span>
+      <span class="first" [class.active]="vertical || isFirstValue()">
+        {{ vertical ? currentValueLabel() : firstValueLabel }}
+      </span>
 
-      <div class="switch"><input type="checkbox" [checked]="isSecondValue()" (change)="changeValue()" /> <span class="slider"></span></div>
+      <div class="switch">
+        <input type="checkbox" [checked]="isSecondValue()" (change)="changeValue()" />
+        <span class="slider"></span>
+      </div>
 
-      <span *ngIf="!vertical" class="second" [class.active]="isSecondValue()"> {{ secondValueLabel }} </span>
+      <span *ngIf="!vertical" class="second" [class.active]="isSecondValue()">
+        {{ secondValueLabel }}
+      </span>
     </label>
   `,
 })

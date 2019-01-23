@@ -12,7 +12,7 @@ import { ThemeSwitcherListComponent } from './themes-switcher-list/themes-switch
 export class ThemeSwitcherComponent {
   @ViewChild(NbPopoverDirective) popover: NbPopoverDirective;
 
-  @Input() showTitle = true;
+  @Input() showTitle: boolean = true;
 
   switcherListComponent = ThemeSwitcherListComponent;
   theme: NbJSThemeOptions;

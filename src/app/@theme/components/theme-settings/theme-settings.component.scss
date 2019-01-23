@@ -2,7 +2,10 @@
 
 @include nb-install-component() {
   h6 {
-    margin-bottom: 0.5rem;
+    font-weight: bold;
+    margin-bottom: 0.875rem;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(0, 0, 0, 0.16);
   }
 
   .settings-row {
@@ -10,22 +13,36 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 0 0 1rem;
-    width: 90%;
+    justify-content: center;
+    margin: 0 0 2.575rem;
+    width: 100%;
 
     a {
       @include nb-for-theme(cosmic) {
+        background-color: #3e367e;
+        border: 2px solid #3e367e;
+        box-shadow: 0 4px 14px 0 rgba(19, 19, 94, 0.4);
         &.selected {
           color: nb-theme(link-color);
         }
       }
 
+      align-content: center;
+      align-items: center;
+      background-color: nb-theme(color-white);
+      border: 2px solid transparent;
+      border-radius: nb-theme(radius);
       color: nb-theme(color-fg);
+      display: flex;
       font-size: 2.25rem;
+      height: 4.15rem;
+      justify-content: center;
+      margin: 0.875rem;
       text-decoration: none;
+      width: 4.15rem;
 
       &.selected {
+        border-color: nb-theme(color-success);
         color: nb-theme(color-success);
       }
     }
@@ -36,7 +53,9 @@
   }
 
   .switcher {
+    font-size: 1.524rem;
     margin-bottom: 1rem;
+    width: 12rem;
 
      /deep/ ngx-switcher {
       @include nb-for-theme(cosmic) {
@@ -47,6 +66,10 @@
       .switch-label span {
         font-size: 1em;
         font-weight: normal;
+        &.first,
+        &.second {
+          font-size: 1rem;
+        }
       }
 
       .switch {
@@ -59,8 +82,8 @@
         }
 
         input:checked + .slider::before {
-          @include nb-ltr(transform, translateX(1.5rem)!important);
-          @include nb-rtl(transform, translateX(-1.5rem)!important);
+          @include nb-ltr(transform, translateX(1.5em)!important);
+          @include nb-rtl(transform, translateX(-1.5em)!important);
         }
       }
     }

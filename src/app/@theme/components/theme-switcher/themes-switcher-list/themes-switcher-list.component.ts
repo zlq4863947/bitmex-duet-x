@@ -9,7 +9,8 @@ import { AnalyticsService } from '../../../../@core/utils/analytics.service';
   template: `
     <ul class="themes-switcher-list">
       <li class="themes-switcher-item" *ngFor="let theme of themes" (click)="onToggleTheme(theme.key)">
-        <i class="nb-drop" [ngClass]="'drop-icon-' + theme.key"></i> <span>{{ theme.title }}</span>
+        <i class="nb-drop" [ngClass]="'drop-icon-' + theme.key"></i>
+        <span>{{ theme.title }}</span>
       </li>
     </ul>
   `,

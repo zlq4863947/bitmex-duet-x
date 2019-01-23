@@ -8,29 +8,35 @@ import { takeWhile } from 'rxjs/operators';
   styleUrls: ['./three-columns.layout.scss'],
   template: `
     <nb-layout>
-      <nb-layout-header fixed> <ngx-header></ngx-header> </nb-layout-header>
+      <nb-layout-header fixed>
+        <ngx-header></ngx-header>
+      </nb-layout-header>
 
       <nb-sidebar class="menu-sidebar" tag="menu-sidebar" responsive>
         <nb-sidebar-header *ngIf="currentTheme !== 'corporate'">
-          <a href="#" class="btn btn-hero-success main-btn"> <i class="ion ion-social-github"></i> <span>联系开发者</span> </a>
+          <a href="#" class="btn btn-hero-success main-btn"> <i class="ion ion-social-github"></i> <span>Support Us</span> </a>
         </nb-sidebar-header>
         <ng-content select="nb-menu"></ng-content>
       </nb-sidebar>
 
       <nb-layout-column class="small"> </nb-layout-column>
 
-      <nb-layout-column> <ng-content select="router-outlet"></ng-content> </nb-layout-column>
+      <nb-layout-column>
+        <ng-content select="router-outlet"></ng-content>
+      </nb-layout-column>
 
       <nb-layout-column class="small"> </nb-layout-column>
 
-      <nb-layout-footer fixed> <ngx-footer></ngx-footer> </nb-layout-footer>
+      <nb-layout-footer fixed>
+        <ngx-footer></ngx-footer>
+      </nb-layout-footer>
     </nb-layout>
   `,
 })
 export class ThreeColumnsLayoutComponent implements OnDestroy {
-  currentTheme: string;
-
   private alive = true;
+
+  currentTheme: string;
 
   constructor(protected themeService: NbThemeService) {
     this.themeService
