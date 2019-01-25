@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as settings from 'electron-settings';
 
+import { isElectron } from '@duet-core/functions';
 import { ActionsSettings, ApplicationSettings, ExchangeSettings, MysqlSettings, RobotProcess, StoreKey, TradingSettings } from '../types';
 
 @Injectable()
@@ -9,12 +10,10 @@ export class SettingsService {
 
   constructor() {
     // Conditional imports
-    if (this.isElectron()) {
+    if (isElectron()) {
       this.settings = window.require('electron').remote.require('electron-settings');
     }
   }
-
-  isElectron = () => window && window.process && window.process.type;
 
   getApplicationSettings(): ApplicationSettings {
     return <any>this.settings.getAll();

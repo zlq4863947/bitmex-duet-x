@@ -1,8 +1,26 @@
 import elog from 'electron-log';
+import { isElectron } from '@duet-core/functions';
 
-export const logger = {
-  on: (ev: string, fn: (e: Error) => void) => {},
-  info: (msg: string) => elog.info(msg),
-  debug: (msg: string) => elog.debug(msg),
-  error: (msg: string) => elog.error(msg),
-};
+export class Log {
+  elog: typeof elog;
+  
+  constructor() {
+    if (isElectron()) {
+      this.elog = window.require('electron').remote.require('electron-log');
+    } else {
+      this.elog = <any>console;
+    }
+  }
+
+  info(msg: string): void {
+    this.elog.info(msg);
+  }
+
+  debug(msg: string): void {
+    this.elog.debug(msg);
+  }
+
+  error(msg: string): void {
+    this.elog.error(msg);
+  }
+}

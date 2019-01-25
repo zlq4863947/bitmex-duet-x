@@ -9,7 +9,7 @@ import { Helper } from '@duet-robot/common';
 import { Order } from '@duet-robot/type';
 
 import { MysqlSettings } from '../../../@core/types';
-import * as entities from './entity';
+import { OrderEntity, LogEntity} from './entity';
 
 @Injectable()
 export class MysqlService {
@@ -23,7 +23,7 @@ export class MysqlService {
         Object.assign(
           {
             type: 'mysql',
-            entities: [entities.Order, entities.Log],
+            entities: [OrderEntity, LogEntity],
             synchronize: true,
           },
           <any>settings,
@@ -83,8 +83,8 @@ export class MysqlService {
   async saveOrder(order: Order) {
     const res = await this.autoConnect();
     if (res && res.conn) {
-      const repo = res.conn.getRepository(entities.Order);
-      const orderInfo = new entities.Order();
+      const repo = res.conn.getRepository(OrderEntity);
+      const orderInfo = new OrderEntity();
       orderInfo.orderId = order.orderID;
       orderInfo.symbol = order.symbol;
       orderInfo.amount = order.orderQty;
@@ -99,13 +99,13 @@ export class MysqlService {
   async syncOrder(order: Order) {
     const res = await this.autoConnect();
     if (res && res.conn) {
-      const repo = res.conn.getRepository(entities.Order);
+      const repo = res.conn.getRepository(OrderEntity);
       const dbOrder = await repo.findOne(order.orderID);
       if (dbOrder && dbOrder.status !== order.ordStatus) {
         dbOrder.status = order.ordStatus;
         await repo.save(dbOrder);
       } else if (order && order.price) {
-        const orderInfo = new entities.Order();
+        const orderInfo = new OrderEntity();
         orderInfo.orderId = order.orderID;
         orderInfo.symbol = order.symbol;
         orderInfo.amount = order.orderQty;
@@ -118,10 +118,10 @@ export class MysqlService {
     }
   }
 
-  async getOrders(): Promise<entities.Order[] | undefined> {
+  async getOrders(): Promise<OrderEntity[] | undefined> {
     const res = await this.autoConnect();
     if (res && res.conn) {
-      const repo = res.conn.getRepository(entities.Order);
+      const repo = res.conn.getRepository(OrderEntity);
       return await repo
         .createQueryBuilder('order')
         .orderBy('order.time', 'DESC')
@@ -129,26 +129,26 @@ export class MysqlService {
     }
   }
 
-  async getOrderById(orderId: string): Promise<entities.Order | undefined> {
+  async getOrderById(orderId: string): Promise<OrderEntity | undefined> {
     const res = await this.autoConnect();
     if (res && res.conn) {
-      const repo = res.conn.getRepository(entities.Order);
+      const repo = res.conn.getRepository(OrderEntity);
       return await repo.findOne(orderId);
     }
   }
 
-  async saveLog(log: entities.Log) {
+  async saveLog(log: LogEntity) {
     const res = await this.autoConnect();
     if (res && res.conn) {
-      const repo = res.conn.getRepository(entities.Log);
+      const repo = res.conn.getRepository(LogEntity);
       return await repo.save(log);
     }
   }
 
-  async getLogs(): Promise<entities.Log[] | undefined> {
+  async getLogs(): Promise<LogEntity[] | undefined> {
     const res = await this.autoConnect();
     if (res && res.conn) {
-      const repo = res.conn.getRepository(entities.Log);
+      const repo = res.conn.getRepository(LogEntity);
       return await repo
         .createQueryBuilder('log')
         .orderBy('log.time', 'DESC')

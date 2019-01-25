@@ -2,7 +2,7 @@ import { ExchangeSettings } from '@duet-core/types';
 
 import { environment } from '../environments/environment';
 import { Rest } from './api';
-import { Helper, logger } from './common';
+import { Helper, Log } from './common';
 import * as types from './type';
 
 export interface IRestOrders {
@@ -14,6 +14,7 @@ export interface IRestOrders {
 }
 export class Trader {
   rest: Rest;
+  private readonly logger: Log;
 
   filter = {
     onlineOrder(orders: types.Order[] | undefined) {
@@ -50,6 +51,7 @@ export class Trader {
 
   constructor(config: ExchangeSettings) {
     this.rest = new Rest(config, environment.production ? '' : 'http://127.0.0.1:7070');
+    this.logger = new Log();
   }
 
   // 下单
@@ -62,32 +64,32 @@ export class Trader {
       ordType: 'Limit', // Market
     };
     const timer = Helper.getTimer();
-    logger.info(`发出订单指令[启动] ${JSON.stringify(orderOptions)}`);
+    this.logger.info(`发出订单指令[启动] ${JSON.stringify(orderOptions)}`);
     const res = await this.rest.newOrder(orderOptions);
     if (!res) {
       return;
     }
-    logger.info(`发出订单指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
+    this.logger.info(`发出订单指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
     return res.order;
   }
 
   async removeOrder(orderId: string) {
     const timer = Helper.getTimer();
-    logger.info(`删除指令[启动] - orderId：${orderId}`);
+    this.logger.info(`删除指令[启动] - orderId：${orderId}`);
     const res = await this.rest.delOrder({
       orderID: orderId,
     });
     if (!res) {
       return;
     }
-    logger.info(`删除指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
+    this.logger.info(`删除指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
     return res.orders;
   }
 
   // 更新价格
   async updatePrice(orderId: string, price: number) {
     const timer = Helper.getTimer();
-    logger.info(`修改价格指令[启动] - orderId：${orderId}, price：${price}`);
+    this.logger.info(`修改价格指令[启动] - orderId：${orderId}, price：${price}`);
     const res = await this.rest.updOrder({
       orderID: orderId,
       price,
@@ -95,7 +97,7 @@ export class Trader {
     if (!res) {
       return;
     }
-    logger.info(`修改价格指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
+    this.logger.info(`修改价格指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
     return res.order;
   }
 
@@ -105,7 +107,7 @@ export class Trader {
     if (!res) {
       return;
     }
-    // logger.info(`更新杠杆指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
+    // this.logger.info(`更新杠杆指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
     return res;
   }
 
@@ -118,7 +120,7 @@ export class Trader {
     if (!res) {
       return;
     }
-    logger.info(`获取仓位指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
+    this.logger.info(`获取仓位指令[终了] ${Helper.endTimer(timer)},  ${JSON.stringify(res)}`);
     return res.positions;
   }
 
@@ -164,12 +166,12 @@ export class Trader {
         orderID,
       },
     };
-    logger.info(`获取当前订单(orderID)[启动] ${JSON.stringify(orderOptions)}`);
+    this.logger.info(`获取当前订单(orderID)[启动] ${JSON.stringify(orderOptions)}`);
     const res = await this.rest.getOrder(orderOptions);
     if (!res || res.orders.length === 0) {
       return;
     }
-    logger.info(`获取当前订单(orderID)[终了] ${JSON.stringify(res)}`);
+    this.logger.info(`获取当前订单(orderID)[终了] ${JSON.stringify(res)}`);
     return res.orders[res.orders.length - 1];
   }
 

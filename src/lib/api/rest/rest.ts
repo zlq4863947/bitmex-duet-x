@@ -2,7 +2,7 @@ import fetch, { Headers, RequestInit } from 'node-fetch';
 
 import { ExchangeSettings } from '@duet-core/types';
 
-import { logger } from '../../common';
+import { Log } from '@duet-robot/common';
 import * as types from '../../type';
 import { Endpoints } from './endpoints';
 
@@ -25,11 +25,13 @@ export class Rest {
     api: 'https://www.bitmex.com',
   };
   private baseUrl: string;
+  private logger: Log;
   private apiRoot = '/api/v1/';
   private credential: types.ICredential;
 
   constructor(config: ExchangeSettings, proxy?: string) {
     this.mode = <'test' | 'real'>config.mode;
+    this.logger = new Log();
     if (this.mode === 'real') {
       this.baseUrl = this.urls.api;
       this.credential = {
@@ -37,7 +39,7 @@ export class Rest {
         secret: config.real.secret,
       };
     } else {
-      logger.info('测试模式下运行返佣程序');
+      this.logger.info('测试模式下运行返佣程序');
       this.baseUrl = this.urls.test;
       this.credential = {
         apiKey: config.test.apiKey,

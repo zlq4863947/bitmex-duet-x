@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('order')
-export class Order {
+export class OrderEntity {
   @PrimaryColumn() orderId: string;
 
   @Column() symbol: string;
@@ -16,7 +16,7 @@ export class Order {
 
   @Column() time: string;
 
-  constructor(obj?: Order) {
+  constructor(obj?: OrderEntity) {
     if (obj) {
       Object.assign(this, obj);
     }
@@ -24,7 +24,7 @@ export class Order {
 }
 
 @Entity('log')
-export class Log {
+export class LogEntity {
   @PrimaryGeneratedColumn() id!: number;
 
   @Column() time: string;
@@ -39,7 +39,7 @@ export class Log {
 
   @Column({ length: 3000, nullable: true }) memo: string;
 
-  constructor(obj?: Log) {
+  constructor(obj?: LogEntity) {
     if (obj) {
       Object.assign(this, obj);
     }

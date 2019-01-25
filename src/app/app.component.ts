@@ -8,7 +8,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { Component, OnInit } from '@angular/core';
 import { ToasterConfig } from 'angular2-toaster';
 
-import { MysqlService } from '@duet-core/services';
+import { isElectron } from '@duet-core/functions';
 
 import { AnalyticsService } from './@core/utils/analytics.service';
 import { ElectronService } from './@core/utils/electron.service';
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   });
 
   constructor(public electronService: ElectronService, private analytics: AnalyticsService) {
-    if (electronService.isElectron()) {
+    if (isElectron()) {
       console.log('Mode electron');
       console.log('Electron ipcRenderer', electronService.ipcRenderer);
       console.log('NodeJS childProcess', electronService.childProcess);

@@ -5,9 +5,8 @@ import { Job } from 'node-schedule';
 import { ApplicationSettings } from '@duet-core/types';
 import { NotificationsService, SettingsService } from '@duet-core/utils';
 
-import { Log } from '../app/@core/services/mysql/entity';
-import { MysqlService } from '../app/@core/services/mysql/mysql.service';
-import { Helper, Scheduler, getExchangeOptions, logger } from './common';
+import { MysqlService, LogEntity } from '@duet-core/services/mysql';
+import { Helper, Scheduler, getExchangeOptions, Log } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
 import { Order, OrderSide, OrderStatus, Step, UdfResponse } from './type';
@@ -56,12 +55,15 @@ export class Robot {
   ws: BitmexWS;
   job?: Job;
   isFrist = true;
+  private readonly logger: Log;
 
   constructor(
     private settingsService: SettingsService,
     private notificationsService: NotificationsService,
     private mysqlService: MysqlService,
-  ) {}
+  ) {
+    this.logger = new Log(); 
+  }
 
   reload() {
     const config = this.settingsService.getApplicationSettings();
@@ -85,7 +87,7 @@ export class Robot {
     const exOptions = getExchangeOptions(config.exchange);
     this.ws = new BitmexWS(exOptions);
     this.ws.order$(this.status.symbol).subscribe(async (order) => {
-      logger.info(`subscribe order: ${JSON.stringify(order)}`);
+      this.logger.info(`subscribe order: ${JSON.stringify(order)}`);
       if (order && order.ordStatus && order.ordStatus !== OrderStatus.New) {
         const fmtOrder: Order = {
           orderID: order.orderID,
@@ -123,17 +125,17 @@ export class Robot {
         this.notificationsService.success({
           title: `执行${this.status.resolution}分钟定时任务...`,
         });
-        logger.info(`系统状态: ${JSON.stringify(this.status)}`);
+        this.logger.info(`系统状态: ${JSON.stringify(this.status)}`);
         const res = await this.rule();
         if (res.action) {
           await this.doOrder(res.action, res.close);
           this.status.robotState = RobotState.Waiting;
         }
       } catch (err) {
-        logger.error(`定时任务[异常终了] ${err.message}`);
+        this.logger.error(`定时任务[异常终了] ${err.message}`);
       }
     });
-    logger.info(`启动机器人`);
+    this.logger.info(`启动机器人`);
     if (this.isFrist) {
       await this.trader.updateLeverage(this.status.symbol, this.status.leverage);
       this.notificationsService.success({
@@ -148,7 +150,7 @@ export class Robot {
       this.job.cancel();
       this.job = undefined;
       this.status.robotState = RobotState.Waiting;
-      logger.info(`停止机器人`);
+      this.logger.info(`停止机器人`);
       return true;
     }
     return false;
@@ -173,7 +175,7 @@ export class Robot {
           this.notificationsService.error({
             title: logText,
           });
-          logger.error(logText);
+          this.logger.error(logText);
           return;
         }
         if (onlineOrder.ordStatus === OrderStatus.New) {
@@ -204,7 +206,7 @@ export class Robot {
       }
       return true;
     } catch (err) {
-      logger.error(`状态检查[异常终了] ${err.message}`);
+      this.logger.error(`状态检查[异常终了] ${err.message}`);
     }
   }
 
@@ -213,7 +215,7 @@ export class Robot {
       return;
     }
     this.status.robotState = RobotState.Ordering;
-    logger.info(`执行订单${this.status.step}[启动]`);
+    this.logger.info(`执行订单${this.status.step}[启动]`);
 
     try {
       const timer = Helper.getTimer();
@@ -227,13 +229,13 @@ export class Robot {
           price,
           amount: this.status.amount,
         };
-        logger.info(`订单信息: ${JSON.stringify(input)}`);
+        this.logger.info(`订单信息: ${JSON.stringify(input)}`);
         if (this.status.isOrder) {
           this.status.robotState = RobotState.Ordering;
           const orderInfo = await this.trader.order(input);
           this.status.orderInfo = orderInfo;
           const saveRes = await this.mysqlService.saveOrder(orderInfo);
-          logger.info(`saveRes: ${JSON.stringify(saveRes)}`);
+          this.logger.info(`saveRes: ${JSON.stringify(saveRes)}`);
           if (!orderInfo) {
             throw Error(`订单${this.status.step}下单异常 - 执行返回结果为空`);
           }
@@ -250,11 +252,11 @@ export class Robot {
             throw Error(`订单${this.status.step}被${orderInfo.ordStatus === OrderStatus.Canceled ? '取消' : '拒绝'}`);
           }
         }
-        logger.info(`执行订单${this.status.step}[终了] ${Helper.endTimer(timer)}`);
+        this.logger.info(`执行订单${this.status.step}[终了] ${Helper.endTimer(timer)}`);
         this.status.step = this.status.step === Step.Order1 ? Step.Order2 : Step.Order1;
         this.syncProcess();
       } else {
-        logger.info(`执行订单${this.status.step}不满足${action === OrderSide.Buy ? '买入' : '卖出'}条件[终了] ${Helper.endTimer(timer)}`);
+        this.logger.info(`执行订单${this.status.step}不满足${action === OrderSide.Buy ? '买入' : '卖出'}条件[终了] ${Helper.endTimer(timer)}`);
       }
     } catch (err) {
       this.status.robotState = RobotState.Ruling;
@@ -262,7 +264,7 @@ export class Robot {
         title: '执行订单异常',
         body: err.message,
       });
-      logger.error(`执行订单[异常终了] ${err.message}`);
+      this.logger.error(`执行订单[异常终了] ${err.message}`);
     }
   }
 
@@ -281,11 +283,11 @@ export class Robot {
         values: bars.c,
       });
       if (bars.c.length === 0 || ichimokuRes.length === 0 || smaRes.length === 0) {
-        logger.error(`获取指标数据出错：bars.c: ${bars.c}, ichimokuRes: ${ichimokuRes}, smaRes: ${smaRes}`);
+        this.logger.error(`获取指标数据出错：bars.c: ${bars.c}, ichimokuRes: ${ichimokuRes}, smaRes: ${smaRes}`);
       }
       const lastClose = bars.c[bars.c.length - 1];
       if (!lastClose) {
-        logger.info(`最近k线为空，取消检测。`);
+        this.logger.info(`最近k线为空，取消检测。`);
         this.status.robotState = RobotState.Waiting;
         return { action: undefined, close: 0 };
       }
@@ -294,7 +296,7 @@ export class Robot {
       let action;
       // 买入
       if (lastClose > baseline && lastClose > ma) {
-        logger.info(`收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`);
+        this.logger.info(`收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`);
         this.notificationsService.info({
           title: '交易规则',
           body: `收盘价(${lastClose}) > 基准线数值(${baseline}),并且 收盘价(${lastClose}) > 均线数值(${ma})，买入操作`,
@@ -302,7 +304,7 @@ export class Robot {
         action = OrderSide.Buy;
       } else if (lastClose < baseline && lastClose < ma) {
         // 卖出
-        logger.info(`收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`);
+        this.logger.info(`收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`);
         this.notificationsService.info({
           title: '交易规则',
           body: `收盘价(${lastClose}) < 基准线数值(${baseline}),并且 收盘价(${lastClose}) < 均线数值(${ma})，卖出操作`,
@@ -310,7 +312,7 @@ export class Robot {
         action = OrderSide.Sell;
       } else {
         const logText = `交易规则计算未满足${this.getOrderSide(this.status.step) === OrderSide.Buy ? '买入' : '卖出'}条件，待机`;
-        logger.info(logText);
+        this.logger.info(logText);
         this.notificationsService.info({
           title: '交易规则',
           body: logText,
@@ -324,20 +326,20 @@ export class Robot {
       };
     } catch (err) {
       this.status.robotState = RobotState.Waiting;
-      logger.error(`检查策略[异常终了] ${err.message}`);
+      this.logger.error(`检查策略[异常终了] ${err.message}`);
     }
   }
 
   private async saveDBLog(udfBar: UdfResponse, action?: OrderSide) {
-    const log = new Log();
+    const logEntity = new LogEntity();
     if (!action) {
-      log.operation = '待机';
+      logEntity.operation = '待机';
     } else {
-      log.operation = action === OrderSide.Buy ? '买入' : '卖出';
+      logEntity.operation = action === OrderSide.Buy ? '买入' : '卖出';
     }
-    log.symbol = this.status.symbol;
-    log.resolution = this.status.resolutionName;
-    log.time = Helper.formatTime(Date.now());
+    logEntity.symbol = this.status.symbol;
+    logEntity.resolution = this.status.resolutionName;
+    logEntity.time = Helper.formatTime(Date.now());
     // 存储最后50条k线数据
     const bars = {
       t: udfBar.t.slice(Math.max(udfBar.t.length - 50, 1)),
@@ -347,8 +349,8 @@ export class Robot {
       l: udfBar.l.slice(Math.max(udfBar.l.length - 50, 1)),
       v: udfBar.v.slice(Math.max(udfBar.v.length - 50, 1)),
     };
-    log.memo = JSON.stringify(bars);
-    await this.mysqlService.saveLog(log);
+    logEntity.memo = JSON.stringify(bars);
+    await this.mysqlService.saveLog(logEntity);
   }
 
   // 获取相应步骤的买入/卖出操作

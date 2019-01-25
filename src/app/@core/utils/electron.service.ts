@@ -4,6 +4,7 @@ import * as path from 'path';
 
 import { Injectable } from '@angular/core';
 import { ipcRenderer, remote, webFrame } from 'electron';
+import { isElectron } from '@duet-core/functions';
 
 @Injectable()
 export class ElectronService {
@@ -16,7 +17,7 @@ export class ElectronService {
 
   constructor() {
     // Conditional imports
-    if (this.isElectron()) {
+    if (isElectron()) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
       this.remote = window.require('electron').remote;
@@ -26,6 +27,4 @@ export class ElectronService {
       this.path = window.require('path');
     }
   }
-
-  isElectron = () => window && window.process && window.process.type;
 }

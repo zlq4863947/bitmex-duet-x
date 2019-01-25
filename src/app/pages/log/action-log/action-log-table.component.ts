@@ -2,8 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Observable, Subscription } from 'rxjs';
 
-import { LogTableService } from '../../../@core/data/log-table.service';
-import { Log } from '../../../@core/services/mysql/entity';
+import { LogTableService } from '@duet-core/data';
+import { LogEntity } from '@duet-core/services';
 
 @Component({
   selector: 'ngx-action-log-table',
@@ -19,7 +19,7 @@ export class ActionLogTableComponent implements OnDestroy {
     return () => clearInterval(timer);
   });
   sub: Subscription;
-  private logData: Log[];
+  private logData: LogEntity[];
 
   constructor(private service: LogTableService) {
     this.settings = this.service.getSettings();
