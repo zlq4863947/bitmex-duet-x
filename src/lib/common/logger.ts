@@ -1,9 +1,10 @@
 import elog from 'electron-log';
+
 import { isElectron } from '@duet-core/functions';
 
 export class Log {
   elog: typeof elog;
-  
+
   constructor() {
     if (isElectron()) {
       this.elog = window.require('electron').remote.require('electron-log');

@@ -1,12 +1,11 @@
 import { moduleMetadata, storiesOf } from '@storybook/angular';
-
-import { ActionLogTableComponent } from './action-log-table.component';
-import { MysqlService } from '../../../@core/services';
-import { mockLogTableData } from '../../../testing';
-import { LogTableService } from '../../../@core/data';
-
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+
+import { LogTableService } from '../../../@core/data';
+import { MysqlService } from '../../../@core/services';
 import { ThemeModule } from '../../../@theme/theme.module';
+import { mockLogTableData } from '../../../testing';
+import { ActionLogTableComponent } from './action-log-table.component';
 
 storiesOf('日志', module)
   .addDecorator(
@@ -34,7 +33,7 @@ storiesOf('日志', module)
                   content: { title: '内容', type: 'string' },
                 },
               };
-            }
+            },
           },
         },
         {

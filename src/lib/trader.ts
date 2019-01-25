@@ -14,7 +14,6 @@ export interface IRestOrders {
 }
 export class Trader {
   rest: Rest;
-  private readonly logger: Log;
 
   filter = {
     onlineOrder(orders: types.Order[] | undefined) {
@@ -48,6 +47,8 @@ export class Trader {
       return [];
     },
   };
+
+  private readonly logger: Log;
 
   constructor(config: ExchangeSettings) {
     this.rest = new Rest(config, environment.production ? '' : 'http://127.0.0.1:7070');

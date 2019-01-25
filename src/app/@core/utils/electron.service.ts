@@ -4,6 +4,7 @@ import * as path from 'path';
 
 import { Injectable } from '@angular/core';
 import { ipcRenderer, remote, webFrame } from 'electron';
+
 import { isElectron } from '@duet-core/functions';
 
 @Injectable()

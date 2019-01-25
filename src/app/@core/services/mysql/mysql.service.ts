@@ -9,7 +9,7 @@ import { Helper } from '@duet-robot/common';
 import { Order } from '@duet-robot/type';
 
 import { MysqlSettings } from '../../../@core/types';
-import { OrderEntity, LogEntity} from './entity';
+import { LogEntity, OrderEntity } from './entity';
 
 @Injectable()
 export class MysqlService {

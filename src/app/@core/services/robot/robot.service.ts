@@ -2,10 +2,9 @@ import 'reflect-metadata';
 
 import { Injectable } from '@angular/core';
 
+import { Robot } from '../../../../lib/robot';
 import { NotificationsService, SettingsService } from '../../utils';
 import { MysqlService } from '../mysql';
-import { Robot } from '../../../../lib/robot';
-
 
 @Injectable({
   providedIn: 'root',

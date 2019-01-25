@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { BitmexWS } from 'bitmex-ws';
 import { Job } from 'node-schedule';
 
+import { LogEntity, MysqlService } from '@duet-core/services/mysql';
 import { ApplicationSettings } from '@duet-core/types';
 import { NotificationsService, SettingsService } from '@duet-core/utils';
 
-import { MysqlService, LogEntity } from '@duet-core/services/mysql';
-import { Helper, Scheduler, getExchangeOptions, Log } from './common';
+import { Helper, Log, Scheduler, getExchangeOptions } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
 import { Order, OrderSide, OrderStatus, Step, UdfResponse } from './type';
@@ -62,7 +62,7 @@ export class Robot {
     private notificationsService: NotificationsService,
     private mysqlService: MysqlService,
   ) {
-    this.logger = new Log(); 
+    this.logger = new Log();
   }
 
   reload() {
@@ -256,7 +256,9 @@ export class Robot {
         this.status.step = this.status.step === Step.Order1 ? Step.Order2 : Step.Order1;
         this.syncProcess();
       } else {
-        this.logger.info(`执行订单${this.status.step}不满足${action === OrderSide.Buy ? '买入' : '卖出'}条件[终了] ${Helper.endTimer(timer)}`);
+        this.logger.info(
+          `执行订单${this.status.step}不满足${action === OrderSide.Buy ? '买入' : '卖出'}条件[终了] ${Helper.endTimer(timer)}`,
+        );
       }
     } catch (err) {
       this.status.robotState = RobotState.Ruling;
