@@ -1,0 +1,36 @@
+{
+  "extends":"../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/spec",
+    "module": "commonjs",
+    "strict": false,
+    "target": "es5",
+    "types": [
+      "jasmine",
+      "node"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@angular/*": [
+        "../node_modules/@angular/*"
+      ],
+      "@nebular/*": [
+        "../node_modules/@nebular/*"
+      ],
+      "@duet-core/*": [
+        "../src/app/@core/*"
+      ],
+      "@duet-robot/*": [
+        "../src/lib/*"
+      ]
+    }
+  },
+  "include": [
+    "../src/**/*.ts"
+  ],
+  "exclude": [
+    "../src/**/*.spec.ts",
+    "../node_modules",
+    "../tmp"
+  ]
+}
