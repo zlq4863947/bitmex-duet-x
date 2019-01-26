@@ -1,7 +1,7 @@
 <nb-card>
   <nb-card-header>
     订单列表
-    <i class="eva-icon-container" (click)="loadData()">
+    <i class="eva-icon-container" nbPopover="刷新" nbPopoverMode="hint" (click)="loadData()">
       <i [innerHTML]="'refresh' | eva: { animationType: 'pulse' } "></i>
     </i>
   </nb-card-header>

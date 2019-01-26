@@ -16,6 +16,8 @@ export class OrderEntity {
 
   @Column() time: string;
 
+  @Column() roe: string;
+
   constructor(obj?: OrderEntity) {
     if (obj) {
       Object.assign(this, obj);
