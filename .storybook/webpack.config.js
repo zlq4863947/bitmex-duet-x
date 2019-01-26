@@ -14,7 +14,6 @@ module.exports = (storybookBaseConfig, env, config) => {
     '@duet-core': path.resolve( __dirname ,  '../src/app/@core'),
     '@duet-robot': path.resolve( __dirname ,  '../src/lib')
   };
-  console.log(storybookBaseConfig)
 
   storybookBaseConfig.externals = {
       'sql.js': "require('sql.js')",
@@ -29,23 +28,16 @@ module.exports = (storybookBaseConfig, env, config) => {
       mssql: "require('mssql')",
       mongodb: "require('mongodb')",
       ioredis: "require('ioredis')"
-      
       // fs: 'require("fs")',
   };
-  /*
-  storybookBaseConfig.resolve.modules = [
-    ...(storybookBaseConfig.resolve.modules || []),
-    path.resolve(__dirname, "../app/javascript/src"),
-  ];*/
-
-/*  
-  storybookBaseConfig.module.rules.push({
-    test: /\.(ts|tsx)$/,
-    use: [{
-      loader: require.resolve('fs')
-    }]
-  });
-  console.log(storybookBaseConfig)
-  storybookBaseConfig.resolve.extensions.push('.ts', '.tsx');*/
+/*
+  storybookBaseConfig.module.rules.push(
+    {
+      test: /\.scss$/,
+      exclude: /node_modules/,
+      loaders: ["style-loader", "css-loader", "sass-loader"],
+      include: path.resolve(__dirname, "../")
+    },
+  );*/
   return storybookBaseConfig;
 };
