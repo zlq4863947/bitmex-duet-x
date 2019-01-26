@@ -39,5 +39,5 @@ storiesOf('日志', module)
     }),
   )
   .add('系统操作日志列表', () => ({
-    component: ActionLogTableComponent
+    component: ActionLogTableComponent,
   }));

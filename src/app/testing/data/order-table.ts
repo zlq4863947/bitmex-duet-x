@@ -9,7 +9,7 @@ export const mockOrderTableData: OrderEntity[] = [
     amount: 1,
     side: '买入',
     status: '已成交',
-    roe: '-'
+    roe: '-',
   },
   {
     orderId: '2',
@@ -19,7 +19,7 @@ export const mockOrderTableData: OrderEntity[] = [
     amount: 1,
     side: '卖出',
     status: '已成交',
-    roe: '-1.1%'
+    roe: '-1.1%',
   },
   {
     orderId: '3',
@@ -29,7 +29,7 @@ export const mockOrderTableData: OrderEntity[] = [
     amount: 1,
     side: '买入',
     status: '已成交',
-    roe: '-'
+    roe: '-',
   },
   {
     orderId: '4',
@@ -39,6 +39,6 @@ export const mockOrderTableData: OrderEntity[] = [
     amount: 1,
     side: '卖出',
     status: '已成交',
-    roe: '0.12%'
-  }
+    roe: '0.12%',
+  },
 ];

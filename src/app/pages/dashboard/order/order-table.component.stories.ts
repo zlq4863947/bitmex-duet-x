@@ -1,35 +1,36 @@
+import { Component } from '@angular/core';
 import { moduleMetadata, storiesOf } from '@storybook/angular';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { OrderTableService } from '../../../@core/data';
+import { getStatusHtml } from '../../../@core/functions';
 import { ThemeModule } from '../../../@theme/theme.module';
 import { mockOrderTableData } from '../../../testing';
 import { OrderTableComponent } from './order-table.component';
-import { getStatusHtml } from '../../../@core/functions';
-import { Component } from '@angular/core';
 
 @Component({
-  styles: [`
-    :host /deep/ .cell_success {
-      color: darkgreen;
-    }
-    :host /deep/ .cell_fail {
-      color: deeppink;
-    }
-  `],
+  styles: [
+    `
+      :host /deep/ .cell_success {
+        color: darkgreen;
+      }
+      :host /deep/ .cell_fail {
+        color: deeppink;
+      }
+    `,
+  ],
   template: `
-  <nb-card>
-    <nb-card-header>
-      订单列表
-    </nb-card-header>
-    <nb-card-body>
-      <ng2-smart-table [settings]="settings" [source]="source">
-      </ng2-smart-table>
-    </nb-card-body>
-  </nb-card>
+    <nb-card>
+      <nb-card-header>
+        订单列表
+      </nb-card-header>
+      <nb-card-body>
+        <ng2-smart-table [settings]="settings" [source]="source"> </ng2-smart-table>
+      </nb-card-body>
+    </nb-card>
   `,
 })
-class WithOrderTableComponent extends OrderTableComponent{}
+class WithOrderTableComponent extends OrderTableComponent {}
 
 storiesOf('日志', module)
   .addDecorator(
@@ -66,5 +67,5 @@ storiesOf('日志', module)
     }),
   )
   .add('订单日志列表', () => ({
-    component: WithOrderTableComponent
+    component: WithOrderTableComponent,
   }));
