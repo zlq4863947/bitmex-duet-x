@@ -11,7 +11,6 @@ module.exports = (storybookBaseConfig, env, config) => {
   storybookBaseConfig.resolve.alias = {
     ...storybookBaseConfig.resolve.alias,
     'fs': path.resolve(__dirname, 'fsMock.js'),
-    '@duet-core': path.resolve( __dirname ,  '../src/app/@core'),
     '@duet-robot': path.resolve( __dirname ,  '../src/lib')
   };
 

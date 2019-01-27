@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { MysqlService } from '@duet-core/services';
-import { MysqlSettings } from '@duet-core/types';
-import { NotificationsService, SettingsService } from '@duet-core/utils';
+import { MysqlService } from '../../../../@core/services';
+import { MysqlSettings } from '../../../../@core/types';
+import { NotificationsService, SettingsService } from '../../../../@core/utils';
 
 @Component({
   selector: 'ngx-setting-mysql',

@@ -1,8 +1,8 @@
 import fetch, { Headers, RequestInit } from 'node-fetch';
 
-import { ExchangeSettings } from '@duet-core/types';
 import { Log } from '@duet-robot/common';
 
+import { ExchangeSettings } from '../../../app/@core/types';
 import * as types from '../../type';
 import { Endpoints } from './endpoints';
 

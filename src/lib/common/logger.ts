@@ -1,6 +1,6 @@
 import elog from 'electron-log';
 
-import { isElectron } from '@duet-core/functions';
+import { isElectron } from '../../app/@core/functions';
 
 export class Log {
   elog: typeof elog;

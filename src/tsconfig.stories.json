@@ -15,9 +15,6 @@
       "@nebular/*": [
         "../node_modules/@nebular/*"
       ],
-      "@duet-core/*": [
-        "app/@core/*"
-      ],
       "@duet-robot/*": [
         "lib/*"
       ]

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as settings from 'electron-settings';
 
-import { isElectron } from '@duet-core/functions';
-
+import { isElectron } from '../functions';
 import { ActionsSettings, ApplicationSettings, ExchangeSettings, MysqlSettings, RobotProcess, StoreKey, TradingSettings } from '../types';
 
 @Injectable()

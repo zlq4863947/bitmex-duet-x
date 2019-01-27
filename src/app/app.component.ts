@@ -8,8 +8,7 @@ import 'style-loader!angular2-toaster/toaster.css';
 import { Component, OnInit } from '@angular/core';
 import { ToasterConfig } from 'angular2-toaster';
 
-import { isElectron } from '@duet-core/functions';
-
+import { isElectron } from './@core/functions';
 import { AnalyticsService } from './@core/utils/analytics.service';
 import { ElectronService } from './@core/utils/electron.service';
 

@@ -3,11 +3,10 @@ import { BitmexWS } from 'bitmex-ws';
 import { Order as WsOrder } from 'bitmex-ws/lib/types';
 import { Job } from 'node-schedule';
 
-import { Order } from '@duet-core/data';
-import { LogEntity, MysqlService } from '@duet-core/services/mysql';
-import { ApplicationSettings } from '@duet-core/types';
-import { NotificationsService, SettingsService } from '@duet-core/utils';
-
+import { Order } from '../app/@core/data';
+import { LogEntity, MysqlService } from '../app/@core/services/mysql';
+import { ApplicationSettings } from '../app/@core/types';
+import { NotificationsService, SettingsService } from '../app/@core/utils';
 import { Helper, Log, Scheduler, getExchangeOptions } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';

@@ -1,4 +1,4 @@
-import { LogEntity } from '@duet-core/services';
+import { LogEntity } from '../../@core/services';
 
 export const mockLogTableData: LogEntity[] = [
   {

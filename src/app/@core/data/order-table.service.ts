@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { getStatusHtml, getStatusName } from '@duet-core/functions';
-import { MysqlService } from '@duet-core/services';
 import { Helper } from '@duet-robot/common';
 import { OrderSide, OrderStatus } from '@duet-robot/type';
+
+import { getStatusHtml, getStatusName } from '../functions';
+import { MysqlService } from '../services';
 
 export interface Order {
   id: string;

@@ -3,10 +3,9 @@ import 'reflect-metadata';
 import { Injectable } from '@angular/core';
 import { Connection, createConnection, getConnection, getConnectionManager } from 'typeorm';
 
-import { Order } from '@duet-core/data';
-import { ApplicationSettings, MysqlSettings } from '@duet-core/types';
-import { SettingsService } from '@duet-core/utils';
-
+import { Order } from '../../data';
+import { ApplicationSettings, MysqlSettings } from '../../types';
+import { SettingsService } from '../../utils';
 import { LogEntity, OrderEntity } from './entity';
 
 @Injectable()

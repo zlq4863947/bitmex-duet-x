@@ -2,8 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 import { Observable, Subscription } from 'rxjs';
 
-import { LogTableService } from '@duet-core/data';
-import { LogEntity } from '@duet-core/services';
+import { LogTableService } from '../../../@core/data';
+import { LogEntity } from '../../../@core/services';
 
 @Component({
   selector: 'ngx-action-log-table',

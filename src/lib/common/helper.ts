@@ -1,7 +1,6 @@
 import { ExchangeOptions } from 'bitmex-ws/lib/types';
 
-import { ExchangeSettings } from '@duet-core/types';
-
+import { ExchangeSettings } from '../../app/@core/types';
 import * as types from '../type';
 
 const moment = require('moment');

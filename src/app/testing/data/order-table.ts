@@ -1,4 +1,4 @@
-import { OrderEntity } from '@duet-core/services';
+import { OrderEntity } from '../../@core/services';
 
 export const mockOrderTableData: OrderEntity[] = [
   {
@@ -9,6 +9,7 @@ export const mockOrderTableData: OrderEntity[] = [
     amount: 1,
     side: '买入',
     status: '已成交',
+    step: '1',
     roe: '-',
   },
   {
@@ -19,6 +20,7 @@ export const mockOrderTableData: OrderEntity[] = [
     amount: 1,
     side: '卖出',
     status: '已成交',
+    step: '2',
     roe: '-1.1%',
   },
   {
@@ -29,6 +31,7 @@ export const mockOrderTableData: OrderEntity[] = [
     amount: 1,
     side: '买入',
     status: '已成交',
+    step: '1',
     roe: '-',
   },
   {
@@ -39,6 +42,7 @@ export const mockOrderTableData: OrderEntity[] = [
     amount: 1,
     side: '卖出',
     status: '已成交',
+    step: '2',
     roe: '0.12%',
   },
 ];
