@@ -36,8 +36,9 @@ export class OrderTableComponent implements OnDestroy {
   }
 
   async loadData() {
-    const data = await this.service.getData();
+    let data = await this.service.getData();
     if (!this.orderData || JSON.stringify(this.orderData) !== JSON.stringify(data)) {
+      data = await this.service.syncROE();
       this.orderData = data;
       this.source.load(data);
     }

@@ -23,20 +23,15 @@ describe('mysql service', async () => {
       ],
     });
     mysqlService = TestBed.get(MysqlService);
-    console.log(12);
-    /*pubConn = await createConnection(bronxPublicDbName);
-    coreConn = await createConnection(bronxCoreDbName);
-    const masterSymbolRepository = coreConn.getCustomRepository(MasterSymbolRepository);
-    await masterSymbolRepository.importDefaultSymbols();*/
   });
 
   afterAll(async () => {
-    // await pubConn.close();
+    await mysqlService.disconnect();
   });
 
   it('计算收益率', async () => {
     const orders = await mysqlService.getOrders();
-    console.log(orders);
-    await mysqlService.disconnect();
+    const orders2 = await mysqlService.syncROE(orders);
+    console.log(orders2)
   });
 });

@@ -4,7 +4,7 @@ import { Helper } from '@duet-robot/common';
 import { OrderSide, OrderStatus } from '@duet-robot/type';
 
 import { getStatusHtml, getStatusName } from '../functions';
-import { MysqlService } from '../services';
+import { MysqlService, OrderEntity } from '../services';
 
 export interface Order {
   id: string;
@@ -24,25 +24,13 @@ export class OrderTableService {
 
   async getData() {
     const dbOrders = await this.mysqlService.getOrders();
-    if (!dbOrders) {
-      return [];
-    }
-    const orders: Order[] = [];
-    for (const dbOrder of dbOrders) {
-      const order: Order = {
-        id: dbOrder.orderId,
-        time: Helper.formatTime(dbOrder.time),
-        symbol: dbOrder.symbol,
-        price: dbOrder.price,
-        amount: dbOrder.amount,
-        side: dbOrder.side === OrderSide.Buy ? '买入' : '卖出',
-        status: getStatusName(<OrderStatus>dbOrder.status),
-        step: dbOrder.step,
-        roe: dbOrder.roe,
-      };
-      orders.push(order);
-    }
-    return orders;
+    return this.formatData(dbOrders);
+  }
+
+  async syncROE(): Promise<Order[]> {
+    let orders = await this.mysqlService.getOrders();
+    orders = await this.mysqlService.syncROE(orders);
+    return this.formatData(orders);
   }
 
   getSettings() {
@@ -63,5 +51,27 @@ export class OrderTableService {
         roe: { title: '收益率', type: 'string' },
       },
     };
+  }
+
+  private formatData(dbOrders: OrderEntity[]) {
+    if (!dbOrders) {
+      return [];
+    }
+    const orders: Order[] = [];
+    for (const dbOrder of dbOrders) {
+      const order: Order = {
+        id: dbOrder.orderId,
+        time: Helper.formatTime(dbOrder.time),
+        symbol: dbOrder.symbol,
+        price: dbOrder.price,
+        amount: dbOrder.amount,
+        side: dbOrder.side === OrderSide.Buy ? '买入' : '卖出',
+        status: getStatusName(<OrderStatus>dbOrder.status),
+        step: dbOrder.step,
+        roe: dbOrder.roe,
+      };
+      orders.push(order);
+    }
+    return orders;
   }
 }

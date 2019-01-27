@@ -7,6 +7,7 @@ import { Order } from '../../data';
 import { ApplicationSettings, MysqlSettings } from '../../types';
 import { SettingsService } from '../../utils';
 import { LogEntity, OrderEntity } from './entity';
+import { OrderSide } from '@duet-robot/type';
 
 @Injectable()
 export class MysqlService {
@@ -121,17 +122,24 @@ export class MysqlService {
   /**
    * 计算收益率
    */
-  /*
-  async calcROE(orders: OrderEntity[]) {
+  async syncROE(orders: OrderEntity[]) {
     const res = await this.autoConnect();
     if (!res || !res.conn) {
       return;
     }
-    //const repo = res.conn.getRepository(OrderEntity);
-    const t = Array.from(orders.entries());
-    console.log(t);
-    // repo.save(orders)
-}*/
+    for (const [i, order] of Array.from(orders.entries())) {
+      const prevOrder = orders[i - 1];
+      if (order.step !== '2' || !prevOrder) {
+        continue;
+      }
+      const diff = order.side === OrderSide.Sell ? order.price-prevOrder.price : prevOrder.price-order.price;
+      const roeRate = diff/order.price*100;
+      order.roe = roeRate.toFixed(2) + '%';
+    }
+    const repo = res.conn.getRepository(OrderEntity);
+    await repo.save(orders)
+    return orders;
+}
 
   async getOrders(): Promise<OrderEntity[] | undefined> {
     const res = await this.autoConnect();
