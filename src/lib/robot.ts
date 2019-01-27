@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BitmexWS } from 'bitmex-ws';
+import { Order as WsOrder } from 'bitmex-ws/lib/types';
 import { Job } from 'node-schedule';
 
 import { LogEntity, MysqlService } from '@duet-core/services/mysql';
@@ -9,7 +10,8 @@ import { NotificationsService, SettingsService } from '@duet-core/utils';
 import { Helper, Log, Scheduler, getExchangeOptions } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
-import { Order, OrderSide, OrderStatus, Step, UdfResponse } from './type';
+import { Order as BitmexOrder, OrderSide, OrderStatus, Step, UdfResponse } from './type';
+import { Order } from '@duet-core/data';
 
 // 机器人运行状态
 export enum RobotState {
@@ -33,7 +35,7 @@ export interface IStatus {
   // 是否真实下单
   isOrder: boolean;
   robotState: RobotState;
-  orderInfo?: Order;
+  orderInfo?: BitmexOrder;
   // 当前步骤
   step: Step;
 }
@@ -89,16 +91,24 @@ export class Robot {
     this.ws.order$(this.status.symbol).subscribe(async (order) => {
       this.logger.info(`subscribe order: ${JSON.stringify(order)}`);
       if (order && order.ordStatus && order.ordStatus !== OrderStatus.New) {
-        const fmtOrder: Order = {
-          orderID: order.orderID,
-          symbol: order.symbol,
-          orderQty: order.orderQty,
-          price: order.price,
-          ordStatus: order.ordStatus,
-        };
-        await this.mysqlService.syncOrder(fmtOrder);
+        await this.syncOrder(order);
       }
     });
+  }
+  
+  async syncOrder(wsOrder: WsOrder) {
+    const order: Order = {
+      id: wsOrder.orderID,
+      time: Helper.formatTime(Date.now()),
+      symbol: wsOrder.symbol,
+      price: wsOrder.price,
+      amount: wsOrder.orderQty,
+      side: wsOrder.side,
+      status: wsOrder.ordStatus,
+      step: this.status.step+'',
+      roe: '-'
+    }
+    await this.mysqlService.syncOrder(order);
   }
 
   syncProcess() {
@@ -184,7 +194,7 @@ export class Robot {
         const dbOrder = await this.mysqlService.getOrderById(orderId);
         if (!dbOrder || onlineOrder.ordStatus !== dbOrder.status) {
           // 同步订单状态
-          await this.mysqlService.syncOrder(onlineOrder);
+          await this.syncOrder(<any>onlineOrder);
 
           switch (onlineOrder.ordStatus) {
             case OrderStatus.Canceled:
@@ -222,7 +232,6 @@ export class Robot {
       const action = this.getOrderSide(this.status.step);
       // 买入/卖出动作 == 本次动作
       if (action === ruleAction) {
-        // this.status.step === Step.Order1
         const input = {
           symbol: this.status.symbol,
           side: ruleAction,
@@ -234,7 +243,7 @@ export class Robot {
           this.status.robotState = RobotState.Ordering;
           const orderInfo = await this.trader.order(input);
           this.status.orderInfo = orderInfo;
-          const saveRes = await this.mysqlService.saveOrder(orderInfo);
+          const saveRes = await this.syncOrder(<any>orderInfo);
           this.logger.info(`saveRes: ${JSON.stringify(saveRes)}`);
           if (!orderInfo) {
             throw Error(`订单${this.status.step}下单异常 - 执行返回结果为空`);

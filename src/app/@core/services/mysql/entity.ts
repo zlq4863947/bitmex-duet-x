@@ -18,6 +18,8 @@ export class OrderEntity {
 
   @Column() roe: string;
 
+  @Column() step: string;
+
   constructor(obj?: OrderEntity) {
     if (obj) {
       Object.assign(this, obj);

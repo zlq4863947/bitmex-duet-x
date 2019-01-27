@@ -3,12 +3,10 @@ import 'reflect-metadata';
 import { Injectable } from '@angular/core';
 import { Connection, createConnection, getConnection, getConnectionManager } from 'typeorm';
 
-import { ApplicationSettings } from '@duet-core/types';
+import { ApplicationSettings, MysqlSettings } from '@duet-core/types';
+import { Order } from '@duet-core/data';
 import { SettingsService } from '@duet-core/utils';
-import { Helper } from '@duet-robot/common';
-import { Order } from '@duet-robot/type';
 
-import { MysqlSettings } from '../../../@core/types';
 import { LogEntity, OrderEntity } from './entity';
 
 @Injectable()
@@ -85,13 +83,14 @@ export class MysqlService {
     if (res && res.conn) {
       const repo = res.conn.getRepository(OrderEntity);
       const orderInfo = new OrderEntity();
-      orderInfo.orderId = order.orderID;
+      orderInfo.orderId = order.id;
       orderInfo.symbol = order.symbol;
-      orderInfo.amount = order.orderQty;
+      orderInfo.amount = order.amount;
       orderInfo.price = order.price;
       orderInfo.side = order.side;
-      orderInfo.status = order.ordStatus;
-      orderInfo.time = Helper.formatTime(Date.now());
+      orderInfo.status = order.status;
+      orderInfo.time = order.time;
+      orderInfo.roe = order.roe + '';
       return await repo.save(orderInfo);
     }
   }
@@ -100,22 +99,42 @@ export class MysqlService {
     const res = await this.autoConnect();
     if (res && res.conn) {
       const repo = res.conn.getRepository(OrderEntity);
-      const dbOrder = await repo.findOne(order.orderID);
-      if (dbOrder && dbOrder.status !== order.ordStatus) {
-        dbOrder.status = order.ordStatus;
+      const dbOrder = await repo.findOne(order.id);
+      // 存在数据的时候
+      if (dbOrder && dbOrder.status !== order.status) {
+        dbOrder.status = order.status;
         await repo.save(dbOrder);
       } else if (order && order.price) {
         const orderInfo = new OrderEntity();
-        orderInfo.orderId = order.orderID;
+        orderInfo.orderId = order.id;
         orderInfo.symbol = order.symbol;
-        orderInfo.amount = order.orderQty;
+        orderInfo.amount = order.amount;
         orderInfo.price = order.price;
         orderInfo.side = order.side;
-        orderInfo.status = order.ordStatus;
-        orderInfo.time = Helper.formatTime(Date.now());
+        orderInfo.status = order.status;
+        orderInfo.time = order.time;
+        orderInfo.roe = order.roe + '';
         await repo.save(orderInfo);
       }
     }
+  }
+
+  /**
+   * 计算收益率
+   */
+  async calcROE(orders: OrderEntity[]) {
+
+    const res = await this.autoConnect();
+    if (!res || !res.conn) {
+      return;
+    }
+    //const repo = res.conn.getRepository(OrderEntity);
+    const t = Array.from(orders.entries());
+    console.log(t)
+    /*for (const [i, order] of orders.entries()) {
+      
+    }*/
+    // repo.save(orders)
   }
 
   async getOrders(): Promise<OrderEntity[] | undefined> {

@@ -6,12 +6,14 @@ import { Helper } from '@duet-robot/common';
 import { OrderSide, OrderStatus } from '@duet-robot/type';
 
 export interface Order {
+  id: string;
   time: string;
   symbol: string;
   price: number;
   amount: number;
   side: string;
   status: string;
+  step: string;
   roe: string;
 }
 
@@ -27,12 +29,14 @@ export class OrderTableService {
     const orders: Order[] = [];
     for (const dbOrder of dbOrders) {
       const order: Order = {
+        id: dbOrder.orderId,
         time: Helper.formatTime(dbOrder.time),
         symbol: dbOrder.symbol,
         price: dbOrder.price,
         amount: dbOrder.amount,
         side: dbOrder.side === OrderSide.Buy ? '买入' : '卖出',
         status: getStatusName(<OrderStatus>dbOrder.status),
+        step: dbOrder.step,
         roe: dbOrder.roe,
       };
       orders.push(order);
