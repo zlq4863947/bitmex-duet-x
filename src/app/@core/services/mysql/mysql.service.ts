@@ -3,8 +3,8 @@ import 'reflect-metadata';
 import { Injectable } from '@angular/core';
 import { Connection, createConnection, getConnection, getConnectionManager } from 'typeorm';
 
-import { ApplicationSettings, MysqlSettings } from '@duet-core/types';
 import { Order } from '@duet-core/data';
+import { ApplicationSettings, MysqlSettings } from '@duet-core/types';
 import { SettingsService } from '@duet-core/utils';
 
 import { LogEntity, OrderEntity } from './entity';
@@ -122,20 +122,17 @@ export class MysqlService {
   /**
    * 计算收益率
    */
+  /*
   async calcROE(orders: OrderEntity[]) {
-
     const res = await this.autoConnect();
     if (!res || !res.conn) {
       return;
     }
     //const repo = res.conn.getRepository(OrderEntity);
     const t = Array.from(orders.entries());
-    console.log(t)
-    /*for (const [i, order] of orders.entries()) {
-      
-    }*/
+    console.log(t);
     // repo.save(orders)
-  }
+}*/
 
   async getOrders(): Promise<OrderEntity[] | undefined> {
     const res = await this.autoConnect();

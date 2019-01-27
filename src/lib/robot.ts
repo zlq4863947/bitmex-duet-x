@@ -3,6 +3,7 @@ import { BitmexWS } from 'bitmex-ws';
 import { Order as WsOrder } from 'bitmex-ws/lib/types';
 import { Job } from 'node-schedule';
 
+import { Order } from '@duet-core/data';
 import { LogEntity, MysqlService } from '@duet-core/services/mysql';
 import { ApplicationSettings } from '@duet-core/types';
 import { NotificationsService, SettingsService } from '@duet-core/utils';
@@ -11,7 +12,6 @@ import { Helper, Log, Scheduler, getExchangeOptions } from './common';
 import { ichimoku, sma } from './indicator';
 import { Trader } from './trader';
 import { Order as BitmexOrder, OrderSide, OrderStatus, Step, UdfResponse } from './type';
-import { Order } from '@duet-core/data';
 
 // 机器人运行状态
 export enum RobotState {
@@ -95,7 +95,7 @@ export class Robot {
       }
     });
   }
-  
+
   async syncOrder(wsOrder: WsOrder) {
     const order: Order = {
       id: wsOrder.orderID,
@@ -105,9 +105,9 @@ export class Robot {
       amount: wsOrder.orderQty,
       side: wsOrder.side,
       status: wsOrder.ordStatus,
-      step: this.status.step+'',
-      roe: '-'
-    }
+      step: this.status.step + '',
+      roe: '-',
+    };
     await this.mysqlService.syncOrder(order);
   }
 
