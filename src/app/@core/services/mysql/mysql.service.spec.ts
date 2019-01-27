@@ -32,6 +32,6 @@ describe('mysql service', async () => {
   it('计算收益率', async () => {
     const orders = await mysqlService.getOrders();
     const orders2 = await mysqlService.syncROE(orders);
-    console.log(orders2)
+    console.log(orders2);
   });
 });

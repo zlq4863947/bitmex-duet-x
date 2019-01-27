@@ -3,11 +3,12 @@ import 'reflect-metadata';
 import { Injectable } from '@angular/core';
 import { Connection, createConnection, getConnection, getConnectionManager } from 'typeorm';
 
+import { OrderSide } from '@duet-robot/type';
+
 import { Order } from '../../data';
 import { ApplicationSettings, MysqlSettings } from '../../types';
 import { SettingsService } from '../../utils';
 import { LogEntity, OrderEntity } from './entity';
-import { OrderSide } from '@duet-robot/type';
 
 @Injectable()
 export class MysqlService {
@@ -132,14 +133,14 @@ export class MysqlService {
       if (order.step !== '2' || !prevOrder) {
         continue;
       }
-      const diff = order.side === OrderSide.Sell ? order.price-prevOrder.price : prevOrder.price-order.price;
-      const roeRate = diff/order.price*100;
+      const diff = order.side === OrderSide.Sell ? order.price - prevOrder.price : prevOrder.price - order.price;
+      const roeRate = (diff / order.price) * 100;
       order.roe = roeRate.toFixed(2) + '%';
     }
     const repo = res.conn.getRepository(OrderEntity);
-    await repo.save(orders)
+    await repo.save(orders);
     return orders;
-}
+  }
 
   async getOrders(): Promise<OrderEntity[] | undefined> {
     const res = await this.autoConnect();
