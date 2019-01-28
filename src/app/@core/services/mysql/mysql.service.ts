@@ -91,7 +91,8 @@ export class MysqlService {
       orderInfo.side = order.side;
       orderInfo.status = order.status;
       orderInfo.time = order.time;
-      orderInfo.roe = order.roe + '';
+      orderInfo.step = order.step;
+      orderInfo.roe = order.roe;
       return await repo.save(orderInfo);
     }
   }
@@ -114,7 +115,8 @@ export class MysqlService {
         orderInfo.side = order.side;
         orderInfo.status = order.status;
         orderInfo.time = order.time;
-        orderInfo.roe = order.roe + '';
+        orderInfo.step = order.step;
+        orderInfo.roe = order.roe;
         await repo.save(orderInfo);
       }
     }

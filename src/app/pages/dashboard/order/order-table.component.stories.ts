@@ -42,6 +42,7 @@ storiesOf('日志', module)
           provide: OrderTableService,
           useValue: {
             getData: () => Promise.resolve(mockOrderTableData),
+            syncROE: () => Promise.resolve(mockOrderTableData),
             getSettings: () => {
               return {
                 hideSubHeader: true,
