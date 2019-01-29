@@ -29,14 +29,6 @@ module.exports = (storybookBaseConfig, env, config) => {
       ioredis: "require('ioredis')"
       // fs: 'require("fs")',
   };
-/*
-  storybookBaseConfig.module.rules.push(
-    {
-      test: /\.scss$/,
-      exclude: /node_modules/,
-      loaders: ["style-loader", "css-loader", "sass-loader"],
-      include: path.resolve(__dirname, "../")
-    },
-  );*/
+
   return storybookBaseConfig;
 };
