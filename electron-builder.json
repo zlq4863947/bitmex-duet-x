@@ -1,26 +1,26 @@
 {
-  "productName": "bitmex-duet",
-  "appId": "com.electron.duet",
+  "productName": "bitmex-duet-x",
+  "appId": "com.electron.duetx",
   "copyright": "Copyright © 2018 zlq4863947",
   "directories": {
     "output": "release/"
   },
-    "files": [
-        "**/*",
-        "!*.ts",
-        "!*.code-workspace",
-        "!LICENSE.md",
-        "!package.json",
-        "!package-lock.json",
-        "!src/",
-        "!e2e/",
-        "!hooks/",
-        "!.angular-cli.json",
-        "!_config.yml",
-        "!karma.conf.js",
-        "!tsconfig.json",
-        "!tslint.json"
-    ],
+  "files": [
+      "**/*",
+      "!*.ts",
+      "!*.code-workspace",
+      "!LICENSE.md",
+      "!package.json",
+      "!package-lock.json",
+      "!src/",
+      "!e2e/",
+      "!hooks/",
+      "!.angular-cli.json",
+      "!_config.yml",
+      "!karma.conf.js",
+      "!tsconfig.json",
+      "!tslint.json"
+  ],
   "win": {
     "icon": "dist",
     "target": [
