@@ -1,0 +1,45 @@
+@import '../../../@theme/styles/themes';
+@import '~@nebular/bootstrap/styles/buttons';
+
+@include nb-install-component() {
+  nb-card {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .eva-icon-container {
+    @include nb-rtl(right, auto);
+    @include nb-rtl(left, 0);
+
+    cursor: pointer;
+    fill: nb-theme(card-fg-text);
+    padding: 1.5rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .icon {
+    display: inline-block;
+    font-size: 1.25rem;
+    padding: 1.25rem 0;
+    text-align: center;
+    width: 4rem;
+
+    i:hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
+}
+
+.hide-action td.ng2-smart-actions {
+  display: none;
+}
+
+:host /deep/ .cell_success {
+  color: greenyellow;
+}
+
+:host /deep/ .cell_fail {
+  color: deeppink;
+}

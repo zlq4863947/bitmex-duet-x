@@ -1,0 +1,29 @@
+@import '../../../@theme/styles/themes';
+@import '~@nebular/bootstrap/styles/buttons';
+
+@include nb-install-component() {
+  nb-card-body {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 1.25rem 1.25rem 0;
+  }
+
+  .container-title {
+    margin-bottom: 0.25rem;
+  }
+
+  .dropdown-menu {
+    position: initial;
+  }
+
+  .size-container {
+    margin: 1.25rem 0 0 1.25rem;
+  }
+
+  .subheader {
+    color: nb-theme(color-fg-heading);
+    font-size: 0.875rem;
+    font-weight: nb-theme(font-weight-bolder);
+    margin-bottom: 0.75rem;
+  }
+}

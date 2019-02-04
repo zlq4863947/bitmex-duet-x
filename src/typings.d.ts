@@ -15,3 +15,5 @@ interface Window {
   process: any;
   require: any;
 }
+
+declare var TradingView: any;

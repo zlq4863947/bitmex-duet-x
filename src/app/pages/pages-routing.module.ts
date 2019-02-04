@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { BacktestComponent } from './backtest/backtest.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LogComponent } from './log/log.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
@@ -18,6 +19,10 @@ const routes: Routes = [
       {
         path: 'log',
         component: LogComponent,
+      },
+      {
+        path: 'backtest',
+        component: BacktestComponent,
       },
       {
         path: 'settings',
