@@ -2,10 +2,22 @@
 @import '~@nebular/bootstrap/styles/buttons';
 
 @include nb-install-component() {
-  nb-card-body {
+  .subcard {
     display: flex;
     flex-wrap: wrap;
     padding: 0 1.25rem 1.25rem 0;
+    font-size: 1rem;
+    line-height: 1.25;
+    background: #3d3780;
+    color: #d1d1ff;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    -webkit-box-shadow: 0 8px 20px 0 rgba(40, 37, 89, 0.6);
+    box-shadow: 0 8px 20px 0 rgba(40, 37, 89, 0.6);
+    font-weight: 400;
+    border: 0 solid #3d3780;
+    scrollbar-face-color: #554db3;
+    scrollbar-track-color: #332e73;
   }
 
   .container-title {
@@ -13,7 +25,7 @@
   }
 
   .dropdown-menu {
-    position: initial;
+    position: absolute;
   }
 
   .size-container {

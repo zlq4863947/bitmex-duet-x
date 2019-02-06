@@ -1,31 +1,29 @@
-<nb-card>
-  <nb-card-body>
-    <div class="size-container">
-        <div class="dropdown" ngbDropdown>
-            <button class="btn btn-primary" type="button" ngbDropdownToggle>
-              {{ actions.symbol }}
-            </button>
-            <ul class="dropdown-menu" ngbDropdownMenu>
-              <li class="dropdown-item" *ngFor="let s of symbols" (click)="actions.symbol = s">{{ s }}</li>
-            </ul>
-        </div>
-    </div>
-    <div class="size-container">
-        <div class="dropdown" ngbDropdown>
-            <button class="btn btn-primary" type="button" ngbDropdownToggle>
-              {{ actions.resolution.name }}
-            </button>
-            <ul class="dropdown-menu" ngbDropdownMenu>
-              <li class="dropdown-item" *ngFor="let r of resolutions" (click)="actions.resolution = r">{{ r.name }}</li>
-            </ul>
-        </div>
-    </div>
-    <div class="size-container">
-        <button type="button" class="btn btn-success btn-block" (click)="launch()" [disabled]="isStarted">{{statusName}}</button>
-    </div>
-    <div class="size-container">
-        <button type="button" class="btn btn-danger btn-block" (click)="launch()" [disabled]="isStarted == false">停止</button>
-    </div>
-    <ngx-clock></ngx-clock>
-  </nb-card-body>
-</nb-card>
+<div class="subcard">
+  <div class="size-container">
+      <div class="dropdown" ngbDropdown>
+          <button class="btn btn-primary" type="button" ngbDropdownToggle>
+            {{ actions.symbol }}
+          </button>
+          <ul class="dropdown-menu" ngbDropdownMenu>
+            <li class="dropdown-item" *ngFor="let s of symbols" (click)="actions.symbol = s">{{ s }}</li>
+          </ul>
+      </div>
+  </div>
+  <div class="size-container">
+      <div class="dropdown" ngbDropdown>
+          <button class="btn btn-primary" type="button" ngbDropdownToggle>
+            {{ actions.resolution.name }}
+          </button>
+          <ul class="dropdown-menu" ngbDropdownMenu>
+            <li class="dropdown-item" *ngFor="let r of resolutions" (click)="actions.resolution = r">{{ r.name }}</li>
+          </ul>
+      </div>
+  </div>
+  <div class="size-container">
+      <button type="button" class="btn btn-success btn-block" (click)="launch()" [disabled]="isStarted">{{statusName}}</button>
+  </div>
+  <div class="size-container">
+      <button type="button" class="btn btn-danger btn-block" (click)="launch()" [disabled]="isStarted == false">停止</button>
+  </div>
+  <ngx-clock></ngx-clock>
+</div>
