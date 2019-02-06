@@ -7,7 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Order, OrderTableService } from '../../../@core/data/order-table.service';
 
 @Component({
-  selector: 'backtest-order-table',
+  selector: 'ngx-backtest-table',
   styleUrls: ['./order-table.component.scss'],
   templateUrl: './order-table.component.html',
 })

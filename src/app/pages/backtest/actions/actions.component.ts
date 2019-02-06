@@ -7,7 +7,7 @@ import { NotificationsService } from '../../../@core/utils/notifications.service
 import { SettingsService } from '../../../@core/utils/settings.service';
 
 @Component({
-  selector: 'backtest-dashboard-actions',
+  selector: 'ngx-backtest-actions',
   styleUrls: ['./actions.component.scss'],
   templateUrl: './actions.component.html',
 })

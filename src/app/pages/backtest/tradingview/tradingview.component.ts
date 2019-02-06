@@ -6,7 +6,7 @@ import { widget } from './charting_library/charting_library.min';
 import { Datafeed } from './datafeed';
 
 @Component({
-  selector: 'backtest-tradingview',
+  selector: 'ngx-backtest-tradingview',
   styleUrls: ['./tradingview.component.scss'],
   templateUrl: './tradingview.component.html',
 })
@@ -18,10 +18,6 @@ export class TradingviewComponent implements OnInit, OnDestroy {
 
   constructor(private service: OrderTableService) {
     this.settings = this.service.getSettings();
-
-    //TradingView.onready(() => {
-    //  this.initChart();
-    //})
   }
 
   ngOnInit() {
@@ -42,7 +38,7 @@ export class TradingviewComponent implements OnInit, OnDestroy {
       datafeed: new Datafeed(),
       library_path: '/assets/charting_library/',
       locale: 'zh',
-      theme: 'Light', //'Dark',
+      theme: 'Light', // 'Dark',
       disabled_features: ['use_localstorage_for_settings'],
     }));
   }
