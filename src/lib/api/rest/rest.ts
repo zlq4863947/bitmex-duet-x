@@ -162,9 +162,10 @@ export class Rest {
     };
   }
 
-  async getCandlestick(symbol: string, resolution: number, from?: number, to?: number): Promise<types.UdfResponse> {
+  async getCandlestick(symbol: string, resolution: string, from?: number, to?: number): Promise<types.UdfResponse> {
     const end = to ? to : Math.floor(Date.now() / 1000);
-    const start = from ? from : end - resolution * 60 * 60;
+    const resolutionTime = resolution.includes('D') ? +resolution.split('D')[0] * 1440 : +resolution;
+    const start = from ? from : end - resolutionTime * 60 * 60;
     const input: types.CandlestickInput = {
       symbol,
       resolution,
@@ -172,7 +173,7 @@ export class Rest {
       to: end,
     };
     const query = Object.keys(input).length !== 0 ? '?' + qs.stringify(input) : '';
-    // 1分钟过期时间
+    // 3分钟过期时间
     const expires = Math.round(Date.now() / 1000) + 60 * 3;
     const method = types.HttpMothed.GET;
     // 签名内容（verb + path + nonce + input）

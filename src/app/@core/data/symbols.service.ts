@@ -18,9 +18,6 @@ export class SymbolsService {
     { resolution: '720', name: '12小时' },
     { resolution: '1D', name: '1天' },
     { resolution: '3D', name: '3天' },
-    { resolution: '1W', name: '1周' },
-    { resolution: '2W', name: '2周' },
-    { resolution: '1M', name: '1月' },
   ];
 
   getSymbols() {

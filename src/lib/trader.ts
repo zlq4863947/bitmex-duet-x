@@ -124,7 +124,7 @@ export class Trader {
     return res.positions;
   }
 
-  getBars(symbol: string, resolution: number, from?: number, to?: number): Promise<types.UdfResponse> {
+  async getBars(symbol: string, resolution: string, from?: number, to?: number): Promise<types.UdfResponse> {
     return this.rest.getCandlestick(symbol, resolution, from, to);
   }
 

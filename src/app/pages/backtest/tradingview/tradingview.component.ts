@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 
 import { Order, OrderTableService } from '../../../@core/data/order-table.service';
+import { SettingsService } from '../../../@core/utils';
 import { widget } from './charting_library/charting_library.min';
 import { Datafeed } from './datafeed';
 
@@ -16,7 +17,7 @@ export class TradingviewComponent implements OnInit, OnDestroy {
 
   private orderData: Order[];
 
-  constructor(private service: OrderTableService) {
+  constructor(private settingsService: SettingsService, private service: OrderTableService) {
     this.settings = this.service.getSettings();
   }
 
@@ -35,11 +36,18 @@ export class TradingviewComponent implements OnInit, OnDestroy {
       interval: '30',
       container_id: 'tv-chart-container',
       // BEWARE: no trailing slash is expected in feed URL
-      datafeed: new Datafeed(),
+      datafeed: new Datafeed(this.settingsService),
       library_path: '/assets/charting_library/',
       locale: 'zh',
       theme: 'Light', // 'Dark',
-      disabled_features: ['use_localstorage_for_settings'],
+      disabled_features: [
+        'widget_logo',
+        'use_localstorage_for_settings',
+        'header_symbol_search',
+        'symbol_search_hot_key',
+        'header_resolutions',
+        'header_compare',
+      ],
     }));
   }
 }

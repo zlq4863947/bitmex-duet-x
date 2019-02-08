@@ -20,10 +20,6 @@
       </div>
   </div>
   <div class="size-container">
-      <button type="button" class="btn btn-success btn-block" (click)="launch()" [disabled]="isStarted">{{statusName}}</button>
+      <button type="button" class="btn btn-success btn-block" (click)="launch()">回测</button>
   </div>
-  <div class="size-container">
-      <button type="button" class="btn btn-danger btn-block" (click)="launch()" [disabled]="isStarted == false">停止</button>
-  </div>
-  <ngx-clock></ngx-clock>
 </div>

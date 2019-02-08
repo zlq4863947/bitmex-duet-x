@@ -1,3 +1,6 @@
+import { Trader } from '@duet-robot/trader';
+
+import { SettingsService } from '../../../@core/utils';
 import {
   Bar,
   ErrorCallback,
@@ -11,38 +14,31 @@ import {
   Timezone,
 } from './charting_library/charting_library.min';
 
-const resolutionToDataName: { [key: string]: string } = {
-  1: 'min1',
-  5: 'min5',
-  10: 'min10',
-  15: 'min15',
-  30: 'min30',
-  60: 'min60',
-  120: 'min120',
-  D: 'day',
-};
-
 export class Datafeed implements IBasicDataFeed {
+  pair: string;
+  resolution: string;
+  trader: Trader;
+  constructor(private settingsService: SettingsService) {
+    this.trader = new Trader(settingsService.getExchange());
+  }
   searchSymbols(userInput: string, exchange: string, symbolType: string, onResult: SearchSymbolsCallback): void {
     throw new Error('Method not implemented.');
   }
 
-  resolveSymbol(symbolName: string, onResolve: ResolveCallback, onError: ErrorCallback): void {
-    const symbol = 'btc_jpy';
-
+  resolveSymbol(symbol: string, onResolve: ResolveCallback, onError: ErrorCallback): void {
     const symbolData = {
       name: symbol,
       full_name: symbol,
-      exchange: 'bitbank',
+      exchange: 'BitMEX',
       listed_exchange: symbol,
-      timezone: <Timezone>'Asia/Tokyo',
+      timezone: <Timezone>'Asia/Shanghai',
       minmov: 1,
       pricescale: 100,
       session: '24x7',
       has_intraday: true,
       has_no_volume: false,
       ticker: symbol,
-      description: 'bitbank',
+      description: '',
       type: 'bitcoin',
       supported_resolutions: ['1', '5', '15', '30', '60', '120', 'D'],
     };
@@ -52,7 +48,7 @@ export class Datafeed implements IBasicDataFeed {
     });
   }
 
-  getBars(
+  async getBars(
     symbolInfo: LibrarySymbolInfo,
     resolution: string,
     rangeStartDate: number,
@@ -60,10 +56,9 @@ export class Datafeed implements IBasicDataFeed {
     onResult: HistoryCallback,
     onError: ErrorCallback,
     isFirstCall: boolean,
-  ): void {
-    // use only resolution to get stored data
-    const fileName = resolutionToDataName[resolution] || 'day';
-    const url = `${fileName}.json`;
+  ): Promise<void> {
+    const bars = await this.trader.getBars(symbolInfo.name, resolution);
+    console.log('bars: ', bars);
 
     // return data only for first time
     if (isFirstCall) {

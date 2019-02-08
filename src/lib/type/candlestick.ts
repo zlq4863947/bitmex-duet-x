@@ -1,6 +1,6 @@
 export interface CandlestickInput {
   symbol: string;
-  resolution: number;
+  resolution: string;
   from: number;
   to: number;
 }

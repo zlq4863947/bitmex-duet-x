@@ -15,7 +15,7 @@ export class SettingsService {
     }
   }
 
-  getApplicationSettings(): ApplicationSettings {
+  getApplication(): ApplicationSettings {
     return <any>this.settings.getAll();
   }
 

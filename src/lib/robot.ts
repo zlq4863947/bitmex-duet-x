@@ -24,7 +24,7 @@ export enum RobotState {
 
 export interface IStatus {
   symbol: string;
-  resolution: number;
+  resolution: string;
   resolutionName: string;
   amount: number;
   leverage: number;
@@ -67,14 +67,14 @@ export class Robot {
   }
 
   reload() {
-    const config = this.settingsService.getApplicationSettings();
+    const config = this.settingsService.getApplication();
     const side = <OrderSide>config.trading.side;
     this.status = {
       symbol: config.actions.symbol,
       amount: config.trading.amount,
       side,
       leverage: config.trading.leverage,
-      resolution: +config.actions.resolution.resolution,
+      resolution: config.actions.resolution.resolution,
       resolutionName: config.actions.resolution.name,
       inverseSide: side === OrderSide.Sell ? OrderSide.Buy : OrderSide.Sell,
       isInitSell: side === OrderSide.Sell,
@@ -124,7 +124,8 @@ export class Robot {
       return;
     }
     this.reload();
-    this.job = Scheduler.min(this.status.resolution, async () => {
+    const resolutionTime = this.status.resolution.includes('D') ? +this.status.resolution.split('D')[0] * 1440 : +this.status.resolution;
+    this.job = Scheduler.min(resolutionTime, async () => {
       try {
         const result = await this.checkStatus();
         // 继续执行

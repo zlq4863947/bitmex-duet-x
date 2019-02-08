@@ -18,7 +18,7 @@ export class RobotService {
   ) {}
 
   async start(): Promise<boolean> {
-    const config = this.settingsService.getApplicationSettings();
+    const config = this.settingsService.getApplication();
     const res = await this.mysqlService.init(config.mysql);
     if (res && res.errorMsg) {
       this.notificationsService.error({
