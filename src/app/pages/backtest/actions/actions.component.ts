@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 import { Trader } from '@duet-robot/trader';
 
-import { ActionsSettings, ResolutionOption } from '../../../@core/types';
 import { SymbolsService } from '../../../@core/data';
-import { SettingsService } from '../../../@core/utils';
 import { BacktestService } from '../../../@core/services';
+import { ActionsSettings, ResolutionOption } from '../../../@core/types';
+import { SettingsService } from '../../../@core/utils';
 
 @Component({
   selector: 'ngx-backtest-actions',
@@ -18,24 +18,25 @@ export class ActionsComponent implements OnInit {
   resolutions: ResolutionOption[];
   trader: Trader;
 
-  constructor(
-    private settingsService: SettingsService,
-    private symbolsService: SymbolsService,
-    private backtestService: BacktestService,
-  ) {
+  constructor(private settingsService: SettingsService, private symbolsService: SymbolsService, private backtestService: BacktestService) {
     this.actions = this.settingsService.getActions();
     this.trader = new Trader(settingsService.getExchange());
   }
 
   ngOnInit() {
     this.symbols = this.symbolsService.getSymbols();
-    this.resolutions = this.symbolsService.getResolutions();
+    this.resolutions = [
+      { resolution: '1', name: '1分钟' },
+      { resolution: '5', name: '5分钟' },
+      { resolution: '60', name: '1小时' },
+      { resolution: '1D', name: '1天' },
+    ]; //this.symbolsService.getResolutions();
   }
 
   async launch() {
-    this.backtestService.launch({
+    await this.backtestService.launch({
       pair: this.actions.symbol,
-      resolution: this.actions.resolution.resolution
+      resolution: this.actions.resolution.resolution,
     });
   }
 }

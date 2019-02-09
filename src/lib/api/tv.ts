@@ -62,6 +62,20 @@ export class TvApi {
     return bars;
   }
 
+  async getMaxBars(symbol: string, resolution: string, from?: number, to?: number): Promise<UdfResponse> {
+    const end = to ? to : Math.floor(Date.now() / 1000);
+    const resolutionTime = resolution.includes('D') ? +resolution.split('D')[0] * 1440 : +resolution;
+    const start = from ? from : end - resolutionTime * 60 * 500;
+    const res: UdfResponse = <any>await this.request(Endpoint.Bar, {
+      symbol,
+      resolution,
+      from: start,
+      to: end,
+    });
+
+    return res;
+  }
+
   private async request(endpoint: string, data?: { [attr: string]: any }): Promise<RestResponse> {
     const query = data && Object.keys(data).length !== 0 ? '?' + qs.stringify(data) : '';
     // 3分钟过期时间

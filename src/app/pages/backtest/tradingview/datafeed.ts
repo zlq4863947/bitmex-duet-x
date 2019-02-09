@@ -1,6 +1,5 @@
-import { Trader } from '@duet-robot/trader';
+import { BacktestOutput } from 'src/app/@core/services';
 
-import { SettingsService } from '../../../@core/utils';
 import {
   Bar,
   ErrorCallback,
@@ -13,22 +12,18 @@ import {
   SubscribeBarsCallback,
   Timezone,
 } from './charting_library/charting_library.min';
-import { TvApi } from '@duet-robot/api/tv';
 
 export class Datafeed implements IBasicDataFeed {
-  tvApi: TvApi;
+  constructor(private backtest: BacktestOutput) {}
 
-  constructor(private settingsService: SettingsService) {
-    this.tvApi = new TvApi(settingsService.getExchange());
-  }
-  
   searchSymbols(userInput: string, exchange: string, symbolType: string, onResult: SearchSymbolsCallback): void {
     throw new Error('Method not implemented.');
   }
 
   async resolveSymbol(symbol: string, onResolve: ResolveCallback, onError: ErrorCallback) {
-    const symbolInfo = await this.tvApi.getSymbolInfo(symbol);
-    onResolve(symbolInfo);
+    setTimeout(() => {
+      onResolve(this.backtest.symbolInfo);
+    });
   }
 
   async getBars(
@@ -42,8 +37,7 @@ export class Datafeed implements IBasicDataFeed {
   ) {
     // return data only for first time
     if (isFirstCall) {
-      const bars = await this.tvApi.getBars(symbolInfo.name, resolution, rangeStartDate, rangeEndDate);
-      onResult(bars, { noData: false });
+      onResult(this.backtest.bars, { noData: false });
     } else {
       onResult([], { noData: true });
     }
@@ -66,6 +60,26 @@ export class Datafeed implements IBasicDataFeed {
   }
 
   onReady(callback: OnReadyCallback): void {
-    setTimeout(callback);
+    setTimeout(() => {
+      callback({
+        exchanges: [
+          {
+            value: 'BITMEX',
+            name: 'BitMEX',
+            desc: 'BitMEX - Bitcoin Mercantile Exchange',
+          },
+        ],
+        symbols_types: [
+          {
+            name: 'Bitcoin',
+            value: 'bitcoin',
+          },
+        ],
+        supported_resolutions: ['1', '3', '5', '15', '30', '60', '120', '180', '240', '360', '720', '1D', '3D', '1W', '2W', '1M'],
+        supports_marks: false,
+        supports_timescale_marks: false,
+        supports_time: true,
+      });
+    });
   }
 }

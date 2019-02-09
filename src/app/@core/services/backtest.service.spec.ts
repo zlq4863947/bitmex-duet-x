@@ -7,28 +7,24 @@ describe('backtest service', async () => {
 
   beforeAll(async () => {
     TestBed.configureTestingModule({
-      providers: [
-        BacktestService
-      ],
+      providers: [BacktestService],
     });
     backtestService = TestBed.get(BacktestService);
   });
 
-  afterAll(async () => {
-
-  });
+  afterAll(async () => {});
 
   it('订阅回测按钮动态', async (done) => {
     backtestService.launchBacktest$.subscribe((input) => {
-      console.log('launchBacktest: ', JSON.stringify(input))
+      console.log('launchBacktest: ', JSON.stringify(input));
     });
-    
+
     let count = 0;
     const interval = setInterval(() => {
       count++;
       backtestService.launch({
         pair: 'BTCUSD',
-        resolution: count + ''
+        resolution: count + '',
       });
       if (count > 3) {
         clearInterval(interval);
