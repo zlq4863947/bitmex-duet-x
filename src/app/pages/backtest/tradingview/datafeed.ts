@@ -1,4 +1,3 @@
-import { TvApi } from '@duet-robot/api/tv';
 import { Trader } from '@duet-robot/trader';
 
 import { SettingsService } from '../../../@core/utils';
@@ -14,16 +13,15 @@ import {
   SubscribeBarsCallback,
   Timezone,
 } from './charting_library/charting_library.min';
+import { TvApi } from '@duet-robot/api/tv';
 
 export class Datafeed implements IBasicDataFeed {
-  pair: string;
-  resolution: string;
-  trader: Trader;
   tvApi: TvApi;
+
   constructor(private settingsService: SettingsService) {
-    this.trader = new Trader(settingsService.getExchange());
     this.tvApi = new TvApi(settingsService.getExchange());
   }
+  
   searchSymbols(userInput: string, exchange: string, symbolType: string, onResult: SearchSymbolsCallback): void {
     throw new Error('Method not implemented.');
   }
@@ -41,7 +39,7 @@ export class Datafeed implements IBasicDataFeed {
     onResult: HistoryCallback,
     onError: ErrorCallback,
     isFirstCall: boolean,
-  ): Promise<void> {
+  ) {
     // return data only for first time
     if (isFirstCall) {
       const bars = await this.tvApi.getBars(symbolInfo.name, resolution, rangeStartDate, rangeEndDate);
@@ -67,8 +65,7 @@ export class Datafeed implements IBasicDataFeed {
     // throw new Error('Method not implemented.');
   }
 
-  async onReady(callback: OnReadyCallback) {
-    const config = await this.tvApi.getConfig();
-    callback(config);
+  onReady(callback: OnReadyCallback): void {
+    setTimeout(callback);
   }
 }

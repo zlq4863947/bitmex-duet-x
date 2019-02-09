@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 import { Trader } from '@duet-robot/trader';
 
-import { SymbolsService } from '../../../@core/data/symbols.service';
 import { ActionsSettings, ResolutionOption } from '../../../@core/types';
-import { SettingsService } from '../../../@core/utils/settings.service';
+import { SymbolsService } from '../../../@core/data';
+import { SettingsService } from '../../../@core/utils';
+import { BacktestService } from '../../../@core/services';
 
 @Component({
   selector: 'ngx-backtest-actions',
@@ -17,7 +18,11 @@ export class ActionsComponent implements OnInit {
   resolutions: ResolutionOption[];
   trader: Trader;
 
-  constructor(private settingsService: SettingsService, private symbolsService: SymbolsService) {
+  constructor(
+    private settingsService: SettingsService,
+    private symbolsService: SymbolsService,
+    private backtestService: BacktestService,
+  ) {
     this.actions = this.settingsService.getActions();
     this.trader = new Trader(settingsService.getExchange());
   }
@@ -28,7 +33,9 @@ export class ActionsComponent implements OnInit {
   }
 
   async launch() {
-    const bars = await this.trader.getBars(this.actions.symbol, this.actions.resolution.resolution);
-    console.log('bars: ', bars);
+    this.backtestService.launch({
+      pair: this.actions.symbol,
+      resolution: this.actions.resolution.resolution
+    });
   }
 }

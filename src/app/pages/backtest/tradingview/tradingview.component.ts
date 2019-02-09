@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
 
-import { Order, OrderTableService } from '../../../@core/data/order-table.service';
+import { Order, OrderTableService } from '../../../@core/data';
 import { SettingsService } from '../../../@core/utils';
+import { BacktestService } from '../../../@core/services';
 import { IChartingLibraryWidget, widget } from './charting_library/charting_library.min';
 import { Datafeed } from './datafeed';
+
 
 @Component({
   selector: 'ngx-backtest-tradingview',
@@ -18,19 +20,24 @@ export class TradingviewComponent implements OnInit, OnDestroy {
 
   private orderData: Order[];
 
-  constructor(private settingsService: SettingsService, private service: OrderTableService) {
+  constructor(
+    private settingsService: SettingsService,
+    private service: OrderTableService,
+    private backtestService: BacktestService,
+  ) {
     this.settings = this.service.getSettings();
   }
 
   ngOnInit() {
-    this.initChart();
+    this.backtestService.launchBacktest$.subscribe((input) => {
+      console.log('launchBacktest: ', JSON.stringify(input))
+      this.removeChart();
+      this.initChart();
+    });
   }
 
   ngOnDestroy() {
-    if (this.tvWidget) {
-      this.tvWidget.remove();
-      this.tvWidget = null;
-    }
+    this.removeChart();
   }
 
   initChart(): void {
@@ -56,5 +63,12 @@ export class TradingviewComponent implements OnInit, OnDestroy {
         'header_compare',
       ],
     });
+  }
+
+  removeChart() {
+    if (this.tvWidget) {
+      this.tvWidget.remove();
+      this.tvWidget = null;
+    }
   }
 }
