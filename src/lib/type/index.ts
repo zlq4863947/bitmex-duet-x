@@ -4,3 +4,4 @@ export * from './http';
 export * from './trade';
 export * from './storage';
 export * from './candlestick';
+export * from './tv';

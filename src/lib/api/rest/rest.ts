@@ -7,7 +7,6 @@ import * as types from '../../type';
 import { Endpoints } from './endpoints';
 
 const crypto = require('crypto');
-
 const qs = require('qs');
 
 export interface RestResponse {
@@ -19,12 +18,12 @@ export interface RestResponse {
  * https://www.bitmex.com/app/restAPI
  */
 export class Rest {
+  baseUrl: string;
   private mode: 'test' | 'real';
   private urls = {
     test: 'https://testnet.bitmex.com',
     api: 'https://www.bitmex.com',
   };
-  private baseUrl: string;
   private logger: Log;
   private apiRoot = '/api/v1/';
   private credential: types.ICredential;
@@ -39,7 +38,6 @@ export class Rest {
         secret: config.real.secret,
       };
     } else {
-      this.logger.info('测试模式下运行返佣程序');
       this.baseUrl = this.urls.test;
       this.credential = {
         apiKey: config.test.apiKey,
@@ -49,6 +47,10 @@ export class Rest {
     if (proxy) {
       this.baseUrl = proxy + '/' + this.baseUrl;
     }
+  }
+
+  getCredential(): types.ICredential {
+    return this.credential;
   }
 
   /**

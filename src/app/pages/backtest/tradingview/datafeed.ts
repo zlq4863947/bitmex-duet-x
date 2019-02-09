@@ -1,3 +1,4 @@
+import { TvApi } from '@duet-robot/api/tv';
 import { Trader } from '@duet-robot/trader';
 
 import { SettingsService } from '../../../@core/utils';
@@ -18,34 +19,18 @@ export class Datafeed implements IBasicDataFeed {
   pair: string;
   resolution: string;
   trader: Trader;
+  tvApi: TvApi;
   constructor(private settingsService: SettingsService) {
     this.trader = new Trader(settingsService.getExchange());
+    this.tvApi = new TvApi(settingsService.getExchange());
   }
   searchSymbols(userInput: string, exchange: string, symbolType: string, onResult: SearchSymbolsCallback): void {
     throw new Error('Method not implemented.');
   }
 
-  resolveSymbol(symbol: string, onResolve: ResolveCallback, onError: ErrorCallback): void {
-    const symbolData = {
-      name: symbol,
-      full_name: symbol,
-      exchange: 'BitMEX',
-      listed_exchange: symbol,
-      timezone: <Timezone>'Asia/Shanghai',
-      minmov: 1,
-      pricescale: 100,
-      session: '24x7',
-      has_intraday: true,
-      has_no_volume: false,
-      ticker: symbol,
-      description: '',
-      type: 'bitcoin',
-      supported_resolutions: ['1', '5', '15', '30', '60', '120', 'D'],
-    };
-    // onResolve invoked async
-    setTimeout(() => {
-      onResolve(symbolData);
-    });
+  async resolveSymbol(symbol: string, onResolve: ResolveCallback, onError: ErrorCallback) {
+    const symbolInfo = await this.tvApi.getSymbolInfo(symbol);
+    onResolve(symbolInfo);
   }
 
   async getBars(
@@ -57,17 +42,10 @@ export class Datafeed implements IBasicDataFeed {
     onError: ErrorCallback,
     isFirstCall: boolean,
   ): Promise<void> {
-    const bars = await this.trader.getBars(symbolInfo.name, resolution);
-    console.log('bars: ', bars);
-
     // return data only for first time
     if (isFirstCall) {
-      /* tslint:disable:no-floating-promises promise-function-async */
-      /*fetch(url)
-        .then((data) => data.json())
-        .then((data: Bar[]) => {
-          onResult(data, { noData: false });
-        });*/
+      const bars = await this.tvApi.getBars(symbolInfo.name, resolution, rangeStartDate, rangeEndDate);
+      onResult(bars, { noData: false });
     } else {
       onResult([], { noData: true });
     }
@@ -89,10 +67,8 @@ export class Datafeed implements IBasicDataFeed {
     // throw new Error('Method not implemented.');
   }
 
-  onReady(callback: OnReadyCallback): void {
-    // throw new Error('Method not implemented.');
-    // callback invoked async
-    // default configuration
-    setTimeout(callback);
+  async onReady(callback: OnReadyCallback) {
+    const config = await this.tvApi.getConfig();
+    callback(config);
   }
 }

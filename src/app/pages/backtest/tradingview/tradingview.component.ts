@@ -3,7 +3,7 @@ import { LocalDataSource } from 'ng2-smart-table';
 
 import { Order, OrderTableService } from '../../../@core/data/order-table.service';
 import { SettingsService } from '../../../@core/utils';
-import { widget } from './charting_library/charting_library.min';
+import { IChartingLibraryWidget, widget } from './charting_library/charting_library.min';
 import { Datafeed } from './datafeed';
 
 @Component({
@@ -12,6 +12,7 @@ import { Datafeed } from './datafeed';
   templateUrl: './tradingview.component.html',
 })
 export class TradingviewComponent implements OnInit, OnDestroy {
+  tvWidget: IChartingLibraryWidget;
   settings: any;
   source: LocalDataSource = new LocalDataSource();
 
@@ -25,10 +26,15 @@ export class TradingviewComponent implements OnInit, OnDestroy {
     this.initChart();
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    if (this.tvWidget) {
+      this.tvWidget.remove();
+      this.tvWidget = null;
+    }
+  }
 
   initChart(): void {
-    const tvWidget = ((window as any).tvWidget = new widget({
+    this.tvWidget = (window as any).tvWidget = new widget({
       // debug: true, // uncomment this line to see Library errors and warnings in the console
       fullscreen: false,
       autosize: true,
@@ -39,6 +45,7 @@ export class TradingviewComponent implements OnInit, OnDestroy {
       datafeed: new Datafeed(this.settingsService),
       library_path: '/assets/charting_library/',
       locale: 'zh',
+      timezone: 'Asia/Shanghai',
       theme: 'Light', // 'Dark',
       disabled_features: [
         'widget_logo',
@@ -48,6 +55,6 @@ export class TradingviewComponent implements OnInit, OnDestroy {
         'header_resolutions',
         'header_compare',
       ],
-    }));
+    });
   }
 }
