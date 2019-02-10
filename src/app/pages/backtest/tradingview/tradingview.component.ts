@@ -46,7 +46,7 @@ export class TradingviewComponent implements OnInit, OnDestroy {
         'use_localstorage_for_settings',
         'header_symbol_search',
         'symbol_search_hot_key',
-       // 'header_resolutions',
+        // 'header_resolutions',
         'header_compare',
       ],
     });

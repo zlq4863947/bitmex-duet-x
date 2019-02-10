@@ -30,7 +30,7 @@ export class ActionsComponent implements OnInit {
       { resolution: '5', name: '5分钟' },
       { resolution: '60', name: '1小时' },
       { resolution: '1D', name: '1天' },
-    ]; //this.symbolsService.getResolutions();
+    ];
   }
 
   async launch() {

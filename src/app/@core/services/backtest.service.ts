@@ -25,12 +25,11 @@ export interface BacktestOutput {
 @Injectable({ providedIn: 'root' })
 export class BacktestService {
   private tvApi: TvApi;
+  private status$ = new Subject<BacktestOutput>();
 
   constructor(private settingsService: SettingsService) {
     this.tvApi = new TvApi(settingsService.getExchange());
   }
-
-  private status$ = new Subject<BacktestOutput>();
 
   get launchBacktest$(): Observable<BacktestOutput> {
     return this.status$.asObservable();
@@ -47,7 +46,7 @@ export class BacktestService {
     const ichimokuList: IchimokuCloudOutput[] = [];
     const smaList: number[] = [];
 
-    udfRes.o.map((_, index) => {
+    udfRes.o.map((val, index) => {
       bars.push({
         time: udfRes.t[index] * 1000,
         open: udfRes.c[index],
