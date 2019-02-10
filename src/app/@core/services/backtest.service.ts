@@ -4,13 +4,15 @@ import { IchimokuCloudOutput } from 'tech-indicator';
 
 import { TvApi } from '@duet-robot/api/tv';
 import { ichimoku, sma } from '@duet-robot/indicator';
-import { Bar, LibrarySymbolInfo, UdfResponse } from '@duet-robot/type';
+import { Bar, LibrarySymbolInfo, Mark, MarkConstColors, OrderSide, OrderStatus } from '@duet-robot/type';
 
+import { Order } from '../data';
 import { SettingsService } from '../utils';
 
 export interface BacktestInput {
   pair: string;
   resolution: string;
+  side: OrderSide;
 }
 
 export interface BacktestOutput {
@@ -18,8 +20,8 @@ export interface BacktestOutput {
   resolution: string;
   symbolInfo: LibrarySymbolInfo;
   bars: Bar[];
-  ichimoku: IchimokuCloudOutput[];
-  sma: number[];
+  marks: Mark[];
+  orders: Order[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -43,10 +45,10 @@ export class BacktestService {
   private async getResult(input: BacktestInput): Promise<BacktestOutput> {
     const udfRes = await this.tvApi.getMaxBars(input.pair, input.resolution);
     const bars: Bar[] = [];
-    const ichimokuList: IchimokuCloudOutput[] = [];
-    const smaList: number[] = [];
+    let orders: Order[] = [];
+    let marks: Mark[] = [];
 
-    udfRes.o.map((val, index) => {
+    udfRes.t.map((time, index) => {
       bars.push({
         time: udfRes.t[index] * 1000,
         open: udfRes.o[index],
@@ -61,9 +63,21 @@ export class BacktestService {
       const close = udfRes.c.slice(0, index + 1);
 
       const ichRes = ichimoku({ high, low });
-      ichimokuList.push(ichRes.length > 0 ? ichRes[ichRes.length - 1] : undefined);
       const smaRes = sma({ values: close });
-      smaList.push(smaRes.length > 0 ? smaRes[smaRes.length - 1] : undefined);
+      if (ichRes.length > 0) {
+        const action = this.getRuleResult(close[close.length - 1], ichRes[ichRes.length - 1], smaRes[smaRes.length - 1]);
+        if (action) {
+          orders = this.getOrders({
+            orders,
+            side: input.side,
+            action,
+            pair: input.pair,
+            time,
+            close: close[close.length - 1],
+          });
+          marks = this.getMarks(orders);
+        }
+      }
     });
 
     const symbolInfo = await this.tvApi.getSymbolInfo(input.pair);
@@ -73,8 +87,87 @@ export class BacktestService {
       resolution: input.resolution,
       symbolInfo,
       bars,
-      ichimoku: ichimokuList,
-      sma: smaList,
+      marks,
+      orders,
     };
+  }
+
+  private getOrders(param: { orders: Order[]; side: OrderSide; action: OrderSide; pair: string; time: number; close: number }) {
+    const orders = param.orders;
+    // 已有之前订单
+    if (orders.length > 0) {
+      const lastOrder = orders[orders.length - 1];
+      // 与最近操作为相反方向
+      if (lastOrder.side !== String(param.action)) {
+        const order: Order = {
+          id: +lastOrder.id + 1 + '',
+          time: param.time * 1000 + '',
+          symbol: param.pair,
+          price: close[close.length - 1],
+          amount: 1,
+          side: param.action,
+          status: OrderStatus.Filled,
+          step: 'auto',
+          roe: '',
+        };
+        // 平仓时计算利润
+        if (param.side !== String(param.action)) {
+          order.roe = this.calcROE(lastOrder, order);
+        }
+        orders.push(order);
+      }
+    } else if (param.side === String(param.action)) {
+      // 未有之前订单 且方向符合时
+      const order: Order = {
+        id: '1',
+        time: param.time * 1000 + '',
+        symbol: param.pair,
+        price: close[close.length - 1],
+        amount: 1,
+        side: param.action,
+        status: OrderStatus.Filled,
+        step: 'auto',
+        roe: '',
+      };
+      orders.push(order);
+    }
+
+    return orders;
+  }
+
+  private getMarks(orders: Order[]): Mark[] {
+    const marks: Mark[] = [];
+    for (const order of orders) {
+      const mark = {
+        id: order.id,
+        time: +order.time / 1000,
+        color: order.side === String(OrderSide.Buy) ? <MarkConstColors>'red' : 'green',
+        labelFontColor: order.side === String(OrderSide.Buy) ? 'white' : 'white',
+        text: order.side === String(OrderSide.Buy) ? '买' : '卖',
+        label: order.side === String(OrderSide.Buy) ? '买' : '卖',
+        minSize: 25,
+      };
+      marks.push(mark);
+    }
+
+    return marks;
+  }
+
+  private calcROE(lastOrder: Order, curOrder: Order): string {
+    const diff = curOrder.side === OrderSide.Sell ? curOrder.price - lastOrder.price : lastOrder.price - curOrder.price;
+    const roeRate = (diff / curOrder.price) * 100;
+    return roeRate.toFixed(2) + '%';
+  }
+
+  private getRuleResult(close: number, ichimokuRes: IchimokuCloudOutput, smaRes: number) {
+    if (!close || !ichimokuRes || !smaRes) {
+      return;
+    }
+
+    if (close > ichimokuRes.base && close > smaRes) {
+      return OrderSide.Buy;
+    } else if (close < ichimokuRes.base && close < smaRes) {
+      return OrderSide.Sell;
+    }
   }
 }

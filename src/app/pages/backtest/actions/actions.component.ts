@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Trader } from '@duet-robot/trader';
+import { OrderSide } from '@duet-robot/type';
 
 import { SymbolsService } from '../../../@core/data';
 import { BacktestService } from '../../../@core/services';
@@ -16,6 +17,7 @@ export class ActionsComponent implements OnInit {
   actions: ActionsSettings;
   symbols: string[];
   resolutions: ResolutionOption[];
+  radioSide = 'Sell';
   trader: Trader;
 
   constructor(private settingsService: SettingsService, private symbolsService: SymbolsService, private backtestService: BacktestService) {
@@ -37,6 +39,7 @@ export class ActionsComponent implements OnInit {
     await this.backtestService.launch({
       pair: this.actions.symbol,
       resolution: this.actions.resolution.resolution,
+      side: <OrderSide>this.radioSide,
     });
   }
 }

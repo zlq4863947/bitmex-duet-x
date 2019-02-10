@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
+import { OrderSide } from '@duet-robot/type';
+
 import { BacktestService } from './backtest.service';
 
 describe('backtest service', async () => {
@@ -25,6 +27,7 @@ describe('backtest service', async () => {
       backtestService.launch({
         pair: 'XBTUSD',
         resolution: count + '',
+        side: OrderSide.Buy,
       });
       if (count > 3) {
         clearInterval(interval);

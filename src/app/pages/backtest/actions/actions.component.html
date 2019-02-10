@@ -20,6 +20,16 @@
       </div>
   </div>
   <div class="size-container">
+    <div [(ngModel)]="radioSide" ngbRadioGroup name="side" class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group">
+      <label ngbButtonLabel class="btn btn-outline-primary">
+        <input ngbButton type="radio" value="Buy" name="Buy"> 买入
+      </label>
+      <label ngbButtonLabel class="btn btn-outline-primary">
+        <input ngbButton type="radio" value="Sell" name="Sell"> 卖出
+      </label>
+    </div>
+  </div>
+  <div class="size-container">
       <button type="button" class="btn btn-success btn-block" (click)="launch()">回测</button>
   </div>
 </div>

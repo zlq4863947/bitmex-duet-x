@@ -2,14 +2,15 @@ import { BacktestOutput } from '../../../@core/services';
 import {
   Bar,
   ErrorCallback,
+  GetMarksCallback,
   HistoryCallback,
   IBasicDataFeed,
   LibrarySymbolInfo,
+  Mark,
   OnReadyCallback,
   ResolveCallback,
   SearchSymbolsCallback,
   SubscribeBarsCallback,
-  Timezone,
 } from './charting_library/charting_library.min';
 
 export class Datafeed implements IBasicDataFeed {
@@ -40,6 +41,10 @@ export class Datafeed implements IBasicDataFeed {
     } else {
       onResult([], { noData: true });
     }
+  }
+
+  getMarks(symbolInfo: LibrarySymbolInfo, from: number, to: number, onDataCallback: GetMarksCallback<Mark>, resolution: string) {
+    onDataCallback(this.backtest.marks);
   }
 
   subscribeBars(
@@ -75,7 +80,7 @@ export class Datafeed implements IBasicDataFeed {
           },
         ],
         supported_resolutions: ['1', '3', '5', '15', '30', '60', '120', '180', '240', '360', '720', '1D', '3D', '1W', '2W', '1M'],
-        supports_marks: false,
+        supports_marks: true,
         supports_timescale_marks: false,
         supports_time: true,
       });

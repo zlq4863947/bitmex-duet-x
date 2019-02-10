@@ -107,3 +107,18 @@ export interface Bar {
   close: number;
   volume?: number;
 }
+
+export interface MarkCustomColor {
+  color: string;
+  background: string;
+}
+export declare type MarkConstColors = 'red' | 'green' | 'blue' | 'yellow';
+export interface Mark {
+  id: string | number;
+  time: number;
+  color: MarkConstColors | MarkCustomColor;
+  text: string;
+  label: string;
+  labelFontColor: string;
+  minSize: number;
+}
