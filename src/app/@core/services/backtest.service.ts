@@ -49,7 +49,7 @@ export class BacktestService {
     udfRes.o.map((val, index) => {
       bars.push({
         time: udfRes.t[index] * 1000,
-        open: udfRes.c[index],
+        open: udfRes.o[index],
         close: udfRes.c[index],
         high: udfRes.h[index],
         low: udfRes.l[index],

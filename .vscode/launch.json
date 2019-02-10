@@ -55,5 +55,22 @@
             "program": "${workspaceFolder}/node_modules/jest/bin/jest",
           }
         },
+        {
+          "type": "node",
+          "request": "launch",
+          "name": "trader.spec",
+          "program": "${workspaceFolder}/node_modules/.bin/jest",
+          "args": [
+            "--runInBand",
+            "--onlyChanged",
+            "--no-cache",
+            "--testPathPattern=.*trader.spec.ts$"
+          ],
+          "console": "integratedTerminal",
+          "internalConsoleOptions": "neverOpen",
+          "windows": {
+            "program": "${workspaceFolder}/node_modules/jest/bin/jest",
+          }
+        },
     ]
 }

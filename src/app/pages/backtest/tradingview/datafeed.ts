@@ -1,5 +1,4 @@
-import { BacktestOutput } from 'src/app/@core/services';
-
+import { BacktestOutput } from '../../../@core/services';
 import {
   Bar,
   ErrorCallback,
