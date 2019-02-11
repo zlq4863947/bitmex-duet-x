@@ -1,46 +1,26 @@
-import { setInterval } from 'timers';
-
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { Observable, Subscription } from 'rxjs';
 
-import { Order, OrderTableService } from '../../../@core/data/order-table.service';
+import { OrderTableService } from '../../../@core/data';
+import { BacktestService } from '../../../@core/services';
 
 @Component({
   selector: 'ngx-backtest-table',
   styleUrls: ['./order-table.component.scss'],
   templateUrl: './order-table.component.html',
 })
-export class OrderTableComponent implements OnDestroy {
-  settings: any;
+export class OrderTableComponent implements OnInit, OnDestroy {
   source: LocalDataSource = new LocalDataSource();
+  settings: any;
 
-  timer: Observable<number> = Observable.create((observer) => {
-    const timer = setInterval(() => observer.next(), 2000);
-    return () => clearInterval(timer);
-  });
-  sub: Subscription;
+  constructor(private orderTableService: OrderTableService, private backtestService: BacktestService) {}
 
-  private orderData: Order[];
-
-  constructor(private service: OrderTableService) {
-    this.settings = this.service.getSettings();
-    this.loadData();
-    this.sub = this.timer.subscribe(async () => {
-      await this.loadData();
+  ngOnInit() {
+    this.settings = this.orderTableService.getSettings();
+    this.backtestService.orders$.subscribe((orders) => {
+      this.source.load(orders);
     });
   }
 
-  ngOnDestroy() {
-    this.sub.unsubscribe();
-  }
-
-  async loadData() {
-    let data = await this.service.getData();
-    if (!this.orderData || JSON.stringify(this.orderData) !== JSON.stringify(data)) {
-      data = await this.service.syncROE();
-      this.orderData = data;
-      this.source.load(data);
-    }
-  }
+  ngOnDestroy() {}
 }

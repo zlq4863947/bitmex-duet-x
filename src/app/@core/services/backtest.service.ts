@@ -3,6 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { IchimokuCloudOutput } from 'tech-indicator';
 
 import { TvApi } from '@duet-robot/api/tv';
+import { Helper } from '@duet-robot/common';
 import { ichimoku, sma } from '@duet-robot/indicator';
 import { Bar, LibrarySymbolInfo, Mark, MarkConstColors, OrderSide, OrderStatus } from '@duet-robot/type';
 
@@ -21,25 +22,43 @@ export interface BacktestOutput {
   symbolInfo: LibrarySymbolInfo;
   bars: Bar[];
   marks: Mark[];
-  orders: Order[];
 }
 
 @Injectable({ providedIn: 'root' })
 export class BacktestService {
   private tvApi: TvApi;
-  private status$ = new Subject<BacktestOutput>();
+  private _status$ = new Subject<BacktestOutput>();
+  private _orders$ = new Subject<Order[]>();
 
   constructor(private settingsService: SettingsService) {
     this.tvApi = new TvApi(settingsService.getExchange());
   }
 
   get launchBacktest$(): Observable<BacktestOutput> {
-    return this.status$.asObservable();
+    return this._status$.asObservable();
+  }
+
+  get orders$(): Observable<Order[]> {
+    return this._orders$.asObservable();
   }
 
   async launch(input: BacktestInput) {
     const res = await this.getResult(input);
-    this.status$.next(res);
+    this._status$.next(res);
+  }
+
+  publishOrders(orders: Order[]) {
+    const fmtOrders: Order[] = [];
+    orders.map((o) => {
+      const order: Order = {
+        ...o,
+        time: Helper.formatTime(+o.time),
+        status: '已成交',
+        side: o.side === OrderSide.Buy ? '买入' : '卖出',
+      };
+      fmtOrders.push(order);
+    });
+    this._orders$.next(fmtOrders);
   }
 
   private async getResult(input: BacktestInput): Promise<BacktestOutput> {
@@ -80,6 +99,8 @@ export class BacktestService {
       }
     });
 
+    this.publishOrders(orders);
+
     const symbolInfo = await this.tvApi.getSymbolInfo(input.pair);
 
     return {
@@ -88,7 +109,6 @@ export class BacktestService {
       symbolInfo,
       bars,
       marks,
-      orders,
     };
   }
 
@@ -103,7 +123,7 @@ export class BacktestService {
           id: +lastOrder.id + 1 + '',
           time: param.time * 1000 + '',
           symbol: param.pair,
-          price: close[close.length - 1],
+          price: param.close,
           amount: 1,
           side: param.action,
           status: OrderStatus.Filled,
@@ -122,7 +142,7 @@ export class BacktestService {
         id: '1',
         time: param.time * 1000 + '',
         symbol: param.pair,
-        price: close[close.length - 1],
+        price: param.close,
         amount: 1,
         side: param.action,
         status: OrderStatus.Filled,

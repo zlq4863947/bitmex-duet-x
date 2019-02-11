@@ -11,7 +11,6 @@ import { Datafeed } from './datafeed';
 })
 export class TradingviewComponent implements OnInit, OnDestroy {
   tvWidget: IChartingLibraryWidget;
-  settings: any;
 
   constructor(private backtestService: BacktestService) {}
 
