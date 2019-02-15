@@ -36,7 +36,7 @@ export class TradingviewComponent implements OnInit, OnDestroy {
       container_id: 'tv-chart-container',
       // BEWARE: no trailing slash is expected in feed URL
       datafeed: new Datafeed(backtest),
-      library_path: '/assets/charting_library/',
+      library_path: 'assets/charting_library/',
       locale: 'zh',
       timezone: 'Asia/Shanghai',
       theme: 'Light', // 'Dark',
